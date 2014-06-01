@@ -44,7 +44,6 @@
 			<scope>test</scope>
 		</dependency>
         
-        
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
@@ -67,6 +66,15 @@
             <artifactId>jasypt-spring31</artifactId>
             <version>1.9.2</version>
             <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>commons-dbcp</groupId>
+            <artifactId>commons-dbcp</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>9.1-901-1.jdbc4</version>
         </dependency>
         
 	</dependencies>
