@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+  <head th:substituteby="layout/header :: head"></head>
+  
+  <body>
+    
+    <header th:substituteby="layout/header :: header"></header>
+    
+    <div id="content">
+  
+        <h1 th:text="#{login.title}">Authenticate</h1>
+
+        <form th:action="@{/login}" method="post">
+        
+          <fieldset>
+            
+            <div>
+              <label for="loginInput" th:text="#{login.form.login}">Login</label>
+              <input id="loginInput" type="text" name="username" required="required" />
+            </div>
+            
+            <div>
+              <label for="passwordInput" th:text="#{login.form.password}">Password</label>
+              <input id="passwordInput" type="password" name="password" required="required" />
+            </div>
+            
+            <div>
+              <input type="submit" th:value="#{login.form.submit}" />
+            </div>
+            
+          </fieldset>
+          
+          
+        </form>        
+        
+    </div> 
+
+  </body>
+  
+</html>

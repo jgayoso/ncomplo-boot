@@ -1,20 +1,31 @@
 package org.jgayoso.ncomplo;
 
 import org.jasypt.util.password.ConfigurablePasswordEncryptor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.authentication.configurers.GlobalAuthenticationConfigurerAdapter;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
-@Configuration
 @ComponentScan
 @EnableAutoConfiguration
 @EnableJpaRepositories
-public class Application {
+@EnableGlobalMethodSecurity(securedEnabled = true)
+public class Application extends WebMvcConfigurerAdapter {
 
-	
 	@Bean
 	public ConfigurablePasswordEncryptor configurablePasswordEncryptor() {
 		return new ConfigurablePasswordEncryptor();
@@ -25,4 +36,47 @@ public class Application {
         SpringApplication.run(Application.class, args);
     }
     
+    @Override
+	public void addViewControllers(ViewControllerRegistry registry) {
+		registry.addViewController("/login").setViewName("login");
+	}
+
+    @Bean
+	public ApplicationSecurity applicationSecurity() {
+		return new ApplicationSecurity();
+	}
+
+	@Order(Ordered.HIGHEST_PRECEDENCE)
+	@Configuration
+	protected static class AuthenticationSecurity extends GlobalAuthenticationConfigurerAdapter {
+
+		@Autowired
+		static AuthenticationProvider authenticationProvider;
+		
+		@Override
+		public void init(AuthenticationManagerBuilder auth) throws Exception {
+//			auth.inMemoryAuthentication().withUser("postgres").password("root")
+//					.roles("ADMIN", "USER").and().withUser("user").password("user")
+//					.roles("USER");
+			auth.authenticationProvider(authenticationProvider);
+		}
+	}
+
+	@Order(Ordered.LOWEST_PRECEDENCE - 8)
+	protected static class ApplicationSecurity extends WebSecurityConfigurerAdapter {
+
+		@Override
+		protected void configure(HttpSecurity http) throws Exception {
+			http.authorizeRequests()
+					      .antMatchers("/login").permitAll()
+					      .antMatchers("/css/ncomplo.css").permitAll()
+					      .antMatchers("/js/ncomplo.js").permitAll()
+					      .anyRequest().fullyAuthenticated()
+					.and().formLogin().loginPage("/login").failureUrl("/login?error")
+					.and().logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+					.and().exceptionHandling().accessDeniedPage("/access?error");
+		}
+
+	}
+	
 }
