@@ -13,8 +13,6 @@ import org.jgayoso.ncomplo.business.entities.repositories.LeagueRepository;
 import org.jgayoso.ncomplo.business.entities.repositories.UserRepository;
 import org.jgayoso.ncomplo.business.util.IterableUtils;
 import org.jgayoso.ncomplo.exceptions.InternalErrorException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,8 +21,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class UserService {
 
-    private static final Logger logger = LoggerFactory.getLogger(UserService.class);
-    
     @Autowired
     private UserRepository userRepository;
     
@@ -43,66 +39,6 @@ public class UserService {
     public UserService() {
         super();
     }
-    
-    
-
-    
-    @Transactional
-    public User authenticate(final String login, final String password) {
-        
-        final User user = this.userRepository.findOne(login);
-        if (user == null || !user.isActive()) {
-            
-            if (user == null) {
-                // Let's check if there are no admin users in the database, in which
-                // case we'll create the first one from this login
-                final int totalAdminUsers = this.userRepository.findAllAdmin().size();
-                if (totalAdminUsers == 0) {
-                    if (logger.isTraceEnabled()) {
-                        logger.trace("[NCOMPLO] Empty user database, creating: \"" + login + "\"");
-                    }
-                    final User firstUser = new User();
-                    firstUser.setLogin(login);
-                    firstUser.setPassword(this.passwordEncryptor.encryptPassword(password));
-                    firstUser.setName(login);
-                    firstUser.setActive(true);
-                    firstUser.setAdmin(true);
-                    firstUser.setEmail("changeme@changeme");
-                    return this.userRepository.save(firstUser); 
-                }
-            }
-            
-            if (logger.isTraceEnabled()) {
-                logger.trace("[NCOMPLO] Bad login for user \"" + login + "\"");
-            }
-            return user;
-        }
-        
-        final String storedHashedPassword = user.getPassword();
-        if (storedHashedPassword == null) {
-            if (logger.isTraceEnabled()) {
-                logger.trace("[NCOMPLO] Bad login for user \"" + login + "\"");
-            }
-            return null;
-        }
-        
-        final boolean passwordMatch =
-                this.passwordEncryptor.checkPassword(password, storedHashedPassword);
-        
-        if (passwordMatch) {
-            if (logger.isTraceEnabled()) {
-                logger.trace("[NCOMPLO] Correct login for user \"" + login + "\"");
-            }
-            return user;
-        }
-        
-        if (logger.isTraceEnabled()) {
-            logger.trace("[NCOMPLO] Bad login for user \"" + login + "\"");
-        }
-        return null;
-    }
-    
-    
     
     
     @Transactional

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+  <head th:substituteby="layout/header :: head"></head>
+  
+  <body>
+    
+    <header th:substituteby="layout/header :: header"></header>
+  
+    <header th:substituteby="layout/admin/header :: header"></header>
+  
+    <div id="content">
+  
+        <h1>Bet Types for competition "<span th:text="${competition.getName(#locale)}">competition</span>"</h1>
+        
+        <a th:href="@{manage}">Create new</a>
+        <table>
+          <tr th:each="bt : ${allBetTypes}">
+            <td th:text="${bt.getName(#locale)}">Type of Bet</td>
+            <td><a th:href="@{manage(id=${bt.id})}">manage bet type</a></td>
+            <td><a th:href="@{delete(id=${bt.id})}" onclick="return confirm('Sure?');">delete bet type</a></td>
+          </tr>
+        </table>
+        
+        <a th:href="@{../../list}">Back to list of Competitions</a>
+        
+    </div> 
+
+  </body>
+  
+</html>

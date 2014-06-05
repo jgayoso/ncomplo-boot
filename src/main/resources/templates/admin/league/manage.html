@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+  <head th:substituteby="layout/header :: head"></head>
+  
+  <body>
+  
+    <header th:substituteby="layout/header :: header"></header>
+  
+    <header th:substituteby="layout/admin/header :: header"></header>
+  
+    <div id="content">
+    
+        <h1>Manage League</h1>
+        
+        <form th:action="@{save}" th:object="${league}" method="post">
+        
+          <fieldset>
+          
+            <input type="hidden" th:field="*{id}" />
+            <input type="hidden" th:field="*{competitionId}" />
+            
+            <div id="name">
+              <label for="nameInput">Name</label>
+              <input id="nameInput" type="text" th:field="*{name}" required="required" />
+              <a href="#" onclick="$.org.eleventhlabs.ncomplo.lang.add('name');">add language</a>
+            </div>
+            
+            <div class="name-lang-existing lang-element" th:each="nameLang : *{namesByLang}">
+              <input class="langInput" type="text" th:field="*{namesByLang[__${nameLangStat.index}__].lang}" />
+              <input class="valueInput" type="text" th:field="*{namesByLang[__${nameLangStat.index}__].value}" />
+              <a href="#" onclick="$.org.eleventhlabs.ncomplo.lang.remove(this);">delete</a>
+            </div>
+            <div id="name-lang-prototype" class="lang-element">
+              <input class="langInput" type="text" name="namesByLang[$index$].lang" id="namesByLang$index$.lang" value="" />
+              <input class="valueInput" type="text" name="namesByLang[$index$].value" id="namesByLang$index$.value" value="" />
+              <a href="#" onclick="$.org.eleventhlabs.ncomplo.lang.remove(this);">delete</a>
+            </div>
+            
+            <div>
+              <label for="adminEmailInput">Admin Email</label>
+              <input id="adminEmailInput" type="text" th:field="*{adminEmail}" required="required" />
+            </div>
+            
+            <div>
+              <label for="activeCheck">Active</label>
+              <input id="activeCheck" type="checkbox" th:field="*{active}" />
+            </div>
+            
+          </fieldset>
+          
+          <fieldset>
+          
+            <div>
+            
+              <table>
+                <tr th:each="g : ${allGames}">
+                  <td th:text="${g.round.getName(#locale)}">round of game</td>
+                  <td th:text="${g.date} ? ${#dates.format(g.date,#messages.msg('dates.format'))} : '-'">2012-06-02</td>
+                  <td th:text="${g.getName(#locale)}">name of game</td>
+                  <td th:text="${g.gameSideA} ? ${g.gameSideA.getName(#locale)} : '-'">name of team/player A</td>
+                  <td th:text="${g.gameSideB} ? ${g.gameSideB.getName(#locale)} : '-'">name of team/player B</td>
+                  <td>
+                    <select th:field="*{betTypesByGame[__${g.id}__]}">
+                      <option th:each="bt : ${allBetTypes}" th:value="${bt.id}" th:text="${bt.getName(#locale)}">bet type</option>
+                    </select>
+                  </td>
+                </tr>
+              </table>
+              
+            </div>
+          
+          </fieldset>
+          
+          <input type="submit" />
+          
+        </form>
+        
+        <a th:href="@{list}">Back to list of Leagues</a>
+        
+    </div>
+    
+  </body>
+  
+</html>

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+  <head th:substituteby="layout/header :: head"></head>
+  
+  <body>
+
+    <header th:substituteby="layout/header :: header"></header>
+    
+    <div id="content">
+  
+        <h1 th:text="#{scoreboard.title}">SCOREBOARD</h1>
+        <h2 th:text="#{scoreboard.title.league(${league.getName(#locale)})}">League: one league</h2>
+
+        <div>
+          <form th:if="${showLeagueSelector}" th:action="@{/selectScoreboard}" 
+                method="post" th:object="${leagueSelector}">
+            <select th:field="*{leagueId}">
+              <option th:each="l : ${allLeagues}" th:value="${l.id}" th:text="${l.getName(#locale)}">a league</option>
+            </select>
+            <input type="submit" th:value="#{scoreboard.league.form.submit}" />
+          </form>
+        </div>
+        
+        <div>
+          <form th:action="@{/selectScoreboard}" 
+                method="post" th:object="${leagueSelector}">
+            <input type="hidden" th:field="*{leagueId}" />
+            <select th:field="*{roundId}">
+              <option value="" th:text="#{scoreboard.form.round.allrounds}">All rounds</option>
+              <option th:each="r : ${allRounds}" th:value="${r.id}" th:text="${r.getName(#locale)}">a league</option>
+            </select>
+            <input type="submit" th:value="#{scoreboard.form.round.submit}" />
+          </form>
+        </div>
+        
+        
+        <div>
+          <table id="scoreboard">
+            <thead>
+              <tr>
+                <th th:text="#{scoreboard.header.position}">Pos</th>
+                <th th:text="#{scoreboard.header.name}">Name</th>
+                <th th:text="#{scoreboard.header.points}">Points</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr th:each="sc : ${scoreboardEntries}">
+                <td class="scoreboard_position">
+                  <span th:text="${sc.position} ?: ''">1</span>
+                </td>
+                <td class="scoreboard_name">
+                  <span th:text="${sc.user.name}">name</span>
+                </td>
+                <td class="scoreboard_points">
+                  <span th:text="${sc.points}">points</span>
+                </td>
+                <td class="scoreboard_actions">
+                  <a th:href="@{'/bets/' + ${league.id} + '/' + ${sc.user.login}}" th:text="#{scoreboard.viewbets}">view bets</a>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div>        
+          <a th:href="@{/password}" th:text="#{nav.changepassword}">Change password</a>
+        </div>
+        
+        <div>        
+          <a th:if="${user.admin}" th:href="@{/admin}" th:text="#{nav.admin}">Go to Admin</a>
+        </div>        
+        
+        
+    </div> 
+
+  </body>
+  
+</html>

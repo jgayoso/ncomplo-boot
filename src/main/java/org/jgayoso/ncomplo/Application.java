@@ -51,14 +51,11 @@ public class Application extends WebMvcConfigurerAdapter {
 	protected static class AuthenticationSecurity extends GlobalAuthenticationConfigurerAdapter {
 
 		@Autowired
-		static AuthenticationProvider authenticationProvider;
+		private AuthenticationProvider authenticationProvider;
 		
 		@Override
 		public void init(AuthenticationManagerBuilder auth) throws Exception {
-//			auth.inMemoryAuthentication().withUser("postgres").password("root")
-//					.roles("ADMIN", "USER").and().withUser("user").password("user")
-//					.roles("USER");
-			auth.authenticationProvider(authenticationProvider);
+			auth.authenticationProvider(this.authenticationProvider);
 		}
 	}
 
