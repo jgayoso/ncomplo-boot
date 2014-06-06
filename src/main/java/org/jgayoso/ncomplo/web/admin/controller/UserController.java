@@ -92,7 +92,7 @@ public class UserController {
     @RequestMapping("/save")
     public String save(
             final UserBean userBean,
-            final BindingResult bindingResult) {
+            @SuppressWarnings("unused") final BindingResult bindingResult) {
 
         this.userService.save(
                 userBean.getLogin(),

@@ -87,7 +87,7 @@ public class RoundController {
     @RequestMapping("/save")
     public String save(
             final RoundBean roundBean,
-            final BindingResult bindingResult,
+            @SuppressWarnings("unused") final BindingResult bindingResult,
             @PathVariable("competitionId")
             final Integer competitionId) {
 

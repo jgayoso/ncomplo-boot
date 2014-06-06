@@ -20,13 +20,16 @@ import org.jgayoso.ncomplo.business.util.I18nNamedEntityComparator;
 import org.jgayoso.ncomplo.business.views.ScoreboardEntry;
 import org.jgayoso.ncomplo.exceptions.InternalErrorException;
 import org.jgayoso.ncomplo.web.beans.LeagueSelectorBean;
-import org.jgayoso.ncomplo.web.util.SessionUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.support.RequestContextUtils;
+
 
 @Controller
 public class ScoreboardController {
@@ -62,7 +65,15 @@ public class ScoreboardController {
         
         final Locale locale = RequestContextUtils.getLocale(request);
         
-        final String login = SessionUtil.getAuthenticatedUser(request);
+        Authentication auth = SecurityContextHolder.getContext()
+				.getAuthentication();
+        if (auth instanceof AnonymousAuthenticationToken) {
+			/* The user is not logged in */
+			return "login";
+		}
+		/* The user is logged in */
+		final String login = auth.getName();
+		
         final User user = this.userService.find(login);
         
         final List<League> userLeagues = new ArrayList<League>(user.getLeagues());
@@ -121,7 +132,15 @@ public class ScoreboardController {
         
         final Locale locale = RequestContextUtils.getLocale(request);
         
-        final String login = SessionUtil.getAuthenticatedUser(request);
+        Authentication auth = SecurityContextHolder.getContext()
+				.getAuthentication();
+        if (auth instanceof AnonymousAuthenticationToken) {
+			/* The user is not logged in */
+			return "login";
+		}
+		/* The user is logged in */
+		final String login = auth.getName();
+        
         final User user = this.userService.find(login);
         
         final List<League> userLeagues = new ArrayList<League>(user.getLeagues());

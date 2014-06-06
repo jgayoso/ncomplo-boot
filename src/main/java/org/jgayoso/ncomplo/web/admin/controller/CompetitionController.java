@@ -77,7 +77,7 @@ public class CompetitionController {
     @RequestMapping("/save")
     public String save(
             final CompetitionBean competitionBean,
-            final BindingResult bindingResult) {
+            @SuppressWarnings("unused") final BindingResult bindingResult) {
 
         this.competitionService.save(
                 competitionBean.getId(),

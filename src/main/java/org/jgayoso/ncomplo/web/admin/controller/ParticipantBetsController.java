@@ -169,7 +169,7 @@ public class ParticipantBetsController {
     @RequestMapping("/save")
     public String save(
             final ParticipationBean participationBean,
-            final BindingResult bindingResult) {
+            @SuppressWarnings("unused") final BindingResult bindingResult) {
 
         
         for (final BetBean betBean : participationBean.getBetsByGame().values()) {

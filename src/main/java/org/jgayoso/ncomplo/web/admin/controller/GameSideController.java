@@ -91,7 +91,7 @@ public class GameSideController {
     @RequestMapping("/save")
     public String save(
             final GameSideBean gameSideBean,
-            final BindingResult bindingResult,
+            @SuppressWarnings("unused") final BindingResult bindingResult,
             @PathVariable("competitionId")
             final Integer competitionId) {
 

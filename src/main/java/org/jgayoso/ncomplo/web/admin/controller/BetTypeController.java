@@ -95,7 +95,7 @@ public class BetTypeController {
     @RequestMapping("/save")
     public String save(
             final BetTypeBean betTypeBean,
-            final BindingResult bindingResult,
+            @SuppressWarnings("unused") final BindingResult bindingResult,
             @PathVariable("competitionId")
             final Integer competitionId) {
 

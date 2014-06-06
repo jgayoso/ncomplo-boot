@@ -14,6 +14,7 @@ public class EmailService {
     
 
     
+    @SuppressWarnings("unused")
     public void sendNewPassword(final String login, final String newPassword) {
         // nothing to do yet
     }

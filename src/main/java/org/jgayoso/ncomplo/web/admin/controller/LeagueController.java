@@ -139,7 +139,7 @@ public class LeagueController {
     @RequestMapping("/save")
     public String save(
             final LeagueBean leagueBean,
-            final BindingResult bindingResult) {
+            @SuppressWarnings("unused") final BindingResult bindingResult) {
 
         this.leagueService.save(
                 leagueBean.getId(),

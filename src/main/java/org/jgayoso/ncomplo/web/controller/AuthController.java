@@ -1,12 +1,12 @@
 package org.jgayoso.ncomplo.web.controller;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.jgayoso.ncomplo.business.entities.User;
 import org.jgayoso.ncomplo.business.services.UserService;
 import org.jgayoso.ncomplo.exceptions.InternalErrorException;
-import org.jgayoso.ncomplo.web.util.SessionUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,9 +26,17 @@ public class AuthController {
     
 
     @RequestMapping("/password")
-    public String password(final HttpServletRequest request, final ModelMap model) {
+    public String password(final ModelMap model) {
         
-        final String login = SessionUtil.getAuthenticatedUser(request);
+    	Authentication auth = SecurityContextHolder.getContext()
+				.getAuthentication();
+        if (auth instanceof AnonymousAuthenticationToken) {
+			/* The user is not logged in */
+			return "login";
+		}
+		/* The user is logged in */
+		final String login = auth.getName();
+		
         final User user = this.userService.find(login);
         
         model.addAttribute("user", user);
@@ -42,10 +50,16 @@ public class AuthController {
     public String changepassword(
             @RequestParam(value="oldPassword",required=true) String oldPassword,
             @RequestParam(value="newPassword1",required=true) String newPassword1,
-            @RequestParam(value="newPassword2",required=true) String newPassword2,
-            final HttpServletRequest request) {
+            @RequestParam(value="newPassword2",required=true) String newPassword2) {
         
-        final String login = SessionUtil.getAuthenticatedUser(request);
+    	Authentication auth = SecurityContextHolder.getContext()
+				.getAuthentication();
+        if (auth instanceof AnonymousAuthenticationToken) {
+			/* The user is not logged in */
+			return "login";
+		}
+		/* The user is logged in */
+		final String login = auth.getName();
         
         if (!newPassword1.equals(newPassword2)) {
             throw new InternalErrorException("New passwords do not match!");
