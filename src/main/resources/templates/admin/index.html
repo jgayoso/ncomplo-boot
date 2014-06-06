@@ -1,3 +1,29 @@
-<html>
-<span>TEST</span>
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+  <head th:substituteby="layout/header :: head"></head>
+  
+  <body>
+    
+    <header th:substituteby="layout/header :: header"></header>
+  
+    <header th:substituteby="layout/admin/header :: header"></header>
+  
+    <div id="content">
+  
+        <h1>Administration</h1>
+
+        <ul>
+          <li><a th:href="@{/admin/competition/list}">Manage Competitions</a></li>
+          <li><a th:href="@{/admin/league/list}">Manage Leagues</a></li>
+          <li><a th:href="@{/admin/user/list}">Manage Users</a></li>
+          <li><a th:href="@{/admin/database/querydatabase}">Manage Database</a></li>
+        </ul>        
+        
+        <a th:href="@{/scoreboard}">Go to Scoreboard</a>
+        
+    </div> 
+
+  </body>
+  
 </html>
