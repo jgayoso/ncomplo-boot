@@ -51,44 +51,10 @@ form#password {
 
 
 
-#scoreboard th {
+table th {
     background-color: #303030;
     color: #f0f0f0;
 }
-
-
-/* ======================  */
-/* ======================  */
-/* BETS                    */
-/* ======================  */
-/* ======================  */
-
-
-
-
-
-#bets {
-    border-collapse: collapse;    
-}
-
-#bets td, #bets th {
-    padding-top: 3px;
-    padding-bottom: 3px;
-    padding-left: 8px;
-    padding-right: 8px;
-    border: 1px solid black;
-}
-
-#bets th {
-    background-color: #303030;
-    font-weight: bold;
-    text-align: center;
-    color: #f0f0f0;
-    font-variant: small-caps;
-}
-
-
-
 
 /* -----------------  */
 /* BET COMPUTED       */
