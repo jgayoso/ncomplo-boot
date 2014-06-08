@@ -5,43 +5,53 @@
   
   <body>
   
-    <header th:substituteby="layout/header :: header"></header>
+    <div class="container">
   
-    <header th:substituteby="layout/admin/header :: header"></header>
+        <header th:substituteby="layout/header :: header"></header>
+      
+        <header th:substituteby="layout/admin/header :: header"></header>
   
-    <div id="content">
-    
-        <h1>Leagues</h1>
+        <div class="row">
+            <h1>Leagues</h1>
+        </div>
         
-        <form th:action="@{manage}" method="get">
-          <fieldset>
-            <select name="competitionId">
-              <option th:each="c : ${allCompetitions}" th:value="${c.id}" th:text="${c.getName(#locale)}">A competition</option>
-            </select>
-            <input type="submit" value="Create new" />
-          </fieldset>
-        </form>
+        <div class="row">
+            <form class="navbar-form" role="form" th:action="@{manage}" method="get">
+                <div class="form-group">
+                    <select name="competitionId">
+                        <option th:each="c : ${allCompetitions}" th:value="${c.id}" th:text="${c.getName(#locale)}">A competition</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary">Create new</button>
+                </div>
+            </form>
+        </div>
         
-        <table>
-          <tr th:each="l : ${allLeagues}">
-            <td th:text="${l.getName(#locale)}">Liga BBVA entre colegas</td>
-            <td th:text="${l.active}">Active</td>
-            <td>
-              <span th:text="${l.leagueGames.size()}">2</span> league games
-            </td>
-            <td>
-              <span th:text="${l.participants.size()}">2</span> participants
-              <a th:href="@{${l.id} + '/participants/list'}">manage participants</a>
-            </td>
-            <td><a th:href="@{recompute(id=${l.id})}" onclick="return confirm('Sure?');">recompute scores</a></td>
-            <td><a th:href="@{manage(id=${l.id})}">manage league</a></td>
-            <td><a th:href="@{delete(id=${l.id})}" onclick="return confirm('Sure?');">delete league</a></td>
-          </tr>
-        </table>
+        <div class="row">
+            <table class="table table-striped table-bordered">
+              <tr th:each="l : ${allLeagues}">
+                <td th:text="${l.getName(#locale)}">Liga BBVA entre colegas</td>
+                <td th:text="${l.active}">Active</td>
+                <td>
+                  <span th:text="${l.leagueGames.size()}">2</span> league games
+                </td>
+                <td>
+                  <span th:text="${l.participants.size()}">2</span> participants
+                  <a th:href="@{${l.id} + '/participants/list'}">manage participants</a>
+                </td>
+                <td><a th:href="@{recompute(id=${l.id})}" onclick="return confirm('Sure?');">recompute scores</a></td>
+                <td><a th:href="@{manage(id=${l.id})}">manage league</a></td>
+                <td><a th:href="@{delete(id=${l.id})}" onclick="return confirm('Sure?');">delete league</a></td>
+              </tr>
+            </table>
+        </div>
         
-        <a th:href="@{..}">Back to Admin Home</a>
+        <div class="row">
+            <a th:href="@{..}">Back to Admin Home</a>
+        </div>
         
-      </div> 
+    </div> 
 
   </body>
   

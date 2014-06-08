@@ -4,16 +4,14 @@
   <head th:substituteby="layout/header :: head"></head>
   
   <body>
+  
+    <div class="container">
     
-    <header th:substituteby="layout/header :: header"></header>
+        <header th:substituteby="layout/header :: header"></header>
+      
+        <header th:substituteby="layout/admin/header :: header"></header>
   
-    <header th:substituteby="layout/admin/header :: header"></header>
-  
-    <div id="content">
-  
-        <h1>Administration</h1>
-
-        <ul>
+        <ul class="list-unstyled">
           <li><a th:href="@{/admin/competition/list}">Manage Competitions</a></li>
           <li><a th:href="@{/admin/league/list}">Manage Leagues</a></li>
           <li><a th:href="@{/admin/user/list}">Manage Users</a></li>
