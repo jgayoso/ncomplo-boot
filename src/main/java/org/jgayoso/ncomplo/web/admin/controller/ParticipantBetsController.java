@@ -35,7 +35,7 @@ import org.springframework.web.servlet.support.RequestContextUtils;
 @RequestMapping("/admin/league/{leagueId}/participants")
 public class ParticipantBetsController {
 
-    private static final String VIEW_BASE = "/admin/league/participants/";
+    private static final String VIEW_BASE = "admin/league/participants/";
     
     
     @Autowired

@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RequestMapping("/admin/competition/{competitionId}/round")
 public class RoundController {
 
-    private static final String VIEW_BASE = "/admin/competition/round/";
+    private static final String VIEW_BASE = "admin/competition/round/";
     
     
     @Autowired

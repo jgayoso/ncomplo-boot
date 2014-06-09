@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RequestMapping("/admin/database")
 public class DatabaseController {
 
-    private static final String VIEW_BASE = "/admin/database/";
+    private static final String VIEW_BASE = "admin/database/";
     
     
     

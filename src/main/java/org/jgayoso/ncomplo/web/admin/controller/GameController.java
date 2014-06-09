@@ -32,7 +32,7 @@ import org.springframework.web.servlet.support.RequestContextUtils;
 @RequestMapping("/admin/competition/{competitionId}/game")
 public class GameController {
 
-    private static final String VIEW_BASE = "/admin/competition/game/";
+    private static final String VIEW_BASE = "admin/competition/game/";
     
     
     @Autowired

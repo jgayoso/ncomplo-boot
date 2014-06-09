@@ -24,7 +24,7 @@ import org.springframework.web.servlet.support.RequestContextUtils;
 @RequestMapping("/admin/user")
 public class UserController {
 
-    private static final String VIEW_BASE = "/admin/user/";
+    private static final String VIEW_BASE = "admin/user/";
     
     
     @Autowired

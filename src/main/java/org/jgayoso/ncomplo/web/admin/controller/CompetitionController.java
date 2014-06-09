@@ -20,7 +20,7 @@ import org.springframework.web.servlet.support.RequestContextUtils;
 @RequestMapping("/admin/competition")
 public class CompetitionController {
 
-    private static final String VIEW_BASE = "/admin/competition/";
+    private static final String VIEW_BASE = "admin/competition/";
     
     
     @Autowired
