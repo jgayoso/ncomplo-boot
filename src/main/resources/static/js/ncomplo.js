@@ -12,14 +12,14 @@ $(function() {
     if (!$.org) {
         $.org = {};
     }
-    if (!$.org.eleventhlabs) {
-        $.org.eleventhlabs = {};
+    if (!$.org.jgayoso) {
+        $.org.jgayoso = {};
     }
-    if ($.org.eleventhlabs.ncomplo) {
-        throw new Error('org.eleventhlabs.ncomplo already exists!');
+    if ($.org.jgayoso.ncomplo) {
+        throw new Error('org.jgayoso.ncomplo already exists!');
     }
   
-    $.org.eleventhlabs.ncomplo = {};
+    $.org.jgayoso.ncomplo = {};
   
 
     
@@ -30,18 +30,18 @@ $(function() {
      */
     
     
-    $.org.eleventhlabs.ncomplo.scoreboard = {};
-    $.org.eleventhlabs.ncomplo.scoreboard.POSITION_SELECTOR = '#scoreboard tbody tr td.scoreboard_position';    
-    $.org.eleventhlabs.ncomplo.scoreboard.POSITION_CLASS_PREFIX = 'scoreboard_pos';
+    $.org.jgayoso.ncomplo.scoreboard = {};
+    $.org.jgayoso.ncomplo.scoreboard.POSITION_SELECTOR = '#scoreboard tbody tr td.scoreboard_position';    
+    $.org.jgayoso.ncomplo.scoreboard.POSITION_CLASS_PREFIX = 'scoreboard_pos';
     
-    $.org.eleventhlabs.ncomplo.lang = {};
-    $.org.eleventhlabs.ncomplo.lang.prototypes = {};
-    $.org.eleventhlabs.ncomplo.lang.LANG_INPUT_CLASS = 'langInput';
-    $.org.eleventhlabs.ncomplo.lang.VALUE_INPUT_CLASS = 'valueInput';
-    $.org.eleventhlabs.ncomplo.lang.LANG_BLOCK_CLASS_SUFFIX = 'lang-element';
-    $.org.eleventhlabs.ncomplo.lang.LANG_BLOCK_NEW_CLASS_SUFFIX = '-lang-new';
-    $.org.eleventhlabs.ncomplo.lang.LANG_BLOCK_EXISTING_CLASS_SUFFIX = '-lang-existing';
-    $.org.eleventhlabs.ncomplo.lang.LANG_BLOCK_PROTOTYPE_ID_SUFFIX = '-lang-prototype';
+    $.org.jgayoso.ncomplo.lang = {};
+    $.org.jgayoso.ncomplo.lang.prototypes = {};
+    $.org.jgayoso.ncomplo.lang.LANG_INPUT_CLASS = 'langInput';
+    $.org.jgayoso.ncomplo.lang.VALUE_INPUT_CLASS = 'valueInput';
+    $.org.jgayoso.ncomplo.lang.LANG_BLOCK_CLASS_SUFFIX = 'lang-element';
+    $.org.jgayoso.ncomplo.lang.LANG_BLOCK_NEW_CLASS_SUFFIX = '-lang-new';
+    $.org.jgayoso.ncomplo.lang.LANG_BLOCK_EXISTING_CLASS_SUFFIX = '-lang-existing';
+    $.org.jgayoso.ncomplo.lang.LANG_BLOCK_PROTOTYPE_ID_SUFFIX = '-lang-prototype';
         
     
     
@@ -52,7 +52,7 @@ $(function() {
      */
     
     
-    $.org.eleventhlabs.ncomplo.initialize =
+    $.org.jgayoso.ncomplo.initialize =
         function() {
             
             var ncomplo = this;
@@ -115,7 +115,7 @@ $(function() {
      */
         
         
-    $.org.eleventhlabs.ncomplo.scoreboard.removeRepeatedPositions =
+    $.org.jgayoso.ncomplo.scoreboard.removeRepeatedPositions =
         function(langElementId) {
         
             var scoreboard = this;
@@ -155,7 +155,7 @@ $(function() {
      */
         
         
-    $.org.eleventhlabs.ncomplo.lang.add =
+    $.org.jgayoso.ncomplo.lang.add =
         function(langElementId) {
         
             var defaultLangElement = $('#'+langElementId);
@@ -203,7 +203,7 @@ $(function() {
         
         
         
-        $.org.eleventhlabs.ncomplo.lang.remove =
+        $.org.jgayoso.ncomplo.lang.remove =
             function(removalLinkElement) {
                 var langParent = $(removalLinkElement);
                 while (!langParent.hasClass(this.LANG_BLOCK_CLASS_SUFFIX)) {
@@ -222,7 +222,7 @@ $(function() {
      * =======================================
      */
         
-    $.org.eleventhlabs.ncomplo.initialize();
+    $.org.jgayoso.ncomplo.initialize();
     
     
 });
