@@ -30,6 +30,7 @@ public class SQLAccessor {
 
     
     
+    @SuppressWarnings("resource")
     public int executeUpdate(final String sql) {
         
         Connection con = null;
@@ -66,6 +67,7 @@ public class SQLAccessor {
 
     
     
+    @SuppressWarnings("resource")
     public SQLQueryResult executeQuery(final String sql) {
         
         Connection con = null;
@@ -86,7 +88,7 @@ public class SQLAccessor {
                     retrieveMetaData(result, rs);
                 }
 
-                final List<Object> dataRow = new ArrayList<Object>();
+                final List<Object> dataRow = new ArrayList<>();
 
                 for (int i = 1; i <= result.getColumnCount(); i++) {
                     dataRow.add(rs.getObject(i));
@@ -134,7 +136,7 @@ public class SQLAccessor {
         final ResultSetMetaData metaData = rs.getMetaData();
         final int columnCount = metaData.getColumnCount();
         
-        final List<String> columnNames = new ArrayList<String>();
+        final List<String> columnNames = new ArrayList<>();
         
         for (int i = 1; i <= columnCount;i++) {
             columnNames.add(metaData.getColumnLabel(i));

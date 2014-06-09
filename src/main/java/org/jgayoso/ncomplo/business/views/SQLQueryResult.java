@@ -9,7 +9,7 @@ public class SQLQueryResult {
 
     private int columnCount = -1;
     private List<String> columnNames = null;
-    private List<List<Object>> data = new ArrayList<List<Object>>();
+    private List<List<Object>> data = new ArrayList<>();
 
 
     

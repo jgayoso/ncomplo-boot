@@ -16,8 +16,8 @@ public class Scoreboard implements Serializable {
 
     public Scoreboard() {
         super();
-        this.totalScores = new ArrayList<ScoreboardPosition>();
-        this.groupStageScores = new ArrayList<ScoreboardPosition>();
+        this.totalScores = new ArrayList<>();
+        this.groupStageScores = new ArrayList<>();
     }
 
     

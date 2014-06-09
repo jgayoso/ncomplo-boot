@@ -34,14 +34,14 @@ public final class JavaScriptBetEvaluator {
 
         try {
             
-            final List<Game> allGames = new ArrayList<Game>(competition.getGames());
-            final List<GameSide> allGameSides = new ArrayList<GameSide>(competition.getGameSides());
-            final List<Game> allGamesInRound = new ArrayList<Game>();
-            final List<GameSide> allGameSidesInRound = new ArrayList<GameSide>();
-            final List<Game> allGamesInNextRounds = new ArrayList<Game>();
-            final List<GameSide> allGameSidesInNextRounds = new ArrayList<GameSide>();
-            final List<Game> allGamesInPreviousRounds = new ArrayList<Game>();
-            final List<GameSide> allGameSidesInPreviousRounds = new ArrayList<GameSide>();
+            final List<Game> allGames = new ArrayList<>(competition.getGames());
+            final List<GameSide> allGameSides = new ArrayList<>(competition.getGameSides());
+            final List<Game> allGamesInRound = new ArrayList<>();
+            final List<GameSide> allGameSidesInRound = new ArrayList<>();
+            final List<Game> allGamesInNextRounds = new ArrayList<>();
+            final List<GameSide> allGameSidesInNextRounds = new ArrayList<>();
+            final List<Game> allGamesInPreviousRounds = new ArrayList<>();
+            final List<GameSide> allGameSidesInPreviousRounds = new ArrayList<>();
             
             final int roundOrder = round.getOrder().intValue();
             

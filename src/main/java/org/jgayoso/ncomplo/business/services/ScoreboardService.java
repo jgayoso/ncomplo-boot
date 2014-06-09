@@ -44,7 +44,7 @@ public class ScoreboardService {
             final Integer leagueId, final Integer roundId, final Locale locale) {
 
         
-        final List<ScoreboardEntry> scoreboard = new ArrayList<ScoreboardEntry>();
+        final List<ScoreboardEntry> scoreboard = new ArrayList<>();
         
         final League league = this.leagueRepository.findOne(leagueId);
         final Set<User> participants = league.getParticipants();
