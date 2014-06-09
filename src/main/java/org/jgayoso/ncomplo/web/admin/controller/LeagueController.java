@@ -96,7 +96,7 @@ public class LeagueController {
         final Competition competition =
                 this.competitionService.find(leagueCompetitionId);
                 
-        final List<Game> allGamesForCompetition = new ArrayList<Game>(competition.getGames());
+        final List<Game> allGamesForCompetition = new ArrayList<>(competition.getGames());
         Collections.sort(allGamesForCompetition, new GameComparator(locale));
                 
         

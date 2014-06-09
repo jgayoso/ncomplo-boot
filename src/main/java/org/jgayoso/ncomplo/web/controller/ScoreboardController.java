@@ -65,7 +65,7 @@ public class ScoreboardController {
         
         final Locale locale = RequestContextUtils.getLocale(request);
         
-        Authentication auth = SecurityContextHolder.getContext()
+        final Authentication auth = SecurityContextHolder.getContext()
 				.getAuthentication();
         if (auth instanceof AnonymousAuthenticationToken) {
 			/* The user is not logged in */
@@ -76,8 +76,8 @@ public class ScoreboardController {
 		
         final User user = this.userService.find(login);
         
-        final List<League> userLeagues = new ArrayList<League>(user.getLeagues());
-        final List<League> activeUserLeagues = new ArrayList<League>();
+        final List<League> userLeagues = new ArrayList<>(user.getLeagues());
+        final List<League> activeUserLeagues = new ArrayList<>();
         for (final League league : userLeagues) {
             if (league.isActive()) {
                 activeUserLeagues.add(league);
@@ -132,7 +132,7 @@ public class ScoreboardController {
         
         final Locale locale = RequestContextUtils.getLocale(request);
         
-        Authentication auth = SecurityContextHolder.getContext()
+        final Authentication auth = SecurityContextHolder.getContext()
 				.getAuthentication();
         if (auth instanceof AnonymousAuthenticationToken) {
 			/* The user is not logged in */
@@ -143,8 +143,8 @@ public class ScoreboardController {
         
         final User user = this.userService.find(login);
         
-        final List<League> userLeagues = new ArrayList<League>(user.getLeagues());
-        final List<League> activeUserLeagues = new ArrayList<League>();
+        final List<League> userLeagues = new ArrayList<>(user.getLeagues());
+        final List<League> activeUserLeagues = new ArrayList<>();
         for (final League league : userLeagues) {
             if (league.isActive()) {
                 activeUserLeagues.add(league);
@@ -158,7 +158,7 @@ public class ScoreboardController {
 
         final League league = this.leagueService.find(leagueId);
         
-        final List<Round> rounds = new ArrayList<Round>(league.getCompetition().getRounds());
+        final List<Round> rounds = new ArrayList<>(league.getCompetition().getRounds());
         Collections.sort(rounds);
         
         final List<ScoreboardEntry> scoreboardEntries =
@@ -195,8 +195,8 @@ public class ScoreboardController {
     
     @RequestMapping({"/bets/{leagueId}/{login}"})
     public String bets(
-            @PathVariable("leagueId") Integer leagueId,
-            @PathVariable("login") String login,
+            @PathVariable("leagueId") final Integer leagueId,
+            @PathVariable("login") final String login,
             final HttpServletRequest request,
             final ModelMap model) {
         

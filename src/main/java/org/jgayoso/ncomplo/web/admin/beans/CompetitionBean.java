@@ -21,7 +21,7 @@ public class CompetitionBean implements Serializable {
     private String name;
     
     @NotNull
-    private List<LangBean> namesByLang = new ArrayList<LangBean>();
+    private final List<LangBean> namesByLang = new ArrayList<>();
 
     @NotNull
     private boolean active = true;

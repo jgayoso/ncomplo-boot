@@ -27,7 +27,7 @@ public class LeagueBean implements Serializable {
     private String name;
     
     @NotNull
-    private List<LangBean> namesByLang = new ArrayList<LangBean>();
+    private final List<LangBean> namesByLang = new ArrayList<>();
 
     @NotNull
     private boolean active = true;
@@ -37,7 +37,7 @@ public class LeagueBean implements Serializable {
 
     
     @NotNull
-    private Map<Integer,Integer> betTypesByGame = new LinkedHashMap<Integer, Integer>();
+    private final Map<Integer,Integer> betTypesByGame = new LinkedHashMap<>();
     
     
     

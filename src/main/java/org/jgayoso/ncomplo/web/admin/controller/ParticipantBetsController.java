@@ -69,7 +69,7 @@ public class ParticipantBetsController {
         final Locale locale = RequestContextUtils.getLocale(request);
         
         final List<User> participants =
-                new ArrayList<User>(this.leagueService.find(leagueId).getParticipants());
+                new ArrayList<>(this.leagueService.find(leagueId).getParticipants());
         Collections.sort(participants, new UserComparator(locale));
         
         model.addAttribute("allParticipants", participants);
@@ -98,7 +98,7 @@ public class ParticipantBetsController {
         final User participant = this.userService.find(login);
         
         final List<GameSide> competitionGameSides =
-                new ArrayList<GameSide>(competition.getGameSides());
+                new ArrayList<>(competition.getGameSides());
         Collections.sort(competitionGameSides, new I18nNamedEntityComparator(locale));
         
         final List<Bet> bets =
@@ -108,7 +108,7 @@ public class ParticipantBetsController {
         participationBean.setLeagueId(leagueId);
         participationBean.setLogin(login);
 
-        final List<Game> allGames = new ArrayList<Game>();
+        final List<Game> allGames = new ArrayList<>();
         for (final LeagueGame leagueGame : league.getLeagueGames().values()) {
             
             final BetBean betBean = new BetBean();

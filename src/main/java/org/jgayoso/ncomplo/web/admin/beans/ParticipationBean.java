@@ -19,7 +19,7 @@ public class ParticipationBean implements Serializable {
     private Integer leagueId;
     
     @NotNull
-    private Map<Integer,BetBean> betsByGame = new LinkedHashMap<Integer, BetBean>();
+    private Map<Integer,BetBean> betsByGame = new LinkedHashMap<>();
     
     
     

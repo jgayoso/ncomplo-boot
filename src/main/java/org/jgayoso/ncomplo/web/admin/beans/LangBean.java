@@ -32,7 +32,7 @@ public class LangBean implements Serializable {
     }
 
 
-    public void setLang(String lang) {
+    public void setLang(final String lang) {
         this.lang = lang;
     }
 
@@ -42,14 +42,14 @@ public class LangBean implements Serializable {
     }
 
 
-    public void setValue(String value) {
+    public void setValue(final String value) {
         this.value = value;
     }
     
     
     
     public static List<LangBean> listFromMap(final Map<String,String> valuesByLang) {
-        final List<LangBean> langBeans = new ArrayList<LangBean>();
+        final List<LangBean> langBeans = new ArrayList<>();
         for (final Map.Entry<String,String> namesByLangEntry : valuesByLang.entrySet()) {
             final LangBean langBean = new LangBean();
             langBean.setLang(namesByLangEntry.getKey());
@@ -62,7 +62,7 @@ public class LangBean implements Serializable {
     
     
     public static Map<String,String> mapFromList(final List<LangBean> langBeans) {
-        final Map<String,String> valuesByLang = new LinkedHashMap<String, String>();
+        final Map<String,String> valuesByLang = new LinkedHashMap<>();
         for (final LangBean langBean : langBeans) {
             if (!StringUtils.isEmpty(langBean.getLang())) {
                 valuesByLang.put(langBean.getLang(), langBean.getValue());
