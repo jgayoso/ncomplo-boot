@@ -32,12 +32,19 @@ public class Application extends WebMvcConfigurerAdapter {
 	}
 	
 	
-    public static void main(String[] args) {
+    public static void main(final String[] args) {
+        
+        String webPort = System.getenv("PORT");
+        if (webPort == null || webPort.isEmpty()) {
+            webPort = "8080";
+        }
+        System.setProperty("server.port", webPort);
+        
         SpringApplication.run(Application.class, args);
     }
     
     @Override
-	public void addViewControllers(ViewControllerRegistry registry) {
+	public void addViewControllers(final ViewControllerRegistry registry) {
 		registry.addViewController("/login").setViewName("login");
 	}
 
@@ -54,7 +61,7 @@ public class Application extends WebMvcConfigurerAdapter {
 		private AuthenticationProvider authenticationProvider;
 		
 		@Override
-		public void init(AuthenticationManagerBuilder auth) throws Exception {
+		public void init(final AuthenticationManagerBuilder auth) throws Exception {
 			auth.authenticationProvider(this.authenticationProvider);
 		}
 	}
@@ -63,7 +70,7 @@ public class Application extends WebMvcConfigurerAdapter {
 	protected static class ApplicationSecurity extends WebSecurityConfigurerAdapter {
 
 		@Override
-		protected void configure(HttpSecurity http) throws Exception {
+		protected void configure(final HttpSecurity http) throws Exception {
 			http.authorizeRequests()
 					      .antMatchers("/login").permitAll()
 					      .antMatchers("/css/ncomplo.css").permitAll()
