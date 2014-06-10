@@ -6,10 +6,10 @@
   <body>
     
     <header th:substituteby="layout/header :: header"></header>
-    
-    <header th:substituteby="layout/admin/header :: header"></header>
   
-    <div id="content">
+    <div class="container">
+  
+        <header th:substituteby="layout/admin/header :: header"></header>
   
         <h1>Games for competition "<span th:text="${competition.getName(#locale)}">competition</span>"</h1>
         

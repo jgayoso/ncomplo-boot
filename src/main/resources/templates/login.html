@@ -5,10 +5,10 @@
   
   <body>
   
+    <header th:substituteby="layout/header :: header"></header>
+    
     <div class="container">
     
-        <header th:substituteby="layout/header :: header"></header>
-      
         <form id="login" th:action="@{/login}" method="post" class="form-signin" role="form">
             <h3 class="form-signin-heading" th:text="#{login.title}">Authenticate</h3>
             <input id="loginInput" type="text" name="username" required="required" class="form-control" th:placeholder="#{login.form.login}" autofocus="autofocus" />

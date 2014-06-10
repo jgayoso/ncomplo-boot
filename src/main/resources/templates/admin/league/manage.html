@@ -7,10 +7,10 @@
   
     <header th:substituteby="layout/header :: header"></header>
   
-    <header th:substituteby="layout/admin/header :: header"></header>
-  
-    <div id="content">
+    <div class="container">
     
+        <header th:substituteby="layout/admin/header :: header"></header>
+  
         <h1>Manage League</h1>
         
         <form th:action="@{save}" th:object="${league}" method="post">

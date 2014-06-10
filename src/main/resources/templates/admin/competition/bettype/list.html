@@ -7,22 +7,31 @@
     
     <header th:substituteby="layout/header :: header"></header>
   
-    <header th:substituteby="layout/admin/header :: header"></header>
+    <div class="container">
   
-    <div id="content">
-  
-        <h1>Bet Types for competition "<span th:text="${competition.getName(#locale)}">competition</span>"</h1>
+        <header th:substituteby="layout/admin/header :: header"></header>
         
-        <a th:href="@{manage}">Create new</a>
-        <table>
-          <tr th:each="bt : ${allBetTypes}">
-            <td th:text="${bt.getName(#locale)}">Type of Bet</td>
-            <td><a th:href="@{manage(id=${bt.id})}">manage bet type</a></td>
-            <td><a th:href="@{delete(id=${bt.id})}" onclick="return confirm('Sure?');">delete bet type</a></td>
-          </tr>
-        </table>
+        <div class="row">
+            <h1>Bet Types for competition "<span th:text="${competition.getName(#locale)}">competition</span>"</h1>
+        </div>
         
-        <a th:href="@{../../list}">Back to list of Competitions</a>
+        <div class="row">        
+            <a th:href="@{manage}">Create new</a>
+        </div>
+        
+        <div class="row">
+            <table class="table table-bordered">
+              <tr th:each="bt : ${allBetTypes}">
+                <td th:text="${bt.getName(#locale)}">Type of Bet</td>
+                <td><a th:href="@{manage(id=${bt.id})}">manage bet type</a></td>
+                <td><a th:href="@{delete(id=${bt.id})}" onclick="return confirm('Sure?');">delete bet type</a></td>
+              </tr>
+            </table>
+        </div>
+        
+        <div class="row">
+            <a th:href="@{../../list}">Back to list of Competitions</a>
+        </div>
         
     </div> 
 
