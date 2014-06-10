@@ -36,7 +36,7 @@ public class User {
 
     
     @ManyToMany(mappedBy="participants")
-    private Set<League> leagues = new LinkedHashSet<League>();
+    private final Set<League> leagues = new LinkedHashSet<>();
     
     
     @Column(name="IS_ADMIN",nullable=false)

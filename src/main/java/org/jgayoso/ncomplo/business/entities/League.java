@@ -43,7 +43,7 @@ public class League implements I18nNamedEntity {
     @CollectionTable(name="LEAGUE_NAME_I18N",joinColumns=@JoinColumn(name="LEAGUE_ID"))
     @MapKeyColumn(name="LANG",nullable=false,length=20)
     @Column(name="NAME", nullable=false,length=200)
-    private Map<String,String> namesByLang = new LinkedHashMap<String, String>();
+    private final Map<String,String> namesByLang = new LinkedHashMap<>();
 
     
     @Column(name="ACTIVE",nullable=false)
@@ -60,12 +60,12 @@ public class League implements I18nNamedEntity {
 
     
     @ManyToMany
-    private Set<User> participants = new LinkedHashSet<User>();
+    private final Set<User> participants = new LinkedHashSet<>();
 
     
     @OneToMany(cascade=CascadeType.ALL,orphanRemoval=true,mappedBy="league")
     @MapKey(name="game")
-    private Map<Game,LeagueGame> leagueGames = new LinkedHashMap<Game,LeagueGame>();
+    private final Map<Game,LeagueGame> leagueGames = new LinkedHashMap<>();
 
     
     

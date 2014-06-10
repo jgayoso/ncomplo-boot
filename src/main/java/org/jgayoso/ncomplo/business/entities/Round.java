@@ -39,7 +39,7 @@ public class Round implements Comparable<Round> {
     @CollectionTable(name="ROUND_NAME_I18N",joinColumns=@JoinColumn(name="ROUND_ID"))
     @MapKeyColumn(name="LANG",nullable=false,length=20)
     @Column(name="NAME", nullable=false,length=200)
-    private Map<String,String> namesByLang = new LinkedHashMap<String, String>();
+    private final Map<String,String> namesByLang = new LinkedHashMap<>();
     
     
     @ManyToOne

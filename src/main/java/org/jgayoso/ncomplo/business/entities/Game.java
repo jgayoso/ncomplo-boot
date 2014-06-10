@@ -59,7 +59,7 @@ public class Game implements DatedAndNamedEntity {
     @CollectionTable(name="GAME_NAME_I18N",joinColumns=@JoinColumn(name="GAME_ID"))
     @MapKeyColumn(name="LANG",nullable=false,length=20)
     @Column(name="NAME", nullable=false,length=200)
-    private Map<String,String> namesByLang = new LinkedHashMap<String, String>();
+    private final Map<String,String> namesByLang = new LinkedHashMap<>();
     
     
     @Column(name="DATE",nullable=true)

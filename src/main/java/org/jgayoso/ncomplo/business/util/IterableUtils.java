@@ -9,7 +9,7 @@ public final class IterableUtils {
 
 
     public static <T> List<T> toList(final Iterable<T> iter) {
-        final List<T> result = new ArrayList<T>();
+        final List<T> result = new ArrayList<>();
         for (final T value : iter) {
             result.add(value);
         }

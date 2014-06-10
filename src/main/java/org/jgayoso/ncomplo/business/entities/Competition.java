@@ -40,7 +40,7 @@ public class Competition implements I18nNamedEntity {
     @CollectionTable(name="COMPETITION_NAME_I18N",joinColumns=@JoinColumn(name="COMPETITION_ID"))
     @MapKeyColumn(name="LANG",nullable=false,length=20)
     @Column(name="NAME", nullable=false,length=200)
-    private Map<String,String> namesByLang = new LinkedHashMap<String, String>();
+    private final Map<String,String> namesByLang = new LinkedHashMap<>();
 
     
     @Column(name="ACTIVE",nullable=false)
@@ -48,19 +48,19 @@ public class Competition implements I18nNamedEntity {
 
     
     @OneToMany(cascade=CascadeType.ALL,orphanRemoval=true,mappedBy="competition")
-    private Set<BetType> betTypes = new LinkedHashSet<BetType>();
+    private final Set<BetType> betTypes = new LinkedHashSet<>();
 
     
     @OneToMany(cascade=CascadeType.ALL,orphanRemoval=true,mappedBy="competition")
-    private Set<Round> rounds = new LinkedHashSet<Round>();
+    private final Set<Round> rounds = new LinkedHashSet<>();
 
     
     @OneToMany(cascade=CascadeType.ALL,orphanRemoval=true,mappedBy="competition")
-    private Set<GameSide> gameSides = new LinkedHashSet<GameSide>();
+    private final Set<GameSide> gameSides = new LinkedHashSet<>();
 
     
     @OneToMany(cascade=CascadeType.ALL,orphanRemoval=true,mappedBy="competition")
-    private Set<Game> games = new LinkedHashSet<Game>();
+    private final Set<Game> games = new LinkedHashSet<>();
     
     
     

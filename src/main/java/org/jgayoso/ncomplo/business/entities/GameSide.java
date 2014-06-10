@@ -38,7 +38,7 @@ public class GameSide implements I18nNamedEntity {
     @CollectionTable(name="GAME_SIDE_NAME_I18N",joinColumns=@JoinColumn(name="GAME_SIDE_ID"))
     @MapKeyColumn(name="LANG",nullable=false,length=20)
     @Column(name="NAME", nullable=false,length=200)
-    private Map<String,String> namesByLang = new LinkedHashMap<String, String>();
+    private final Map<String,String> namesByLang = new LinkedHashMap<>();
     
     
     @ManyToOne
