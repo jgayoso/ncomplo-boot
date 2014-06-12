@@ -62,6 +62,18 @@ form#password {
     text-align: right;
 }
 
+#scoreboard tbody tr.scoreboard_pos1 {
+    background-color: #77d245;
+}
+
+#scoreboard tbody tr.scoreboard_pos2 {
+    background-color: #a7f37e;
+}
+
+#scoreboard tbody tr.scoreboard_pos3 {
+    background-color: #c7f39e;
+}
+
 
 /* -----------------  */
 /* BET COMPUTED       */
