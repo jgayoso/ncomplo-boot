@@ -54,6 +54,10 @@ form#password {
     color: #f0f0f0;
 }
 
+#scoreboard tbody td {
+    vertical-align: middle;    
+}
+
 #scoreboard tbody td.scoreboard_position {
     text-align: right;
 }

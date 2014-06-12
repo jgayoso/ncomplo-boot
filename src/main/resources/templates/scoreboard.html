@@ -65,7 +65,7 @@
                   <span th:text="${sc.points}">points</span>
                 </td>
                 <td class="scoreboard_actions">
-                  <a th:href="@{'/bets/' + ${league.id} + '/' + ${sc.user.login}}" th:text="#{scoreboard.viewbets}" class="btn-xs btn-default">view bets</a>
+                  <a th:href="@{'/bets/' + ${league.id} + '/' + ${sc.user.login}}" th:text="#{scoreboard.viewbets}" class="btn btn-xs btn-default">view bets</a>
                 </td>
               </tr>
             </tbody>
