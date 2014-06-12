@@ -7,9 +7,9 @@
   
     <header th:substituteby="layout/header :: header"></header>
   
-    <header th:substituteby="layout/admin/header :: header"></header>
-    
-    <div id="content">
+    <div class="container">
+  
+        <header th:substituteby="layout/admin/header :: header"></header>
 
         <h1>Manage Bet Type in competition "<span th:text="${competition.getName(#locale)}">One Competition</span>"</h1>
         

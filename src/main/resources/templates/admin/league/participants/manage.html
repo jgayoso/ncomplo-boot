@@ -7,10 +7,10 @@
   
     <header th:substituteby="layout/header :: header"></header>
   
-    <header th:substituteby="layout/admin/header :: header"></header>
+    <div class="container">
   
-    <div id="content">
-    
+        <header th:substituteby="layout/admin/header :: header"></header>
+  
         <h1>
           Manage bets in league 
           "<span th:text="${league.getName(#locale)}">league</span>"

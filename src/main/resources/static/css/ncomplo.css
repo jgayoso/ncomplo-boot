@@ -7,6 +7,7 @@ body {
 
 .page-header {
     border-bottom: 1px solid #fff;
+    padding-left: 20px;
 }
 
 
@@ -48,13 +49,19 @@ form#password {
     padding:10px 0px
 }
 
-
-
-
-table th {
+#scoreboard thead th {
     background-color: #303030;
     color: #f0f0f0;
 }
+
+#scoreboard tbody td.scoreboard_position {
+    text-align: right;
+}
+
+#scoreboard tbody td.scoreboard_points {
+    text-align: right;
+}
+
 
 /* -----------------  */
 /* BET COMPUTED       */
@@ -146,7 +153,7 @@ table th {
 #bets tr.bet_computed td.bet_points {
     background-color: #303030;
     font-weight: bold;
-    text-align: right;
+    text-align: center;
 }
 
 #bets tr.bet_computed.bet_winlevel0 td.bet_points,
@@ -186,7 +193,7 @@ table th {
 #bets tr.bet_notcomputed td.bet_bet_scoreB,
 #bets tr.bet_notcomputed td.bet_bet_sideB,
 #bets tr.bet_notcomputed td.bet_points {
-    background-color: #f3fdaf;
+    background-color: lemonchiffon;
 }
 
 #bets tr.bet_notcomputed.bet_bet_winnerA td.bet_bet_sideA,

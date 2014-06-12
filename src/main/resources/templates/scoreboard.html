@@ -5,9 +5,9 @@
   
   <body>
     
-    <div class="container">
+    <header th:substituteby="layout/header :: header"></header>
     
-        <header th:substituteby="layout/header :: header"></header>
+    <div class="container">
     
         <div class="row">
             <h2 th:text="#{scoreboard.title}">SCOREBOARD</h2>
