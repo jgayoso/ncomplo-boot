@@ -62,15 +62,15 @@ form#password {
     text-align: right;
 }
 
-#scoreboard tbody tr.scoreboard_pos1 {
+#scoreboard>tbody>tr.scoreboard_pos1>td {
     background-color: #77d245;
 }
 
-#scoreboard tbody tr.scoreboard_pos2 {
+#scoreboard>tbody>tr.scoreboard_pos2>td {
     background-color: #a7f37e;
 }
 
-#scoreboard tbody tr.scoreboard_pos3 {
+#scoreboard>tbody>tr.scoreboard_pos3>td {
     background-color: #c7f39e;
 }
 
