@@ -86,6 +86,9 @@ public class ScoreboardController {
         Collections.sort(activeUserLeagues, new I18nNamedEntityComparator(locale));
         
         if (activeUserLeagues.size() == 0) {
+        	if (user.isAdmin()) {
+        		return "redirect:/admin";
+        	}
             throw new InternalErrorException("No active leagues for user \"" +  login + "\"");
         }
 

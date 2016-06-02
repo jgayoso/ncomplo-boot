@@ -1,4 +1,4 @@
-package org.jgayoso.ncomplo.web.admin.controller;
+package org.jgayoso.ncomplo.web;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -15,85 +15,57 @@ import org.jgayoso.ncomplo.business.entities.GameSide;
 import org.jgayoso.ncomplo.business.entities.League;
 import org.jgayoso.ncomplo.business.entities.LeagueGame;
 import org.jgayoso.ncomplo.business.entities.User;
-import org.jgayoso.ncomplo.business.entities.User.UserComparator;
 import org.jgayoso.ncomplo.business.services.BetService;
+import org.jgayoso.ncomplo.business.services.GameService;
 import org.jgayoso.ncomplo.business.services.LeagueService;
 import org.jgayoso.ncomplo.business.services.UserService;
 import org.jgayoso.ncomplo.business.util.I18nNamedEntityComparator;
 import org.jgayoso.ncomplo.web.admin.beans.BetBean;
 import org.jgayoso.ncomplo.web.admin.beans.ParticipationBean;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.support.RequestContextUtils;
 
 @Controller
-@RequestMapping("/admin/league/{leagueId}/participants")
-public class ParticipantBetsController {
-
-    private static final String VIEW_BASE = "admin/league/participants/";
-    
-    
+@RequestMapping("/bets/{leagueId}")
+public class UserBetsController {
+	
     @Autowired
     private LeagueService leagueService;
-
+    @Autowired
+    private GameService gameService;
     @Autowired
     private UserService userService;
 
     @Autowired
     private BetService betService;
     
-    
-    
-    
-    
-    public ParticipantBetsController() {
-        super();
+    public UserBetsController() {
+    	super();
     }
     
-
-
-
-    
-    
-    @RequestMapping("/list")
-    public String list(
-            @PathVariable("leagueId") final Integer leagueId,
-            final HttpServletRequest request,
-            final ModelMap model) {
-        
-        final Locale locale = RequestContextUtils.getLocale(request);
-        
-        final List<User> participants =
-                new ArrayList<>(this.leagueService.find(leagueId).getParticipants());
-        Collections.sort(participants, new UserComparator(locale));
-        
-        model.addAttribute("allParticipants", participants);
-        model.addAttribute("league", this.leagueService.find(leagueId));
-        
-        return VIEW_BASE + "list";
-        
-    }
-
-
-    
-    
-    @RequestMapping("/manage")
+    @RequestMapping("/")
     public String manage(
-            @RequestParam(value="leagueId",required=true)
+    		@PathVariable(value="leagueId")
             final Integer leagueId,
-            @RequestParam(value="login",required=true)
-            final String login,
             final ModelMap model,
             final HttpServletRequest request) {
 
         final Locale locale = RequestContextUtils.getLocale(request);
-        SecurityContextHolder.getContext().getAuthentication();
+        final Authentication auth = SecurityContextHolder.getContext()
+				.getAuthentication();
+        if (auth instanceof AnonymousAuthenticationToken) {
+			/* The user is not logged in */
+			return "login";
+		}
+		/* The user is logged in */
+		final String login = auth.getName();
         
         final League league = this.leagueService.find(leagueId);
         final Competition competition = league.getCompetition();
@@ -161,36 +133,33 @@ public class ParticipantBetsController {
         model.addAttribute("allGameSides", competitionGameSides);
         model.addAttribute("allBets", bets);
         
-        return VIEW_BASE + "manage";
+        return "managebets";
         
     }
-
-
-
     
     @RequestMapping("/save")
-    public String save(
-            final ParticipationBean participationBean,
-            @SuppressWarnings("unused") final BindingResult bindingResult) {
-
+    public String save(final ParticipationBean participationBean){
+    	final Authentication auth = SecurityContextHolder.getContext()
+				.getAuthentication();
+        if (auth instanceof AnonymousAuthenticationToken) {
+			/* The user is not logged in */
+			return "login";
+		}
         
-        for (final BetBean betBean : participationBean.getBetsByGame().values()) {
-            
+    	for (final BetBean betBean : participationBean.getBetsByGame().values()) {
+            Game game = this.gameService.find(betBean.getGameId());
             this.betService.save(
                     betBean.getId(),
                     participationBean.getLeagueId(),
                     participationBean.getLogin(),
                     betBean.getGameId(),
-                    betBean.getGameSideAId(),
-                    betBean.getGameSideBId(),
+                    game.getGameSideA() != null ? game.getGameSideA().getId() : betBean.getGameSideAId(),
+            		game.getGameSideB() != null ? game.getGameSideB().getId() : betBean.getGameSideBId(),
                     betBean.getScoreA(),
                     betBean.getScoreB());
             
         }
-        
-        return "redirect:list";
-        
-    }
-    
-    
+		return "redirect:/scoreboard";
+	}
+
 }

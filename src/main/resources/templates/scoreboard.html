@@ -71,9 +71,14 @@
             </tbody>
           </table>
         </div>
-
+		<div class="row">  
+          <a th:href="@{'/bets/' + ${league.id} + '/'}" th:text="#{scoreboard.viewbets}">Send bets</a>
+        </div>
         <div class="row">  
           <a th:href="@{/password}" th:text="#{nav.changepassword}">Change password</a>
+        </div>
+        <div class="row">  
+          <a th:href="@{/logout}" th:text="#{logout}">Logout</a>
         </div>
         
         <div class="row">

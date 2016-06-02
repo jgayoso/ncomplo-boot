@@ -89,8 +89,7 @@ public class LeagueController {
         final Integer leagueCompetitionId =
                 (league == null? competitionId : league.getCompetition().getId());
         if (leagueCompetitionId == null) {
-            throw new InternalErrorException(
-                    "\"competitionId\" is mandatory if no \"id\" is specified.");
+        	return "redirect:/admin";
         }
         
         final Competition competition =
@@ -137,9 +136,7 @@ public class LeagueController {
     
     
     @RequestMapping("/save")
-    public String save(
-            final LeagueBean leagueBean,
-            @SuppressWarnings("unused") final BindingResult bindingResult) {
+    public String save(final LeagueBean leagueBean) {
 
         this.leagueService.save(
                 leagueBean.getId(),
