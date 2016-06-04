@@ -9,11 +9,7 @@
   
     <div class="container">
     
-        <h1>
-          Manage bets in league 
-          "<span th:text="${league.getName(#locale)}">league</span>"
-          by participant "<span th:text="${participant.name}">user</span>"
-        </h1>
+        <h1><span th:text="#{bets.title}">Manage bets for league</span> "<span th:text="${league.getName(#locale)}">league</span>"</h1>
         
         <form th:action="@{save}" th:object="${participation}" method="post">
           
@@ -24,7 +20,18 @@
           
             <div>
             
-              <table>
+              <table id="bets" class="table table-striped table-bordered" >
+              	<thead>
+              		<tr>
+              			<th><span th:text="#{bets.header.round}">Round</span></th>
+              			<th><span th:text="#{bets.header.date}">Date</span></th>
+              			<th></th>
+              			<th></th>
+              			<th></th>
+              			<th><span th:text="#{bets.header.match.sideA}">Score A</span></th>
+              			<th><span th:text="#{bets.header.match.sideB}">Score B</span></th>
+              		</tr>
+              	</thead>
                 <tr th:each="g : ${allGames}">
                   <td>
                     <input type="hidden" th:field="*{betsByGame[__${g.id}__].id}" />
