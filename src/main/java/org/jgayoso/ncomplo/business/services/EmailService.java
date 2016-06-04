@@ -47,7 +47,9 @@ public class EmailService {
 			+ "\nTo access to your ncomplo account user your new credentials: \n-Login: "
 			+ user.getLogin() + "\n-Password: " + newPassword + "\nPlease, change your password!";
 			email.setHtml(html).setText(text);
+			logger.debug("Sending email to " + email.getTos());
     		this.sendGrid.send(email);
+    		logger.debug("Reset password email sent to " + email.getTos());
 			
 		} catch (SendGridException e) {
 			logger.error("Error sending new password email", e);

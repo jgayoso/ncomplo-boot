@@ -1,4 +1,4 @@
-package org.jgayoso.ncomplo.web;
+package org.jgayoso.ncomplo.web.controller;
 
 import java.util.ArrayList;
 import java.util.Collections;
