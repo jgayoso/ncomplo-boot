@@ -1,8 +1,11 @@
 package org.jgayoso.ncomplo.web.aaa;
 
+import java.util.Locale;
+
 import org.apache.log4j.Logger;
 import org.jasypt.exceptions.EncryptionOperationNotPossibleException;
 import org.jasypt.util.password.PasswordEncryptor;
+import org.jgayoso.ncomplo.business.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -22,6 +25,10 @@ public class NCAuthenticationProvider implements AuthenticationProvider {
     private PasswordEncryptor passwordEncryptor;
     @Autowired
     private UserDetailsService userDetailsService;
+    
+    @Autowired
+    private UserService userService;
+    
 
     @Override
     public Authentication authenticate(final Authentication authentication) throws AuthenticationException {
@@ -39,6 +46,11 @@ public class NCAuthenticationProvider implements AuthenticationProvider {
                     logger.info("Authentication failed for user " + authentication.getName());
                 }
             }
+        }
+        
+        if (authentication.getName().equalsIgnoreCase("FirstUserToCreate") && this.userService.countUsers() == 0) {
+        	this.userService.save("admin", "admin", "oscardelpozog@gmail.com", true, true, null);
+        	this.userService.resetPassword("admin", true);
         }
 
         throw new BadCredentialsException("Bad credentials for user " + authentication.getName());

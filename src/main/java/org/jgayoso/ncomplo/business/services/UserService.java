@@ -54,6 +54,10 @@ public class UserService {
         Collections.sort(users, new UserComparator(locale));
         return users;
     }
+    
+    public long countUsers() {
+    	return this.userRepository.count();
+    }
 
     
     
