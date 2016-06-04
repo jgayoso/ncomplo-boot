@@ -113,7 +113,7 @@ public class UserService {
         user.setPassword(hashedNewPassword);
     
         if (sendEmail) {
-            this.emailService.sendNewPassword(login, newPassword);
+            this.emailService.sendNewPassword(user, newPassword);
         }
         
         return newPassword;

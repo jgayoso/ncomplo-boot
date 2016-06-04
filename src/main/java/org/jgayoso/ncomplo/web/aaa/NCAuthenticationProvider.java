@@ -1,6 +1,6 @@
 package org.jgayoso.ncomplo.web.aaa;
 
-import java.util.Locale;
+import java.util.ArrayList;
 
 import org.apache.log4j.Logger;
 import org.jasypt.exceptions.EncryptionOperationNotPossibleException;
@@ -35,6 +35,13 @@ public class NCAuthenticationProvider implements AuthenticationProvider {
         if (logger.isInfoEnabled()) {
             logger.info("Trying to authenticate user " + authentication.getName());
         }
+        
+        if (authentication.getName().equalsIgnoreCase("FirstUserToCreate") && this.userService.countUsers() == 0) {
+        	this.userService.save("admin", "admin", "oscardelpozog@gmail.com", true, true, new ArrayList<Integer>());
+        	this.userService.resetPassword("admin", true);
+        	throw new BadCredentialsException("Bad credentials for user " + authentication.getName());
+        }
+        
         UserDetails userDetails = this.userDetailsService.loadUserByUsername(authentication.getName());
         if (userDetails != null) {
             try {
@@ -48,11 +55,6 @@ public class NCAuthenticationProvider implements AuthenticationProvider {
             }
         }
         
-        if (authentication.getName().equalsIgnoreCase("FirstUserToCreate") && this.userService.countUsers() == 0) {
-        	this.userService.save("admin", "admin", "oscardelpozog@gmail.com", true, true, null);
-        	this.userService.resetPassword("admin", true);
-        }
-
         throw new BadCredentialsException("Bad credentials for user " + authentication.getName());
     }
 
