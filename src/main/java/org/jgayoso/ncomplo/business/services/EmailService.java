@@ -20,9 +20,11 @@ public class EmailService {
 	private final SendGrid sendGrid; 
     public EmailService() {
         super();
-        Map<String, String> env = System.getenv();
-    	final String username = env.get("SENDGRID_USERNAME");
-    	final String password = env.get("SENDGRID_PASSWORD");
+//        Map<String, String> env = System.getenv();
+//    	final String username = env.get("SENDGRID_USERNAME");
+//    	final String password = env.get("SENDGRID_PASSWORD");
+        final String username = "app49099817@heroku.com";
+        final String password = "clyerlux2690";
     	if (StringUtils.isNotBlank(username) && StringUtils.isNotBlank(password)){
     		this.sendGrid = new SendGrid(username, password);
     	} else {
