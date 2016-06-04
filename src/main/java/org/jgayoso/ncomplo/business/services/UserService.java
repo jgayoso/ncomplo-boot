@@ -54,6 +54,10 @@ public class UserService {
         Collections.sort(users, new UserComparator(locale));
         return users;
     }
+    
+    public long countUsers() {
+    	return this.userRepository.count();
+    }
 
     
     
@@ -109,7 +113,7 @@ public class UserService {
         user.setPassword(hashedNewPassword);
     
         if (sendEmail) {
-            this.emailService.sendNewPassword(login, newPassword);
+            this.emailService.sendNewPassword(user, newPassword);
         }
         
         return newPassword;
