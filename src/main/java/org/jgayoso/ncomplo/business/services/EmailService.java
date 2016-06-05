@@ -20,23 +20,18 @@ public class EmailService {
 	private static final Logger logger = Logger.getLogger(EmailService.class);
 	
 	//TODO EmailService must be an interface and this a specific implementation
-	@Value("${SENDGRID_USERNAME)")
-	private String sendgridUsername;
 	
-	@Value("${SENDGRID_PASSWORD)")
-	private String sendgridPassword;
-	
-	private final SendGrid sendGrid; 
-    public EmailService() {
-        super();
-        final String username = this.sendgridUsername;
-        final String password = this.sendgridPassword;
-    	if (StringUtils.isNotBlank(username) && StringUtils.isNotBlank(password)){
-    		this.sendGrid = new SendGrid(username, password);
-    	} else {
-    		this.sendGrid = null;
-    	}
-    }
+	private final SendGrid sendGrid;
+
+	public EmailService() {
+		super();
+		// Map<String, String> env = System.getenv();
+		// final String username = env.get("SENDGRID_USERNAME");
+		// final String password = env.get("SENDGRID_PASSWORD");
+		final String username = "app49099817@heroku.com";
+		final String password = "clyerlux2690";
+		this.sendGrid = new SendGrid(username, password);
+	}
     
     public void sendNewPassword(final User user, final String newPassword) {
     	if (this.sendGrid == null){
