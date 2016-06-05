@@ -2,6 +2,7 @@ package org.jgayoso.ncomplo.web.controller;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -174,6 +175,7 @@ public class ScoreboardController {
         model.addAttribute("allLeagues", activeUserLeagues);
         model.addAttribute("allRounds", rounds);
         model.addAttribute("showLeagueSelector", Boolean.valueOf(activeUserLeagues.size() > 1));
+        model.addAttribute("betsAllowed", league.getBetsDeadLine().after(new Date()));
         
         return "scoreboard";
         

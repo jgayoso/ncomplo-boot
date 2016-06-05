@@ -1,6 +1,7 @@
 package org.jgayoso.ncomplo.business.services;
 
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -75,6 +76,7 @@ public class LeagueService {
             final Map<String,String> namesByLang,
             final String adminEmail,
             final boolean active,
+            final Date betsDeadLine,
             final Map<Integer,Integer> betTypesByGame) {
 
         final Competition competition = 
@@ -90,6 +92,7 @@ public class LeagueService {
         league.setAdminEmail(adminEmail);
         league.setActive(active);
         league.getLeagueGames().clear();
+        league.setBetsDeadLine(betsDeadLine);
         
         for (final Map.Entry<Integer,Integer> betTypesByGameEntry : betTypesByGame.entrySet()) {
             

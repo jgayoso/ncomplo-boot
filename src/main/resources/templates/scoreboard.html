@@ -71,7 +71,7 @@
             </tbody>
           </table>
         </div>
-		<div class="row">  
+		<div class="row" th:if="${betsAllowed}">  
           <a th:href="@{'/bets/' + ${league.id} + '/'}" th:text="#{scoreboard.sendbets}">Send bets</a>
         </div>
         <div class="row">  

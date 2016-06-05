@@ -2,11 +2,13 @@ package org.jgayoso.ncomplo.web.controller;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.log4j.Logger;
 import org.jgayoso.ncomplo.business.entities.Bet;
 import org.jgayoso.ncomplo.business.entities.Competition;
 import org.jgayoso.ncomplo.business.entities.Game;
@@ -28,6 +30,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.support.RequestContextUtils;
@@ -35,6 +38,8 @@ import org.springframework.web.servlet.support.RequestContextUtils;
 @Controller
 @RequestMapping("/bets/{leagueId}")
 public class UserBetsController {
+	
+	private static final Logger logger = Logger.getLogger(UserBetsController.class);
 	
     @Autowired
     private LeagueService leagueService;
@@ -68,6 +73,11 @@ public class UserBetsController {
 		final String login = auth.getName();
         
         final League league = this.leagueService.find(leagueId);
+        if (league.getBetsDeadLine().before(new Date())) {
+        	logger.info("User " + login + " trying to edit the bets in league " + league.getId() + " - " + league.getName());
+        	return "managebets";
+        }
+        
         final Competition competition = league.getCompetition();
         final User participant = this.userService.find(login);
         
