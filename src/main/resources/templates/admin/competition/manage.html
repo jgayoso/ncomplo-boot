@@ -22,18 +22,18 @@
             <div id="name">
               <label for="nameInput">Name</label>
               <input id="nameInput" type="text" th:field="*{name}" required="required" />
-              <a href="#" onclick="$.org.eleventhlabs.ncomplo.lang.add('name');">add language</a>
+              <a href="#" onclick="$.org.jgayoso.ncomplo.lang.add('name');">add language</a>
             </div>
             
             <div class="name-lang-existing lang-element" th:each="nameLang : *{namesByLang}">
               <input class="langInput" type="text" th:field="*{namesByLang[__${nameLangStat.index}__].lang}" />
               <input class="valueInput" type="text" th:field="*{namesByLang[__${nameLangStat.index}__].value}" />
-              <a href="#" onclick="$.org.eleventhlabs.ncomplo.lang.remove(this);">delete</a>
+              <a href="#" onclick="$.org.jgayoso.ncomplo.lang.remove(this);">delete</a>
             </div>
             <div id="name-lang-prototype" class="lang-element">
               <input class="langInput" type="text" name="namesByLang[$index$].lang" id="namesByLang$index$.lang" value="" />
               <input class="valueInput" type="text" name="namesByLang[$index$].value" id="namesByLang$index$.value" value="" />
-              <a href="#" onclick="$.org.eleventhlabs.ncomplo.lang.remove(this);">delete</a>
+              <a href="#" onclick="$.org.jgayoso.ncomplo.lang.remove(this);">delete</a>
             </div>
             
             <div>
