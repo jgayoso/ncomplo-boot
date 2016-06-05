@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+  <head th:substituteby="layout/header :: head"></head>
+  
+  <body>
+    
+    <header th:substituteby="layout/header :: header"></header>
+  
+    <div class="container">
+    
+        <header th:substituteby="layout/admin/header :: header"></header>
+  
+        <h1>Send invitation</h1>
+        <div class="row">
+        	<form th:action="@{doInvite}" th:object="${invitation}" method="post">
+        		<fieldset>
+	        		<input type="hidden" th:field="*{leagueId}" />
+	        		
+	        		<div id="name">
+		              <label for="nameInput">Name</label>
+		              <input id="nameInput" type="text" th:field="*{name}" required="required" />
+		            </div>
+		            
+		            <div id="email">
+		              <label for="emailInput">Email</label>
+		              <input id="emailInput" type="text" th:field="*{email}" required="required" />
+		            </div>
+        		</fieldset>
+        		<input type="submit" />
+        	</form>
+        </div>
+        
+        <div class="row">
+        	<h2>Invitations already sent</h2>
+	        <table id="invitations">
+	        <thead>
+	        	<tr><th>Name</th><th>Email</th><th>Admin</th></tr>
+        	</thead>
+        	<tbody>
+		        <tr th:each="inv : ${invitations}">
+		          	<td><span th:text="${inv.name}" >name</span></td>
+		          	<td><span th:text="${inv.email}">email</span></td>
+		          	<td><span th:text="${inv.adminLogin}">admin</span></td>
+		        </tr>
+	        </tbody>
+	        </table>
+		</div>	        
+        <a th:href="@{manage(id=${leagueId})}">Back to manage league</a>
+        
+    </div> 
+
+  </body>
+  
+</html>

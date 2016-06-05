@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+  <head th:substituteby="layout/header :: head"></head>
+  
+  <body>
+  
+    <header th:substituteby="layout/header :: header"></header>
+  
+    <div class="container">
+    
+        <h1 th:text="#{register.form.title}">Invitation Form</h1>
+        
+        <form th:action="@{register}" th:object="${user}" method="post" class="form-horizontal">
+        
+          <fieldset>
+          
+          	<input type="hidden" th:field="*{invitationId}" />
+            
+            <div class="form-group">
+              <label for="loginInput" th:text="#{register.form.login}" class="col-sm-4 control-label">Login</label>
+              <input id="loginInput" type="text" th:field="*{login}" required="required" class="col-sm-4" />
+            </div>
+            
+            <div class="form-group">
+              	<label for="nameInput" th:text="#{register.form.name}" class="col-sm-4 control-label">Name</label>
+           		<input id="nameInput" type="text" th:field="*{name}" required="required" class="col-sm-4" />
+            </div>
+            
+            <div class="form-group">
+              	<label for="emailInput" th:text="#{register.form.email}" class="col-sm-4 control-label">Email</label>
+          		<input id="emailInput" type="text" th:field="*{email}" required="required" class="col-sm-4" />
+            </div>
+            
+            <div class="form-group">
+                <label for="newPassword1Input" th:text="#{register.form.password1}" class="col-sm-4 control-label">New password:</label>
+                <input id="newPassword1Input"  type="password" th:field="*{password}" required="required" class="col-sm-4" />
+            </div>
+            
+            <div class="form-group">
+                <label for="newPassword2Input" th:text="#{register.form.password2}" class="col-sm-4 control-label">Repeat password:</label>
+				<input id="newPassword2Input" type="password" th:field="*{password2}" required="required" class="col-sm-4" />
+            </div>
+            <div class="form-group">
+            	<button type="submit" class="btn btn-primary" th:text="#{register.form.submit}">Change</button>
+            </div>
+          </fieldset>
+          
+        </form>
+        
+    </div>
+    
+  </body>
+  
+</html>

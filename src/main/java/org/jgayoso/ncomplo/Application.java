@@ -12,6 +12,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.authentication.configurers.GlobalAuthenticationConfigurerAdapter;
@@ -83,13 +84,16 @@ public class Application extends WebMvcConfigurerAdapter {
 		@Override
 		protected void configure(final HttpSecurity http) throws Exception {
 			http.authorizeRequests()
-					      .antMatchers("/login").permitAll()
-					      .antMatchers("/css/ncomplo.css").permitAll()
-					      .antMatchers("/js/ncomplo.js").permitAll()
-					      .anyRequest().fullyAuthenticated()
+				.antMatchers(HttpMethod.GET, "/invitation*").permitAll()
+				.antMatchers("/register").permitAll()
+				.antMatchers("/login").permitAll()
+				.antMatchers("/css/ncomplo.css").permitAll()
+				.antMatchers("/js/ncomplo.js").permitAll()
+				.antMatchers("/*").fullyAuthenticated()
 					.and().formLogin().loginPage("/login").failureUrl("/login?error")
 					.and().logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-					.and().exceptionHandling().accessDeniedPage("/access?error");
+					.and().exceptionHandling()
+					.accessDeniedPage("/login?error");
 		}
 
 	}
