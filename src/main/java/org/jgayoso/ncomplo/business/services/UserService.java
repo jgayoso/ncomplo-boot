@@ -9,6 +9,7 @@ import org.jasypt.util.password.PasswordEncryptor;
 import org.jgayoso.ncomplo.business.entities.League;
 import org.jgayoso.ncomplo.business.entities.User;
 import org.jgayoso.ncomplo.business.entities.User.UserComparator;
+import org.jgayoso.ncomplo.business.entities.repositories.InvitationRepository;
 import org.jgayoso.ncomplo.business.entities.repositories.LeagueRepository;
 import org.jgayoso.ncomplo.business.entities.repositories.UserRepository;
 import org.jgayoso.ncomplo.business.util.IterableUtils;
@@ -26,7 +27,10 @@ public class UserService {
     
     @Autowired
     private LeagueRepository leagueRepository;
-
+    
+    @Autowired
+    private InvitationRepository invitationRepository;
+    
     @Autowired
     private PasswordEncryptor passwordEncryptor;
 
@@ -46,6 +50,10 @@ public class UserService {
         return this.userRepository.findOne(login);
     }
     
+    public User findByEmail(final String email) {
+        return this.userRepository.findByEmail(email);
+    }
+    
     
     @Transactional
     public List<User> findAll(final Locale locale) {
@@ -59,7 +67,35 @@ public class UserService {
     	return this.userRepository.count();
     }
 
-    
+	@Transactional
+	public User registerFromInvitation(final Integer invitationId, final String login, final String name, final String email,
+			final Integer leagueId, final String password) {
+		
+		final boolean userExists = this.userRepository.exists(login);
+        
+		if (userExists) {
+			//TODO change it
+			throw new InternalErrorException("User already exists");
+		}
+		final String hashedNewPassword = 
+				this.passwordEncryptor.encryptPassword(password);
+        
+		final User user = new User();
+        user.setLogin(login);
+        user.setName(name);
+        user.setEmail(email);
+        user.setAdmin(false);
+        user.setActive(true);
+        user.setPassword(hashedNewPassword);
+        User newUser = this.userRepository.save(user);
+
+        final League league = this.leagueRepository.findOne(leagueId);
+        newUser.getLeagues().add(league);
+        league.getParticipants().add(newUser);
+        
+        invitationRepository.delete(invitationId);
+        return newUser;
+	}
     
     @Transactional
     public User save(

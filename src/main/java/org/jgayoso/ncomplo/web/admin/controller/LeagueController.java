@@ -15,14 +15,20 @@ import org.jgayoso.ncomplo.business.entities.BetType;
 import org.jgayoso.ncomplo.business.entities.Competition;
 import org.jgayoso.ncomplo.business.entities.Game;
 import org.jgayoso.ncomplo.business.entities.Game.GameComparator;
+import org.jgayoso.ncomplo.business.entities.Invitation;
 import org.jgayoso.ncomplo.business.entities.League;
 import org.jgayoso.ncomplo.business.entities.LeagueGame;
 import org.jgayoso.ncomplo.business.services.BetTypeService;
 import org.jgayoso.ncomplo.business.services.CompetitionService;
+import org.jgayoso.ncomplo.business.services.InvitationService;
 import org.jgayoso.ncomplo.business.services.LeagueService;
+import org.jgayoso.ncomplo.web.admin.beans.InvitationBean;
 import org.jgayoso.ncomplo.web.admin.beans.LangBean;
 import org.jgayoso.ncomplo.web.admin.beans.LeagueBean;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -41,6 +47,9 @@ public class LeagueController {
 
 	@Autowired
 	private LeagueService leagueService;
+	
+	@Autowired
+	private InvitationService invitationService;
 
 	@Autowired
 	private BetTypeService betTypeService;
@@ -152,4 +161,36 @@ public class LeagueController {
 		return "redirect:list";
 
 	}
+	
+	@RequestMapping("/invite")
+	public String invite(@RequestParam(value = "id", required = true) final Integer leagueId,
+			final HttpServletRequest request, final ModelMap model) {
+		
+		List<Invitation> invitationsSent = this.invitationService.findByLeagueId(leagueId);
+		
+		InvitationBean bean = new InvitationBean();
+		bean.setLeagueId(leagueId);
+		
+		model.addAttribute("invitation", bean);
+		model.addAttribute("leagueId", leagueId);
+		model.addAttribute("invitations", invitationsSent);
+		return VIEW_BASE + "invite";
+	}
+	
+	@RequestMapping("/doInvite")
+	public String doInvite(final InvitationBean bean, BindingResult result) {
+		final Authentication auth = SecurityContextHolder.getContext()
+				.getAuthentication();
+        if (auth instanceof AnonymousAuthenticationToken) {
+			/* The user is not logged in */
+			return "login";
+		}
+		/* The user is logged in */
+		final String adminLogin = auth.getName();
+		
+		this.invitationService.sendInvitations(bean.getLeagueId(), adminLogin, bean.getName(), bean.getEmail());
+		return "redirect:list";
+
+	}
+	
 }
