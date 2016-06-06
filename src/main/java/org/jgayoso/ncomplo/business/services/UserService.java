@@ -15,6 +15,7 @@ import org.jgayoso.ncomplo.business.entities.repositories.UserRepository;
 import org.jgayoso.ncomplo.business.util.IterableUtils;
 import org.jgayoso.ncomplo.exceptions.InternalErrorException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -38,6 +39,8 @@ public class UserService {
     private EmailService emailService;
     
 
+    @Value("${ncomplo.server.url}")
+    private String baseUrl;
     
     
     public UserService() {
@@ -87,13 +90,13 @@ public class UserService {
         user.setAdmin(false);
         user.setActive(true);
         user.setPassword(hashedNewPassword);
-        User newUser = this.userRepository.save(user);
+        final User newUser = this.userRepository.save(user);
 
         final League league = this.leagueRepository.findOne(leagueId);
         newUser.getLeagues().add(league);
         league.getParticipants().add(newUser);
         
-        invitationRepository.delete(invitationId);
+        this.invitationRepository.delete(invitationId);
         return newUser;
 	}
     
@@ -149,7 +152,7 @@ public class UserService {
         user.setPassword(hashedNewPassword);
     
         if (sendEmail) {
-            this.emailService.sendNewPassword(user, newPassword);
+            this.emailService.sendNewPassword(user, newPassword, this.baseUrl);
         }
         
         return newPassword;

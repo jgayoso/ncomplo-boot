@@ -1,17 +1,11 @@
 package org.jgayoso.ncomplo.web.controller;
 
-import java.util.Arrays;
-import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
-
 import org.apache.log4j.Logger;
 import org.jgayoso.ncomplo.business.entities.Invitation;
 import org.jgayoso.ncomplo.business.entities.User;
 import org.jgayoso.ncomplo.business.services.InvitationService;
 import org.jgayoso.ncomplo.business.services.UserService;
 import org.jgayoso.ncomplo.exceptions.InternalErrorException;
-import org.jgayoso.ncomplo.web.admin.beans.UserBean;
 import org.jgayoso.ncomplo.web.admin.beans.UserInvitationBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
@@ -42,7 +36,7 @@ public class AuthController {
 	@RequestMapping("/password")
 	public String password(final ModelMap model) {
 
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		final Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		if (auth instanceof AnonymousAuthenticationToken) {
 			/* The user is not logged in */
 			return "login";
@@ -59,11 +53,11 @@ public class AuthController {
 	}
 
 	@RequestMapping("/changepassword")
-	public String changepassword(@RequestParam(value = "oldPassword", required = true) String oldPassword,
-			@RequestParam(value = "newPassword1", required = true) String newPassword1,
-			@RequestParam(value = "newPassword2", required = true) String newPassword2) {
+	public String changepassword(@RequestParam(value = "oldPassword", required = true) final String oldPassword,
+			@RequestParam(value = "newPassword1", required = true) final String newPassword1,
+			@RequestParam(value = "newPassword2", required = true) final String newPassword2) {
 
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		final Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		if (auth instanceof AnonymousAuthenticationToken) {
 			/* The user is not logged in */
 			return "login";
@@ -81,25 +75,19 @@ public class AuthController {
 
 	}
 
-	@RequestMapping(method=RequestMethod.GET, value = "/invitation/{leagueId}/{emailId}")
+	@RequestMapping(method=RequestMethod.GET, value = "/invitation/{invitationId}/{leagueId}/{emailId}")
     public String processInvitation(
+            @PathVariable("invitationId") final Integer invitationId,
     		@PathVariable("leagueId") final Integer leagueId,
     		@PathVariable("emailId") final String emailId,
-    		final HttpServletRequest request, 
             final ModelMap model) {
     	
-    	List<Invitation> invitations = invitationService.findByLeagueId(leagueId);
-    	Invitation invitation = null;
-    	for (Invitation inv: invitations) {
-    		if (inv.getEmail().startsWith(emailId)) {
-    			invitation = inv;
-    			break;
-    		}
-    	}
-    	
-    	if (invitation == null) {
-    		logger.info("Invitation not found for league " + leagueId + " and user " + emailId);
-    		return "redirect:/login?error";
+	    final Invitation invitation = this.invitationService.findById(invitationId);
+        if (invitation == null || !invitation.getLeague().getId().equals(leagueId)
+                || !invitation.getEmail().startsWith(emailId)) {
+            logger.info("Invalid invitation " + leagueId + " for values " + invitationId + ", " + leagueId + ", "
+                    + emailId);
+            return "redirect:/login?error";
     	}
     	
     	final UserInvitationBean userBean = new UserInvitationBean();
@@ -111,15 +99,17 @@ public class AuthController {
     	return "invitation";
     }
 	
-	@RequestMapping(method=RequestMethod.POST, value = "/invitation/{leagueId}/register")
-	public String acceptInvitation(@PathVariable("leagueId") final Integer leagueId, 
+	@RequestMapping(method=RequestMethod.POST, value = "/invitation/{invitationId}/{leagueId}/register")
+	public String acceptInvitation(
+	        @PathVariable("invitationId") final Integer invitationId,
+	        @PathVariable("leagueId") final Integer leagueId, 
 			final UserInvitationBean userBean) {
 		
 		if (!userBean.getPassword().equals(userBean.getPassword2())) {
 			return "invitation";
 		}
 		
-		this.userService.registerFromInvitation(userBean.getInvitationId(), userBean.getLogin(), userBean.getName(),
+		this.userService.registerFromInvitation(invitationId, userBean.getLogin(), userBean.getName(),
 				userBean.getEmail(), leagueId, userBean.getPassword());
 		return "redirect:/login";
 	}
