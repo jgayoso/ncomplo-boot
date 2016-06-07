@@ -1,8 +1,12 @@
 package org.jgayoso.ncomplo.business.services;
 
+import java.util.Map;
+
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.jgayoso.ncomplo.business.entities.Invitation;
 import org.jgayoso.ncomplo.business.entities.User;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.sendgrid.SendGrid;
@@ -25,7 +29,7 @@ public class EmailService {
 	private final SendGrid sendGrid; 
     public EmailService() {
         super();
-        Map<String, String> env = System.getenv();
+        final Map<String, String> env = System.getenv();
     	final String username = env.get("SENDGRID_USERNAME");
     	final String password = env.get("SENDGRID_PASSWORD");
     	if (StringUtils.isNotBlank(username) && StringUtils.isNotBlank(password)){
