@@ -29,6 +29,7 @@
         
         <div class="row">
             <form method="POST" enctype="multipart/form-data" th:action="@{/upload}">
+                <input type="hidden" th:value="${league.id}" name="leagueId" />
                 <table>
                     <tr><td>File to upload:</td><td><input type="file" name="file" /></td></tr>
                     <tr><td></td><td><input type="submit" value="Upload" /></td></tr>

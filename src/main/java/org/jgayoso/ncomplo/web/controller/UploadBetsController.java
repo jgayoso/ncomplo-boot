@@ -1,17 +1,11 @@
 package org.jgayoso.ncomplo.web.controller;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.Iterator;
 
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.CellValue;
-import org.apache.poi.ss.usermodel.FormulaEvaluator;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.xssf.usermodel.XSSFSheet;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.jgayoso.ncomplo.business.services.BetService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -25,12 +19,17 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @Controller
 public class UploadBetsController {
     
+    @Autowired
+    private BetService betService;
+    
     public UploadBetsController() {
         super();
     }
     
     @RequestMapping(method = RequestMethod.POST, value = "/upload")
-    public String uploadBets(@RequestParam("file") final MultipartFile file, final RedirectAttributes redirectAttributes){
+    public String uploadBets(@RequestParam("file") final MultipartFile file,
+            @RequestParam("leagueId") final Integer leagueId,
+            final RedirectAttributes redirectAttributes){
         final Authentication auth = SecurityContextHolder.getContext()
                 .getAuthentication();
         if (auth instanceof AnonymousAuthenticationToken) {
@@ -39,54 +38,23 @@ public class UploadBetsController {
             return "login";
         }
         
-        FileInputStream fis = null;
-        XSSFWorkbook book = null;
+        final String login = auth.getName();
+        
         try {
-            final File excel = this.convert(file);
-            fis = new FileInputStream(excel);
-            book = new XSSFWorkbook(fis);
-            final FormulaEvaluator evaluator = book.getCreationHelper().createFormulaEvaluator();
-            final XSSFSheet sheet = book.getSheetAt(3);
-            final Iterator<Row> itr = sheet.iterator();
-            int iRow = 0;
-            while (itr.hasNext()) {
-                int iCell = 0;
-                final Row row = itr.next();
-
-                // Iterating over each column of Excel file
-                final Iterator<Cell> cellIterator = row.cellIterator();
-                while (cellIterator.hasNext()) {
-
-                    final Cell cell = cellIterator.next();
-                    final CellValue cellValue = evaluator.evaluate(cell);
-                    
-                    iCell++;
-                    
-                }
-                iRow++;
-            }
-            redirectAttributes.addFlashAttribute("message", "Success");
-            return "redirect:/scoreboard";
+            final File betsFile = this.convert(file);
+            this.betService.processBetsFile(betsFile, login, leagueId);
         } catch (final IOException e) {
-            redirectAttributes.addFlashAttribute("message", "Error processing file");
-            return "redirect:/scoreboard";
-        } finally {
-            try {
-                if (book != null) {book.close(); }
-                if (fis != null) { fis.close(); }
-            } catch (final Exception e) { 
-                // Nothing to do
-            }
+            redirectAttributes.addFlashAttribute("message", "Error");
         }
+        return "redirect:/scoreboard";
     }
     
-    public File convert(final MultipartFile file) throws IOException
-    {    
+    public File convert(final MultipartFile file) throws IOException {
         final File convFile = new File(file.getOriginalFilename());
-        convFile.createNewFile(); 
-        final FileOutputStream fos = new FileOutputStream(convFile); 
+        convFile.createNewFile();
+        final FileOutputStream fos = new FileOutputStream(convFile);
         fos.write(file.getBytes());
-        fos.close(); 
+        fos.close();
         return convFile;
     }
 
