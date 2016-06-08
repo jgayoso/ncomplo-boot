@@ -11,6 +11,16 @@
     
         <h1><span th:text="#{bets.title}">Manage bets for league</span> "<span th:text="${league.getName(#locale)}">league</span>"</h1>
         
+        <div class="row">
+            <form method="POST" enctype="multipart/form-data" th:action="@{/upload}">
+                <input type="hidden" th:value="${league.id}" name="leagueId" />
+                <table>
+                    <tr><td>File to upload:</td><td><input type="file" name="file" /></td></tr>
+                    <tr><td></td><td><input type="submit" value="Upload" /></td></tr>
+                </table>
+            </form>
+        </div>
+        
         <form th:action="@{save}" th:object="${participation}" method="post">
           
           <fieldset>

@@ -28,16 +28,6 @@
         </div>
         
         <div class="row">
-            <form method="POST" enctype="multipart/form-data" th:action="@{/upload}">
-                <input type="hidden" th:value="${league.id}" name="leagueId" />
-                <table>
-                    <tr><td>File to upload:</td><td><input type="file" name="file" /></td></tr>
-                    <tr><td></td><td><input type="submit" value="Upload" /></td></tr>
-                </table>
-            </form>
-        </div>
-        
-        <div class="row">
           <form class="navbar-form" role="form" th:action="@{/selectScoreboard}" method="post" th:object="${leagueSelector}">
             <input class="form-control" type="hidden" th:field="*{leagueId}" />
             <div class="form-group">
