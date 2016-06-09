@@ -11,12 +11,7 @@
     
         <h1 th:text="#{register.form.title}">Invitation Form</h1>
         
-        <div th:if="${message}" class="message">
-            <p th:text="${message}">Message</p>
-        </div>
-        <div th:if="${error}" class="error">
-            <p th:text="${error}">Error</p>
-        </div>
+        <div th:substituteby="layout/messages :: messages"></div>
         
         <form th:action="@{register}" th:object="${user}" method="post" class="form-horizontal">
         

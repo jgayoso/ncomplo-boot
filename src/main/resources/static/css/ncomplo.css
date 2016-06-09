@@ -32,6 +32,17 @@ form#password {
   border-top-right-radius: 0;
 }
 
+.upload-box {
+	margin: 20px 0px;
+	padding: 10px 10px;
+	border: 1px #ddd solid;
+}
+
+.upload-box span
+ {
+	margin-right: 5px;
+	display: inline-block;
+}
 
 .message {
     color: blue;

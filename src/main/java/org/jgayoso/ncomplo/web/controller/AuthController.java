@@ -5,7 +5,6 @@ import org.jgayoso.ncomplo.business.entities.Invitation;
 import org.jgayoso.ncomplo.business.entities.User;
 import org.jgayoso.ncomplo.business.services.InvitationService;
 import org.jgayoso.ncomplo.business.services.UserService;
-import org.jgayoso.ncomplo.exceptions.InternalErrorException;
 import org.jgayoso.ncomplo.web.admin.beans.UserInvitationBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
@@ -54,9 +53,11 @@ public class AuthController {
 	}
 
 	@RequestMapping("/changepassword")
-	public String changepassword(@RequestParam(value = "oldPassword", required = true) final String oldPassword,
+	public String changepassword(
+			@RequestParam(value = "oldPassword", required = true) final String oldPassword,
 			@RequestParam(value = "newPassword1", required = true) final String newPassword1,
-			@RequestParam(value = "newPassword2", required = true) final String newPassword2) {
+			@RequestParam(value = "newPassword2", required = true) final String newPassword2,
+			final RedirectAttributes redirectAttributes) {
 
 		final Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		if (auth instanceof AnonymousAuthenticationToken) {
@@ -67,7 +68,8 @@ public class AuthController {
 		final String login = auth.getName();
 
 		if (!newPassword1.equals(newPassword2)) {
-			throw new InternalErrorException("New passwords do not match!");
+			redirectAttributes.addFlashAttribute("error", "Passwords don't match");
+			return "redirect:/password";
 		}
 
 		this.userService.changePassword(login, oldPassword, newPassword1);
@@ -93,6 +95,7 @@ public class AuthController {
     	}
     	
     	final UserInvitationBean userBean = new UserInvitationBean();
+    	userBean.setEmailId(emailId);
     	userBean.setEmail(invitation.getEmail());
     	userBean.setName(invitation.getName());
     	userBean.setInvitationId(invitation.getId());
@@ -108,8 +111,8 @@ public class AuthController {
 			final UserInvitationBean userBean, final RedirectAttributes redirectAttributes) {
 		
 		if (!userBean.getPassword().equals(userBean.getPassword2())) {
-		    redirectAttributes.addFlashAttribute("error", "Passwords don't match");
-			return "invitation";
+            redirectAttributes.addFlashAttribute("error", "Passwords don't match");
+			return "redirect:/invitation/"+invitationId+"/"+leagueId+"/"+userBean.getEmailId();
 		}
 		
 		this.userService.registerFromInvitation(invitationId, userBean.getLogin(), userBean.getName(),

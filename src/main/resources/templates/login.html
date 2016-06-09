@@ -8,6 +8,8 @@
     <header th:substituteby="layout/header :: header"></header>
     
     <div class="container">
+    	
+    	<div th:substituteby="layout/messages :: messages"></div>
     
         <form id="login" th:action="@{/login}" method="post" class="form-signin" role="form">
             <h3 class="form-signin-heading" th:text="#{login.title}">Authenticate</h3>
