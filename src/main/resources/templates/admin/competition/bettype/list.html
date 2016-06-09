@@ -20,7 +20,7 @@
         </div>
         
         <div class="row">
-            <table class="table table-bordered">
+            <table class="table table-striped table-bordered">
               <tr th:each="bt : ${allBetTypes}">
                 <td th:text="${bt.getName(#locale)}">Type of Bet</td>
                 <td><a th:href="@{manage(id=${bt.id})}">manage bet type</a></td>
