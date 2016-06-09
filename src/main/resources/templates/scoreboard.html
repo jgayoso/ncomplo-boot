@@ -13,7 +13,7 @@
             <h2 th:text="#{scoreboard.title}">SCOREBOARD</h2>
             <h4 th:text="#{scoreboard.title.league(${league.getName(#locale)})}">League: one league</h4>
         </div>
-
+        
         <div class="row">
           <form class="navbar-form" role="form" th:if="${showLeagueSelector}" th:action="@{/selectScoreboard}" method="post" th:object="${leagueSelector}">
             <div class="form-group">

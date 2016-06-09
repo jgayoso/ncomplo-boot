@@ -1,5 +1,8 @@
 package org.jgayoso.ncomplo.web.controller;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -30,13 +33,15 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.support.RequestContextUtils;
 
 @Controller
-@RequestMapping("/bets/{leagueId}")
 public class UserBetsController {
 	
 	private static final Logger logger = Logger.getLogger(UserBetsController.class);
@@ -55,7 +60,7 @@ public class UserBetsController {
     	super();
     }
     
-    @RequestMapping("/")
+    @RequestMapping("/bets/{leagueId}/")
     public String manage(
     		@PathVariable(value="leagueId")
             final Integer leagueId,
@@ -147,7 +152,7 @@ public class UserBetsController {
         
     }
     
-    @RequestMapping("/save")
+    @RequestMapping("/bets/{leagueId}/save")
     public String save(final ParticipationBean participationBean){
     	final Authentication auth = SecurityContextHolder.getContext()
 				.getAuthentication();
@@ -157,7 +162,7 @@ public class UserBetsController {
 		}
         
     	for (final BetBean betBean : participationBean.getBetsByGame().values()) {
-            Game game = this.gameService.find(betBean.getGameId());
+            final Game game = this.gameService.find(betBean.getGameId());
             this.betService.save(
                     betBean.getId(),
                     participationBean.getLeagueId(),
@@ -171,5 +176,47 @@ public class UserBetsController {
         }
 		return "redirect:/scoreboard";
 	}
+    
+    @RequestMapping(method = RequestMethod.POST, value = "/upload")
+    public String uploadBets(@RequestParam("file") final MultipartFile file,
+    		@RequestParam("leagueId") final Integer leagueId,
+    		final HttpServletRequest request,
+            final RedirectAttributes redirectAttributes){
+        final Authentication auth = SecurityContextHolder.getContext()
+                .getAuthentication();
+        if (auth instanceof AnonymousAuthenticationToken) {
+            /* The user is not logged in */
+            redirectAttributes.addFlashAttribute("message", "Session expired");
+            return "login";
+        }
+        
+        final String login = auth.getName();
+        final Locale locale = RequestContextUtils.getLocale(request);
+        
+        try {
+            final File betsFile = this.convert(file, login);
+            if (!betsFile.exists() || betsFile.length() == 0) {
+                redirectAttributes.addFlashAttribute("error", "Empty file");
+                return "redirect:/bets/"+leagueId+"/";
+            }
+            this.betService.processBetsFile(betsFile, login, leagueId, locale);
+            betsFile.delete();
+        } catch (final IOException e) {
+            redirectAttributes.addFlashAttribute("error", "Error processing bets file");
+        } finally {
+        	// delete file
+        }
+        redirectAttributes.addFlashAttribute("message", "Bets processed successfully");
+        return "redirect:/bets/"+leagueId+"/";
+    }
+    
+    public File convert(final MultipartFile file, final String login) throws IOException {
+        final File convFile = new File(login);
+        convFile.createNewFile();
+        final FileOutputStream fos = new FileOutputStream(convFile);
+        fos.write(file.getBytes());
+        fos.close();
+        return convFile;
+    }
 
 }
