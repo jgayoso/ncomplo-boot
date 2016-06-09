@@ -11,6 +11,13 @@
     
         <h1><span th:text="#{bets.title}">Manage bets for league</span> "<span th:text="${league.getName(#locale)}">league</span>"</h1>
         
+        <div th:if="${message}" class="message">
+            <p th:text="${message}">Message</p>
+        </div>
+        <div th:if="${error}" class="error">
+            <p th:text="${error}">Error</p>
+        </div>
+        
         <div class="row">
             <form method="POST" enctype="multipart/form-data" th:action="@{/upload}">
                 <input type="hidden" th:value="${league.id}" name="leagueId" />

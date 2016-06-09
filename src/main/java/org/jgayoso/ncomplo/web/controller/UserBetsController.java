@@ -162,7 +162,7 @@ public class UserBetsController {
 		}
         
     	for (final BetBean betBean : participationBean.getBetsByGame().values()) {
-            Game game = this.gameService.find(betBean.getGameId());
+            final Game game = this.gameService.find(betBean.getGameId());
             this.betService.save(
                     betBean.getId(),
                     participationBean.getLeagueId(),
@@ -195,13 +195,17 @@ public class UserBetsController {
         
         try {
             final File betsFile = this.convert(file, login);
+            if (!betsFile.exists() || betsFile.length() == 0) {
+                redirectAttributes.addFlashAttribute("error", "Empty file");
+                return "redirect:/bets/"+leagueId+"/";
+            }
             this.betService.processBetsFile(betsFile, login, leagueId, locale);
+            betsFile.delete();
         } catch (final IOException e) {
-            redirectAttributes.addFlashAttribute("message", "Error");
-        } finally {
-        	// delete file
-        }
-        return "redirect:/scoreboard";
+            redirectAttributes.addFlashAttribute("error", "Error processing bets file");
+        } 
+        redirectAttributes.addFlashAttribute("message", "Bets processed successfully");
+        return "redirect:/bets/"+leagueId+"/";
     }
     
     public File convert(final MultipartFile file, final String login) throws IOException {

@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 public class AuthController {
@@ -80,13 +81,14 @@ public class AuthController {
             @PathVariable("invitationId") final Integer invitationId,
     		@PathVariable("leagueId") final Integer leagueId,
     		@PathVariable("emailId") final String emailId,
-            final ModelMap model) {
+            final ModelMap model, final RedirectAttributes redirectAttributes) {
     	
 	    final Invitation invitation = this.invitationService.findById(invitationId);
         if (invitation == null || !invitation.getLeague().getId().equals(leagueId)
                 || !invitation.getEmail().startsWith(emailId)) {
             logger.info("Invalid invitation " + leagueId + " for values " + invitationId + ", " + leagueId + ", "
                     + emailId);
+            redirectAttributes.addFlashAttribute("error", "Invalid invitation");
             return "redirect:/login?error";
     	}
     	
@@ -103,9 +105,10 @@ public class AuthController {
 	public String acceptInvitation(
 	        @PathVariable("invitationId") final Integer invitationId,
 	        @PathVariable("leagueId") final Integer leagueId, 
-			final UserInvitationBean userBean) {
+            final UserInvitationBean userBean, final RedirectAttributes redirectAttributes) {
 		
 		if (!userBean.getPassword().equals(userBean.getPassword2())) {
+            redirectAttributes.addFlashAttribute("error", "Passwords don't match");
 			return "invitation";
 		}
 		

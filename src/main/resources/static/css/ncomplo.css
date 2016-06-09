@@ -33,7 +33,33 @@ form#password {
 }
 
 
+.message {
+    color: blue;
+    text-align: center;
+    border: 1px;
+    border-color: blue;
+    border-style: dashed;
+    margin: 20px;
+    font-size: 12px;
+}
 
+.message p {
+    margin-top: 10px;
+}
+
+.error p {
+    margin-top: 10px;
+}
+
+.error {
+    color: red;
+    text-align: center;
+    border: 1px;
+    border-color: red;
+    border-style: dashed;
+    margin: 20px;
+    font-size: 12px;
+}
 
 
 
