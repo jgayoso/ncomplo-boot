@@ -3,7 +3,6 @@ package org.jgayoso.ncomplo.business.services;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -18,7 +17,6 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.jgayoso.ncomplo.business.entities.Bet;
 import org.jgayoso.ncomplo.business.entities.Bet.BetComparator;
-import org.jgayoso.ncomplo.business.entities.Game.GameComparator;
 import org.jgayoso.ncomplo.business.entities.Game;
 import org.jgayoso.ncomplo.business.entities.GameSide;
 import org.jgayoso.ncomplo.business.entities.League;
@@ -96,17 +94,20 @@ public class BetService {
     }
     
     @Transactional
-    public void processBetsFile(final File betsFile, final String login, final Integer leagueId, Locale locale) {
+    public void processBetsFile(final File betsFile, final String login, final Integer leagueId, final Locale locale) {
         FileInputStream fis = null;
         XSSFWorkbook book = null;
         
         final League league = this.leagueService.find(leagueId);
         final Collection<LeagueGame> leagueGames = league.getLeagueGames().values();
         
-        List<GameSide> gameSides = this.gameSideRepository.findByCompetitionId(league.getCompetition().getId());
-        Map<String, GameSide> gameSidesByName = new HashMap<>();
-        for (GameSide gameSide: gameSides) {
+        final List<GameSide> gameSides = this.gameSideRepository.findByCompetitionId(league.getCompetition().getId());
+        final Map<String, GameSide> gameSidesByName = new HashMap<>();
+        for (final GameSide gameSide: gameSides) {
         	gameSidesByName.put(gameSide.getName(), gameSide);
+        	for (final String name : gameSide.getNamesByLang().values()) {
+        	    gameSidesByName.put(name, gameSide);
+        	}
         }
         
         final List<Bet> bets =
@@ -117,7 +118,7 @@ public class BetService {
         final Map<Integer, Integer> betIdsByGameId = new HashMap<Integer, Integer>();
         
         if (!CollectionUtils.isEmpty(bets)) {
-        	for (Bet bet: bets) {
+        	for (final Bet bet: bets) {
         		betIdsByGameId.put(bet.getGame().getId(), bet.getId());
         	}
         }
@@ -138,8 +139,6 @@ public class BetService {
             gamesByOrder.put(game.getOrder(), game);
         }
         
-        
-        
         try {
             
             fis = new FileInputStream(betsFile);
@@ -149,9 +148,9 @@ public class BetService {
             // Groups games
             int matchNumber = 1;
             for (int rowIndex=10; rowIndex < 46; rowIndex++) {
-                BetView betView = this.processGroupsGameBet(sheet, rowIndex, matchNumber, gamesByOrder, betViewssByGameId);
+                final BetView betView = this.processGroupsGameBet(sheet, rowIndex, matchNumber, gamesByOrder, betViewssByGameId);
                 // If betId is not null, update the current bet instance
-                Integer betId = betIdsByGameId.get(betView.getGameId());
+                final Integer betId = betIdsByGameId.get(betView.getGameId());
                 
 				this.save(betId, leagueId, login, betView.getGameId(), betView.getGameSideAId(),
 						betView.getGameSideBId(), betView.getScoreA(), betView.getScoreB());
@@ -160,7 +159,7 @@ public class BetService {
             
             // Second round
             for (int rowIndex=10; rowIndex < 40; rowIndex+=4) {
-				BetView betView = processPlayOffGameBet(sheet, rowIndex, matchNumber, this.secondRoundColumnName,
+				final BetView betView = this.processPlayOffGameBet(sheet, rowIndex, matchNumber, this.secondRoundColumnName,
 						gamesByOrder, betViewssByGameId, gameSidesByName);
             	this.save(betView.getId(), leagueId, login, betView.getGameId(), betView.getGameSideAId(),
 						betView.getGameSideBId(), betView.getScoreA(), betView.getScoreB());
@@ -169,7 +168,7 @@ public class BetService {
             
             // Quarter final round
             for (int rowIndex=12; rowIndex < 40; rowIndex+=8) {
-            	BetView betView = processPlayOffGameBet(sheet, rowIndex, matchNumber, this.quarterFinalsColumnName,
+            	final BetView betView = this.processPlayOffGameBet(sheet, rowIndex, matchNumber, this.quarterFinalsColumnName,
             			gamesByOrder, betViewssByGameId, gameSidesByName);
             	this.save(betView.getId(), leagueId, login, betView.getGameId(), betView.getGameSideAId(),
 						betView.getGameSideBId(), betView.getScoreA(), betView.getScoreB());
@@ -177,7 +176,7 @@ public class BetService {
             }
             // Semifinal round
             for (int rowIndex=16; rowIndex < 40; rowIndex+=16) {
-            	BetView betView = processPlayOffGameBet(sheet, rowIndex, matchNumber, this.semisColumnName,
+            	final BetView betView = this.processPlayOffGameBet(sheet, rowIndex, matchNumber, this.semisColumnName,
             			gamesByOrder, betViewssByGameId, gameSidesByName);
             	this.save(betView.getId(), leagueId, login, betView.getGameId(), betView.getGameSideAId(),
 						betView.getGameSideBId(), betView.getScoreA(), betView.getScoreB());
@@ -185,7 +184,7 @@ public class BetService {
             }
             
             // Final
-            BetView betView = processPlayOffGameBet(sheet, 23, matchNumber, this.finalColumnName,
+            final BetView betView = this.processPlayOffGameBet(sheet, 23, matchNumber, this.finalColumnName,
         			gamesByOrder, betViewssByGameId, gameSidesByName);
         	this.save(betView.getId(), leagueId, login, betView.getGameId(), betView.getGameSideAId(),
 					betView.getGameSideBId(), betView.getScoreA(), betView.getScoreB());
@@ -216,17 +215,17 @@ public class BetService {
         final int homeResult = Double.valueOf(homeResultCell.getNumericCellValue()).intValue();
         final int awayResult = Double.valueOf(awayResultCell.getNumericCellValue()).intValue();
         
-        Game game = gamesByOrder.get(Integer.valueOf(matchNumber));
-        BetView betView = betsByGameId.get(game.getId());
+        final Game game = gamesByOrder.get(Integer.valueOf(matchNumber));
+        final BetView betView = betsByGameId.get(game.getId());
         betView.setScoreA(Integer.valueOf(homeResult));
         betView.setScoreB(Integer.valueOf(awayResult));
         return betView;
     }
     
     private BetView processPlayOffGameBet(final XSSFSheet sheet, final int rowIndex, final int matchNumber,
-            String columnName, final Map<Integer, Game> gamesByOrder,
+            final String columnName, final Map<Integer, Game> gamesByOrder,
             final Map<Integer, BetView> betsByGameId,
-            Map<String, GameSide> gameSidesByName) {
+            final Map<String, GameSide> gameSidesByName) {
     	
     	final CellReference homeCellReference = new CellReference(columnName + rowIndex);
     	final Row homeRow = sheet.getRow(homeCellReference.getRow());
@@ -242,11 +241,13 @@ public class BetService {
     	final String awayTeamName = awayTeamCell.getStringCellValue();
     	final int awayResult = Double.valueOf(awayResultCell.getNumericCellValue()).intValue();
     	
-    	final Integer gameSideAId = gameSidesByName.get(homeTeamName).getId();
-    	final Integer gameSideBId = gameSidesByName.get(awayTeamName).getId();
+        final Integer gameSideAId =
+                gameSidesByName.get(homeTeamName) == null ? null : gameSidesByName.get(homeTeamName).getId();
+        final Integer gameSideBId =
+                gameSidesByName.get(awayTeamName) == null ? null : gameSidesByName.get(awayTeamName).getId();
     	
-    	Game game = gamesByOrder.get(Integer.valueOf(matchNumber));
-    	BetView betView = betsByGameId.get(game.getId());
+    	final Game game = gamesByOrder.get(Integer.valueOf(matchNumber));
+    	final BetView betView = betsByGameId.get(game.getId());
     	betView.setGameSideAId(gameSideAId);
     	betView.setGameSideBId(gameSideBId);
     	betView.setScoreA(Integer.valueOf(homeResult));
