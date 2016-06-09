@@ -13,7 +13,7 @@
   
         <h1>Participants in League "<span th:text="${league.getName(#locale)}">league</span>"</h1>
         
-        <table>
+        <table class="table table-striped table-bordered">
           <tr th:each="p : ${allParticipants}">
             <td th:text="${p.login}">Login</td>
             <td th:text="${p.name}">Name</td>

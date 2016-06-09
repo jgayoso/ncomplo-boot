@@ -14,7 +14,7 @@
         <h1>Rounds for competition "<span th:text="${competition.getName(#locale)}">competition</span>"</h1>
         
         <a th:href="@{manage}">Create new</a>
-        <table>
+        <table class="table table-striped table-bordered">
           <tr th:each="r : ${allRounds}">
             <td th:text="${r.order}">order of round</td>
             <td th:text="${r.getName(#locale)}">name of round</td>

@@ -14,7 +14,7 @@
         <h1>Games for competition "<span th:text="${competition.getName(#locale)}">competition</span>"</h1>
         
         <a th:href="@{manage}">Create new</a>
-        <table>
+        <table class="table table-striped table-bordered">
           <tr th:each="g : ${allGames}">
             <td th:text="${g.date} ? ${#dates.format(g.date,#messages.msg('dates.format'))} : '-'">date of game</td>
             <td th:text="${g.getName(#locale)}">name of game</td>
