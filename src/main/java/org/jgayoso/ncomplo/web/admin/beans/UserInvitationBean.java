@@ -17,6 +17,8 @@ public class UserInvitationBean implements Serializable {
     @NotNull
     private String name;
     
+    private String emailId;
+    
     @NotNull
     private String email;
     
@@ -44,6 +46,14 @@ public class UserInvitationBean implements Serializable {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public String getEmailId() {
+		return emailId;
+	}
+
+	public void setEmailId(String emailId) {
+		this.emailId = emailId;
 	}
 
 	public String getEmail() {

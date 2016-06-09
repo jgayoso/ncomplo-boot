@@ -3,7 +3,6 @@ package org.jgayoso.ncomplo.business.services.aaa;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.jasypt.util.password.PasswordEncryptor;
 import org.jgayoso.ncomplo.business.entities.User;
 import org.jgayoso.ncomplo.business.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,9 +18,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class NCUserDetailsService implements UserDetailsService {
 
-	@Autowired
-    private PasswordEncryptor passwordEncryptor;
-	
     @Autowired
     private UserService userService;
     
