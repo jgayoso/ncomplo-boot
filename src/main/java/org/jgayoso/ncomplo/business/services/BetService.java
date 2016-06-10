@@ -94,7 +94,8 @@ public class BetService {
     }
     
     @Transactional
-    public void processBetsFile(final File betsFile, final String login, final Integer leagueId, final Locale locale) {
+    public void processBetsFile(final File betsFile, final String login, final Integer leagueId, final Locale locale) 
+            throws IOException {
         FileInputStream fis = null;
         XSSFWorkbook book = null;
         
@@ -161,7 +162,9 @@ public class BetService {
             for (int rowIndex=10; rowIndex < 40; rowIndex+=4) {
 				final BetView betView = this.processPlayOffGameBet(sheet, rowIndex, matchNumber, this.secondRoundColumnName,
 						gamesByOrder, betViewssByGameId, gameSidesByName);
-            	this.save(betView.getId(), leagueId, login, betView.getGameId(), betView.getGameSideAId(),
+				// If betId is not null, update the current bet instance
+                final Integer betId = betIdsByGameId.get(betView.getGameId());
+            	this.save(betId, leagueId, login, betView.getGameId(), betView.getGameSideAId(),
 						betView.getGameSideBId(), betView.getScoreA(), betView.getScoreB());
                 matchNumber++;
             }
@@ -170,7 +173,9 @@ public class BetService {
             for (int rowIndex=12; rowIndex < 40; rowIndex+=8) {
             	final BetView betView = this.processPlayOffGameBet(sheet, rowIndex, matchNumber, this.quarterFinalsColumnName,
             			gamesByOrder, betViewssByGameId, gameSidesByName);
-            	this.save(betView.getId(), leagueId, login, betView.getGameId(), betView.getGameSideAId(),
+            	// If betId is not null, update the current bet instance
+                final Integer betId = betIdsByGameId.get(betView.getGameId());
+                this.save(betId, leagueId, login, betView.getGameId(), betView.getGameSideAId(),
 						betView.getGameSideBId(), betView.getScoreA(), betView.getScoreB());
                 matchNumber++;
             }
@@ -178,7 +183,9 @@ public class BetService {
             for (int rowIndex=16; rowIndex < 40; rowIndex+=16) {
             	final BetView betView = this.processPlayOffGameBet(sheet, rowIndex, matchNumber, this.semisColumnName,
             			gamesByOrder, betViewssByGameId, gameSidesByName);
-            	this.save(betView.getId(), leagueId, login, betView.getGameId(), betView.getGameSideAId(),
+            	// If betId is not null, update the current bet instance
+                final Integer betId = betIdsByGameId.get(betView.getGameId());
+                this.save(betId, leagueId, login, betView.getGameId(), betView.getGameSideAId(),
 						betView.getGameSideBId(), betView.getScoreA(), betView.getScoreB());
                 matchNumber++;
             }
@@ -186,12 +193,11 @@ public class BetService {
             // Final
             final BetView betView = this.processPlayOffGameBet(sheet, 23, matchNumber, this.finalColumnName,
         			gamesByOrder, betViewssByGameId, gameSidesByName);
-        	this.save(betView.getId(), leagueId, login, betView.getGameId(), betView.getGameSideAId(),
+            // If betId is not null, update the current bet instance
+            final Integer betId = betIdsByGameId.get(betView.getGameId());
+            this.save(betId, leagueId, login, betView.getGameId(), betView.getGameSideAId(),
 					betView.getGameSideBId(), betView.getScoreA(), betView.getScoreB());
             
-            return;
-        } catch (final IOException e) {
-            //Throw exception
             return;
         } finally {
             try {
