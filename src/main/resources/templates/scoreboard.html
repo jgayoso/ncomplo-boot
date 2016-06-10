@@ -52,7 +52,7 @@
                 <th th:text="#{scoreboard.header.position}">Pos</th>
                 <th th:text="#{scoreboard.header.name}">Name</th>
                 <th th:text="#{scoreboard.header.points}">Points</th>
-                <th></th>
+                <th th:unless="${betsAllowed}"></th>
               </tr>
             </thead>
             <tbody>
@@ -66,7 +66,7 @@
                 <td class="scoreboard_points">
                   <span th:text="${sc.points}">points</span>
                 </td>
-                <td class="scoreboard_actions">
+                <td class="scoreboard_actions" th:unless="${betsAllowed}">
                   <a th:href="@{'/bets/' + ${league.id} + '/' + ${sc.user.login}}" th:text="#{scoreboard.viewbets}" class="btn btn-xs btn-default">view bets</a>
                 </td>
               </tr>
