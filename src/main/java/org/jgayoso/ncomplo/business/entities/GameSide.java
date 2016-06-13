@@ -34,7 +34,7 @@ public class GameSide implements I18nNamedEntity {
     private String name;
     
     
-    @ElementCollection(fetch=FetchType.EAGER,targetClass=java.lang.String.class)
+    @ElementCollection(fetch=FetchType.LAZY,targetClass=java.lang.String.class)
     @CollectionTable(name="GAME_SIDE_NAME_I18N",joinColumns=@JoinColumn(name="GAME_SIDE_ID"))
     @MapKeyColumn(name="LANG",nullable=false,length=20)
     @Column(name="NAME", nullable=false,length=200)

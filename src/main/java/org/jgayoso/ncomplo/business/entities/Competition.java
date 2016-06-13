@@ -36,7 +36,7 @@ public class Competition implements I18nNamedEntity {
     private String name;
     
     
-    @ElementCollection(fetch=FetchType.EAGER,targetClass=java.lang.String.class)
+    @ElementCollection(fetch=FetchType.LAZY,targetClass=java.lang.String.class)
     @CollectionTable(name="COMPETITION_NAME_I18N",joinColumns=@JoinColumn(name="COMPETITION_ID"))
     @MapKeyColumn(name="LANG",nullable=false,length=20)
     @Column(name="NAME", nullable=false,length=200)

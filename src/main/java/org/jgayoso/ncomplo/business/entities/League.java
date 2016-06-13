@@ -37,7 +37,7 @@ public class League implements I18nNamedEntity {
 	@Column(name = "NAME", nullable = false, length = 200)
 	private String name;
 
-	@ElementCollection(fetch = FetchType.EAGER, targetClass = java.lang.String.class)
+	@ElementCollection(fetch = FetchType.LAZY, targetClass = java.lang.String.class)
 	@CollectionTable(name = "LEAGUE_NAME_I18N", joinColumns = @JoinColumn(name = "LEAGUE_ID") )
 	@MapKeyColumn(name = "LANG", nullable = false, length = 20)
 	@Column(name = "NAME", nullable = false, length = 200)

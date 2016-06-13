@@ -35,7 +35,7 @@ public class Round implements Comparable<Round> {
     private String name;
     
     
-    @ElementCollection(fetch=FetchType.EAGER,targetClass=java.lang.String.class)
+    @ElementCollection(fetch=FetchType.LAZY,targetClass=java.lang.String.class)
     @CollectionTable(name="ROUND_NAME_I18N",joinColumns=@JoinColumn(name="ROUND_ID"))
     @MapKeyColumn(name="LANG",nullable=false,length=20)
     @Column(name="NAME", nullable=false,length=200)

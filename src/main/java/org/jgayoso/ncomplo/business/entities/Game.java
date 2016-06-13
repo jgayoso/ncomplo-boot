@@ -37,7 +37,7 @@ public class Game implements DatedAndNamedEntity {
     private Competition competition; 
     
     
-    @ManyToOne(fetch=FetchType.EAGER)
+    @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="ROUND_ID",nullable=false)
     private Round round; 
 
@@ -46,7 +46,7 @@ public class Game implements DatedAndNamedEntity {
     private Integer order;
 
     
-    @ManyToOne(fetch=FetchType.EAGER)
+    @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="DEFAULT_BET_TYPE_ID",nullable=false)
     private BetType defaultBetType; 
 
@@ -55,23 +55,23 @@ public class Game implements DatedAndNamedEntity {
     private String name;
     
     
-    @ElementCollection(fetch=FetchType.EAGER,targetClass=java.lang.String.class)
+    @ElementCollection(fetch=FetchType.LAZY, targetClass=java.lang.String.class)
     @CollectionTable(name="GAME_NAME_I18N",joinColumns=@JoinColumn(name="GAME_ID"))
     @MapKeyColumn(name="LANG",nullable=false,length=20)
     @Column(name="NAME", nullable=false,length=200)
     private final Map<String,String> namesByLang = new LinkedHashMap<>();
     
     
-    @Column(name="DATE",nullable=true)
+    @Column(name="DATE", nullable=true)
     private Date date;
 
     
-    @ManyToOne(fetch=FetchType.EAGER)
+    @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="GAME_SIDE_A_ID",nullable=true)
     private GameSide gameSideA;
 
     
-    @ManyToOne(fetch=FetchType.EAGER)
+    @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="GAME_SIDE_B_ID",nullable=true)
     private GameSide gameSideB;
     
