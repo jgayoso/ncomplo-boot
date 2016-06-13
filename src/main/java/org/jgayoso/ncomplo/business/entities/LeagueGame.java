@@ -26,17 +26,17 @@ public class LeagueGame {
     private Integer id;
     
     
-    @ManyToOne(fetch=FetchType.EAGER)
+    @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="LEAGUE_ID",nullable=false)
     private League league; 
     
     
-    @ManyToOne(fetch=FetchType.EAGER)
+    @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="GAME_ID",nullable=false)
     private Game game; 
 
     
-    @ManyToOne(fetch=FetchType.EAGER)
+    @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="BET_TYPE_ID",nullable=false)
     private BetType betType; 
 

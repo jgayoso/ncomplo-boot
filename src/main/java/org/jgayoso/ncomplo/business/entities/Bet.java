@@ -30,27 +30,27 @@ public class Bet {
     private Integer id;
     
     
-    @ManyToOne(fetch=FetchType.EAGER)
+    @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="USER_ID",nullable=false)
     private User user; 
     
     
-    @ManyToOne(fetch=FetchType.EAGER)
+    @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="LEAGUE_ID",nullable=false)
     private League league; 
     
     
-    @ManyToOne(fetch=FetchType.EAGER)
+    @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="GAME_ID",nullable=false)
     private Game game; 
 
     
-    @ManyToOne(fetch=FetchType.EAGER)
+    @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="GAME_SIDE_A_ID",nullable=true)
     private GameSide gameSideA;
 
     
-    @ManyToOne(fetch=FetchType.EAGER)
+    @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="GAME_SIDE_B_ID",nullable=true)
     private GameSide gameSideB;
     
@@ -107,7 +107,7 @@ public class Bet {
     private Boolean betDraw;    
     
     
-    @ManyToOne(fetch=FetchType.EAGER)
+    @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="BET_WINNER_ID",nullable=true)
     private GameSide betWinner;
     
@@ -116,7 +116,7 @@ public class Bet {
     private Boolean gameDraw;
     
     
-    @ManyToOne(fetch=FetchType.EAGER)
+    @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="GAME_WINNER_ID",nullable=true)
     private GameSide gameWinner;
 
