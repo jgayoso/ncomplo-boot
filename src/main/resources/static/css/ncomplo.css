@@ -297,7 +297,8 @@ form#password {
 }
 
 .match-score {
-	min-width: 20px;
+	min-width: 120px;
+	width: 120px;
 	font-size: 35px;
 }
 

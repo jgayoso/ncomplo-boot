@@ -36,8 +36,8 @@
 						<span class="team-name" th:text="${gsA.getName(#locale)}">Belgium</span>
 					</td>
 					<td class="text-center match-score">
-						<span th:if="${gScA}" th:text="${gScA}">1</span> - <span
-							th:if="${gScB}" th:text="${gScB}">0</span>
+						<span th:if="${gScA != null}" th:text="${gScA}">1</span> - <span
+							th:if="${gScB != null}" th:text="${gScB}">0</span>
 					</td>
 					<td class="team-away">
 						<span class="team-name" th:text="${gsB.getName(#locale)}">Republic of Ireland</span>

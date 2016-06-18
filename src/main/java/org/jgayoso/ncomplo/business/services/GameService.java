@@ -11,6 +11,7 @@ import org.apache.commons.lang3.time.DateUtils;
 import org.jgayoso.ncomplo.business.entities.Competition;
 import org.jgayoso.ncomplo.business.entities.Game;
 import org.jgayoso.ncomplo.business.entities.Game.GameComparator;
+import org.jgayoso.ncomplo.business.entities.Game.GameOrderComparator;
 import org.jgayoso.ncomplo.business.entities.GameSide;
 import org.jgayoso.ncomplo.business.entities.League;
 import org.jgayoso.ncomplo.business.entities.repositories.BetTypeRepository;
@@ -139,7 +140,9 @@ public class GameService {
     	Date today = new Date();
     	Date todayMorning = DateUtils.truncate(today, Calendar.DATE);
     	Date todayEvening = DateUtils.addSeconds(DateUtils.addMinutes(DateUtils.addHours(todayMorning, 23), 59), 59);
-		return this.gameRepository.findByCompetitionAndDateBetween(league.getCompetition(), todayMorning, todayEvening);
+    	List<Game> games = this.gameRepository.findByCompetitionAndDateBetween(league.getCompetition(), todayMorning, todayEvening);
+    	Collections.sort(games, new GameOrderComparator());
+    	return games;
     }
     
     
