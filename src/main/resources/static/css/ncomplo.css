@@ -274,7 +274,12 @@ form#password {
 #matchesTable {
 	min-width: 100%;
 	width: 100%;
-	margin: 5px;
+}
+
+#matchesTable tbody td {
+    vertical-align: middle;
+    border: 0px;
+    padding: 2px;
 }
 
 .match-row {
@@ -289,7 +294,7 @@ form#password {
 	font-size: 20px;
 	margin-left: 10px;
 	margin-right: 10px;
-	vertical-align: middle;	
+	vertical-align: middle;
 }
 .team-away {
 	text-align: left;
@@ -310,3 +315,42 @@ form#password {
 .text-center {
 	text-align: center;
 }
+
+[class*=" euro-flag-"], [class^=euro-flag-] {
+    display: inline-block;
+    margin: 0;
+    background-repeat: no-repeat;
+    background-image: url(/images/flags_sprite_empty_64x64.png);
+}
+
+.team-flag {
+   	background-size: 230px 506px;
+    width: 46px;
+    height: 46px;
+    vertical-align: middle;
+}
+
+.euro-flag-Bélgica {background-position: 0 10%;}
+.euro-flag-Portugal {background-position: 0 80%;}
+.euro-flag-Hungría {background-position: 50% 40%;}
+.euro-flag-Austria {background-position: 75% 0;}
+.euro-flag-Islandia {background-position: 75% 40%;}
+.euro-flag-Republica-de-Irlanda {background-position: 100% 40%;}
+.euro-flag-Rumania {background-position: 25% 80%;}
+.euro-flag-Albania {background-position: 100% 100%;}
+.euro-flag-Suiza {background-position: 50% 90%;}
+.euro-flag-Francia {background-position: 25% 30%;}
+.euro-flag-Rusia {background-position: 50% 80%;}
+.euro-flag-Gales {background-position: 50% 100%;}
+.euro-flag-Eslovaquia {background-position: 75% 90%;}
+.euro-flag-Inglaterra {background-position: 75% 20%;}
+.euro-flag-Ucrania {background-position: 25% 100%;}
+.euro-flag-Polonia {background-position: 100% 70%;}
+.euro-flag-Irlanda-del-Norte {background-position: 50% 70%;}
+.euro-flag-Alemania {background-position: 100% 30%;}
+.euro-flag-República-Checa {background-position: 25% 20%;}
+.euro-flag-Turquía {background-position: 0 100%;}
+.euro-flag-Croacia {background-position: 100% 10%;}
+.euro-flag-España {background-position: 25% 90%;}
+.euro-flag-Italia {background-position: 25% 50%;}
+.euro-flag-Suecia {background-position: 100% 90%;}
