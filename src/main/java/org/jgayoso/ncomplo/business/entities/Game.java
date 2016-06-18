@@ -289,5 +289,41 @@ public class Game implements DatedAndNamedEntity {
         
     }
     
+	public final static class GameOrderComparator implements Comparator<Game> {
+
+		public GameOrderComparator() {
+            super();
+        }
+
+		@Override
+		public int compare(final Game o1, final Game o2) {
+
+			final Integer o1Order = o1.getOrder();
+			final Integer o2Order = o2.getOrder();
+
+			final int orderComp = o1Order.compareTo(o2Order);
+			if (orderComp != 0) {
+				return orderComp;
+			}
+
+			final Date o1Date = o1.getDate();
+			final Date o2Date = o2.getDate();
+
+			if (o1Date != null) {
+				if (o2Date == null) {
+					return -1;
+				}
+				final int dateComp = o1Date.compareTo(o2Date);
+				if (dateComp != 0) {
+					return dateComp;
+				}
+			} else if (o2Date != null) {
+				return 1;
+			}
+			return 0;
+		}
+
+	}
+    
     
 }
