@@ -1,15 +1,18 @@
 package org.jgayoso.ncomplo.business.services;
 
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import org.apache.commons.lang3.time.DateUtils;
 import org.jgayoso.ncomplo.business.entities.Competition;
 import org.jgayoso.ncomplo.business.entities.Game;
 import org.jgayoso.ncomplo.business.entities.Game.GameComparator;
 import org.jgayoso.ncomplo.business.entities.GameSide;
+import org.jgayoso.ncomplo.business.entities.League;
 import org.jgayoso.ncomplo.business.entities.repositories.BetTypeRepository;
 import org.jgayoso.ncomplo.business.entities.repositories.CompetitionRepository;
 import org.jgayoso.ncomplo.business.entities.repositories.GameRepository;
@@ -41,6 +44,8 @@ public class GameService {
     @Autowired
     private GameSideRepository gameSideRepository;
     
+    @Autowired
+    private LeagueService leagueService;
     
     
     
@@ -127,6 +132,14 @@ public class GameService {
         
         competition.getGames().remove(game);
         
+    }
+    
+    public List<Game> findTodayGames(Integer leagueId) {
+    	League league = this.leagueService.find(leagueId);
+    	Date today = new Date();
+    	Date todayMorning = DateUtils.truncate(today, Calendar.DATE);
+    	Date todayEvening = DateUtils.addSeconds(DateUtils.addMinutes(DateUtils.addHours(todayMorning, 23), 59), 59);
+		return this.gameRepository.findByCompetitionAndDateBetween(league.getCompetition(), todayMorning, todayEvening);
     }
     
     
