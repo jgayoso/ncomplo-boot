@@ -28,6 +28,23 @@
             </div>
           </form>
         </div>
+        <div class="row">
+	        <table th:if="${todayGames}" id="matchesTable">
+				<tr class="match-row" th:each="g : ${todayGames}"
+					th:with="gsA=${g.gameSideA},gsB=${g.gameSideB}, gScA=${g.scoreA},gScB=${g.scoreB}">
+					<td class="team-home">
+						<span class="team-name" th:text="${gsA.getName(#locale)}">Belgium</span>
+					</td>
+					<td class="text-center match-score">
+						<span th:if="${gScA}" th:text="${gScA}">1</span> - <span
+							th:if="${gScB}" th:text="${gScB}">0</span>
+					</td>
+					<td class="team-away">
+						<span class="team-name" th:text="${gsB.getName(#locale)}">Republic of Ireland</span>
+					</td>
+				</tr>
+			</table>
+		</div>
         
         <div class="row">
           <form class="navbar-form" role="form" th:action="@{/selectScoreboard}" method="post" th:object="${leagueSelector}">
@@ -43,9 +60,8 @@
             </div>
           </form>
         </div>
-        
-        
-        <div class="row">
+
+		<div class="row">
           <table id="scoreboard" class="table table-striped table-bordered" >
             <thead>
               <tr>

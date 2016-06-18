@@ -14,6 +14,7 @@ import org.jgayoso.ncomplo.business.entities.League;
 import org.jgayoso.ncomplo.business.entities.Round;
 import org.jgayoso.ncomplo.business.entities.User;
 import org.jgayoso.ncomplo.business.services.BetService;
+import org.jgayoso.ncomplo.business.services.GameService;
 import org.jgayoso.ncomplo.business.services.LeagueService;
 import org.jgayoso.ncomplo.business.services.ScoreboardService;
 import org.jgayoso.ncomplo.business.services.UserService;
@@ -47,6 +48,9 @@ public class ScoreboardController {
 
     @Autowired
     private ScoreboardService scoreboardService;
+    
+    @Autowired
+    private GameService gameService;
     
 
     
@@ -168,6 +172,8 @@ public class ScoreboardController {
         final List<ScoreboardEntry> scoreboardEntries =
                 this.scoreboardService.computeScoreboard(leagueId, roundId, locale);
        
+        model.addAttribute("todayGames", gameService.findTodayGames(leagueId));
+        
         model.addAttribute("scoreboardEntries", scoreboardEntries);
         model.addAttribute("user", user);
         model.addAttribute("league", league);

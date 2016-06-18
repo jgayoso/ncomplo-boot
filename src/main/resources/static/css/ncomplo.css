@@ -269,7 +269,38 @@ form#password {
     font-weight: bold;
 }
 
+/* Matches */
 
+#matchesTable {
+	min-width: 100%;
+	width: 100%;
+	margin: 5px;
+}
 
+.match-row {
+	width: 100%;
+}
 
+.team-name {
+	font-size: 30px;
+	margin-left: 10px;
+	margin-right: 10px;
+}
+.team-away {
+	text-align: left;
+	margin-left: 10px;
+}
 
+.team-home {
+	text-align: right;
+	margin-right: 10px;
+}
+
+.match-score {
+	min-width: 20px;
+	font-size: 35px;
+}
+
+.text-center {
+	text-align: center;
+}
