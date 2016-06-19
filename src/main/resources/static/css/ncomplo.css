@@ -269,10 +269,20 @@ form#password {
     font-weight: bold;
 }
 
-.betsColumn {
-	max-width: 40px;
+.smallColumn {
+	max-width: 10px;
+}
+
+.todayBetHeader {
+	max-width: 80px;
 	text-align: center;
 }
+
+.betsColumn {
+	max-width: 25px;
+	text-align: center;
+}
+
 .todayBetColumn {
 	max-width: 20px;
 	text-align: center;
