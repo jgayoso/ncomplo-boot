@@ -85,7 +85,7 @@
                 <td class="scoreboard_points">
                   <span th:text="${sc.points}">points</span>
                 </td>
-                <td th:if="${todayGames}" class="todayBetColumn" th:each="g : ${todayGames}" th:with="userBets=${todayBets[__${user.login}__]}">
+                <td th:if="${todayGames}" class="todayBetColumn" th:each="g : ${todayGames}" th:with="userBets=${todayBets[__${sc.user.login}__]}">
                 	<div th:if="${userBets} != null and ${userBets.containsKey(g.id)} and ${userBets[__${g.id}__].scoreMatter}
                 		and ${userBets[__${g.id}__].scoreA} != null and ${userBets[__${g.id}__].scoreB} != null" > 
                 		<span th:text="${userBets[__${g.id}__].scoreA} + ' - ' + ${userBets[__${g.id}__].scoreB}">1 - 0</span>
