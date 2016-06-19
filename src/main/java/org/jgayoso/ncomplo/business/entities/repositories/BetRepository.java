@@ -1,8 +1,10 @@
 package org.jgayoso.ncomplo.business.entities.repositories;
 
+import java.util.Collection;
 import java.util.List;
 
 import org.jgayoso.ncomplo.business.entities.Bet;
+import org.jgayoso.ncomplo.business.entities.Game;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
@@ -13,6 +15,8 @@ public interface BetRepository
         extends PagingAndSortingRepository<Bet,Integer> {
     
     public List<Bet> findByLeagueIdAndUserLogin(final Integer leagueId, final String login);
+    
+    public List<Bet> findByLeagueIdAndGameIn(final Integer leagueId, final Collection<Game> games);
     
 }
     

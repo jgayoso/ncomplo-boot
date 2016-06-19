@@ -70,7 +70,8 @@
                 <th th:text="#{scoreboard.header.position}">Pos</th>
                 <th th:text="#{scoreboard.header.name}">Name</th>
                 <th th:text="#{scoreboard.header.points}">Points</th>
-                <th th:unless="${betsAllowed}"></th>
+                <th th:if="${todayGames}" th:each="g : ${todayGames}" class="todayBetColumn"></th>
+                <th th:unless="${betsAllowed}" class="betsColumn"></th>
               </tr>
             </thead>
             <tbody>
@@ -84,7 +85,13 @@
                 <td class="scoreboard_points">
                   <span th:text="${sc.points}">points</span>
                 </td>
-                <td class="scoreboard_actions" th:unless="${betsAllowed}">
+                <td th:if="${todayGames}" class="todayBetColumn" th:each="g : ${todayGames}" th:with="userBets=${todayBets[__${user.login}__]}">
+                	<div th:if="${userBets} != null and ${userBets.containsKey(g.id)} and ${userBets[__${g.id}__].scoreMatter}
+                		and ${userBets[__${g.id}__].scoreA} != null and ${userBets[__${g.id}__].scoreB} != null" > 
+                		<span th:text="${userBets[__${g.id}__].scoreA} + ' - ' + ${userBets[__${g.id}__].scoreB}">1 - 0</span>
+               		</div>
+                </td>
+                <td class="scoreboard_actions betsColumn" th:unless="${betsAllowed}" >
                   <a th:href="@{'/bets/' + ${league.id} + '/' + ${sc.user.login}}" th:text="#{scoreboard.viewbets}" class="btn btn-xs btn-default">view bets</a>
                 </td>
               </tr>

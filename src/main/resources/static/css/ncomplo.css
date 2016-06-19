@@ -269,6 +269,15 @@ form#password {
     font-weight: bold;
 }
 
+.betsColumn {
+	max-width: 40px;
+	text-align: center;
+}
+.todayBetColumn {
+	max-width: 20px;
+	text-align: center;
+}
+
 /* Matches */
 
 #matchesTable {
