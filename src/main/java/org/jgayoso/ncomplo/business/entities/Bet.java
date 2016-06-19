@@ -14,6 +14,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import org.jgayoso.ncomplo.business.entities.Game.GameComparator;
+import org.jgayoso.ncomplo.business.entities.Game.GameOrderComparator;
 import org.jgayoso.ncomplo.business.entities.User.UserComparator;
 import org.jgayoso.ncomplo.business.util.I18nNamedEntityComparator;
 import org.jgayoso.ncomplo.business.util.JavaScriptBetEvaluator;
@@ -415,6 +416,22 @@ public class Bet {
         
         
     }
+    
+	public static final class BetByGameOrderComparator implements Comparator<Bet> {
+
+		private final GameOrderComparator gameComparator;
+
+		public BetByGameOrderComparator() {
+			super();
+			this.gameComparator = new GameOrderComparator();
+		}
+
+		@Override
+		public int compare(final Bet o1, final Bet o2) {
+			return this.gameComparator.compare(o1.getGame(), o2.getGame());
+		}
+
+	}
     
     
 }
