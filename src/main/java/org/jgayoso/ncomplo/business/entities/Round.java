@@ -112,7 +112,7 @@ public class Round implements Comparable<Round> {
     
     @Override
     public int compareTo(final Round o) {
-        return this.order.compareTo(o.order);
+        return this.getOrder().compareTo(o.getOrder());
     }
 
     

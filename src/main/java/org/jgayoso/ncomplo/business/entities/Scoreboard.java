@@ -91,11 +91,11 @@ public class Scoreboard implements Serializable {
         @Override
         public int compareTo(ScoreboardPosition o) {
             final int pointComparison =
-                o.points.compareTo(this.points);
+                o.getPoints().compareTo(this.getPoints());
             if (pointComparison != 0) {
                 return pointComparison;
             }
-            return this.ownerName.compareTo(o.ownerName);
+            return this.getOwnerName().compareTo(o.getOwnerName());
         }
         
     }
