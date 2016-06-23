@@ -70,7 +70,8 @@
                 <th class="smallColumn" th:text="#{scoreboard.header.position}">Pos</th>
                 <th th:text="#{scoreboard.header.name}">Name</th>
                 <th class="smallColumn" th:text="#{scoreboard.header.points}">Points</th>
-                <th class="todayBetHeader" th:if="${todayGames}" th:colspan="${#lists.size(todayGames)}" th:text="#{scoreboard.header.today.bets}"></th>
+                <th class="todayBetHeader" th:if="${todayGames != null} and ${#lists.size(todayGames) > 0}" 
+                	th:colspan="${#lists.size(todayGames)}" th:text="#{scoreboard.header.today.bets}"></th>
                 <th th:unless="${betsAllowed}" class="betsColumn"></th>
               </tr>
             </thead>
