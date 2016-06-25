@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.jgayoso.ncomplo.business.entities.Bet;
 import org.jgayoso.ncomplo.business.entities.Game;
+import org.jgayoso.ncomplo.business.entities.Round;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
@@ -16,7 +17,9 @@ public interface BetRepository
     
     public List<Bet> findByLeagueIdAndUserLogin(final Integer leagueId, final String login);
     
-    public List<Bet> findByLeagueIdAndGameIn(final Integer leagueId, final Collection<Game> games);
+    public List<Bet> findByScoreMatterTrueAndLeagueIdAndGameIn(final Integer leagueId, final Collection<Game> games);
+    
+    public List<Bet> findBySidesMatterTrueAndLeagueIdAndAndGameRound(final Integer leagueId, final Round round);
     
 }
     
