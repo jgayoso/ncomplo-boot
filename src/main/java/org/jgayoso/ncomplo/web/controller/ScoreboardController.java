@@ -5,13 +5,11 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.jgayoso.ncomplo.business.entities.Bet;
 import org.jgayoso.ncomplo.business.entities.Bet.BetComparator;
-import org.jgayoso.ncomplo.business.entities.Game;
 import org.jgayoso.ncomplo.business.entities.League;
 import org.jgayoso.ncomplo.business.entities.Round;
 import org.jgayoso.ncomplo.business.entities.User;
@@ -22,7 +20,7 @@ import org.jgayoso.ncomplo.business.services.ScoreboardService;
 import org.jgayoso.ncomplo.business.services.UserService;
 import org.jgayoso.ncomplo.business.util.I18nNamedEntityComparator;
 import org.jgayoso.ncomplo.business.views.ScoreboardEntry;
-import org.jgayoso.ncomplo.business.views.UserBetView;
+import org.jgayoso.ncomplo.business.views.TodayEventsView;
 import org.jgayoso.ncomplo.exceptions.InternalErrorException;
 import org.jgayoso.ncomplo.web.beans.LeagueSelectorBean;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,9 +47,6 @@ public class ScoreboardController {
 
 	@Autowired
 	private ScoreboardService scoreboardService;
-
-	@Autowired
-	private GameService gameService;
 
 	public ScoreboardController() {
 		super();
@@ -144,10 +139,8 @@ public class ScoreboardController {
 		final List<ScoreboardEntry> scoreboardEntries = this.scoreboardService.computeScoreboard(leagueId, roundId,
 				locale);
 		
-		final List<Game> todayGames = this.gameService.findTodayGames(leagueId);
-		final Map<String, Map<Integer, UserBetView>> todayBets = this.betService.findUserBetsByLeagueIdAndGames(leagueId, todayGames);
-		model.addAttribute("todayGames", todayGames);
-		model.addAttribute("todayBets", todayBets);
+		final TodayEventsView todayEvents = this.leagueService.getTodayInformation(leagueId);
+		model.addAttribute("todayEvents", todayEvents);
 
 		model.addAttribute("scoreboardEntries", scoreboardEntries);
 		model.addAttribute("user", user);

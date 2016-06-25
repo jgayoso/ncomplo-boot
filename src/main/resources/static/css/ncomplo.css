@@ -270,7 +270,9 @@ form#password {
 }
 
 .smallColumn {
-	max-width: 10px;
+	width: 65px;
+	max-width: 65px;
+	text-align: center;
 }
 
 .todayBetHeader {
@@ -279,13 +281,20 @@ form#password {
 }
 
 .betsColumn {
-	max-width: 30px;
+	width: 130px;
+	max-width: 130px;
 	text-align: center;
 }
 
 .todayBetColumn {
-	max-width: 20px;
 	text-align: center;
+}
+
+.betsTable {
+	width: 100%;
+	height: 100%;
+	border: 0px;
+	padding: 0px;
 }
 
 /* Matches */
@@ -298,7 +307,12 @@ form#password {
 #matchesTable tbody td {
     vertical-align: middle;
     border: 0px;
-    padding: 2px;
+    padding: 1px;
+}
+
+.roundName {
+	text-align: center;
+	font-size: 18px;
 }
 
 .match-row {
@@ -311,8 +325,8 @@ form#password {
 
 .team-name {
 	font-size: 20px;
-	margin-left: 10px;
-	margin-right: 10px;
+	margin-left: 5px;
+	margin-right: 5px;
 	vertical-align: middle;
 }
 .team-away {

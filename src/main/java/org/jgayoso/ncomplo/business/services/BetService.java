@@ -3,14 +3,12 @@ package org.jgayoso.ncomplo.business.services;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import org.apache.poi.hssf.util.CellReference;
 import org.apache.poi.ss.usermodel.Cell;
@@ -18,7 +16,6 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.jgayoso.ncomplo.business.entities.Bet;
-import org.jgayoso.ncomplo.business.entities.Bet.BetByGameOrderComparator;
 import org.jgayoso.ncomplo.business.entities.Bet.BetComparator;
 import org.jgayoso.ncomplo.business.entities.Game;
 import org.jgayoso.ncomplo.business.entities.GameSide;
@@ -31,7 +28,6 @@ import org.jgayoso.ncomplo.business.entities.repositories.GameSideRepository;
 import org.jgayoso.ncomplo.business.entities.repositories.LeagueRepository;
 import org.jgayoso.ncomplo.business.entities.repositories.UserRepository;
 import org.jgayoso.ncomplo.business.views.BetView;
-import org.jgayoso.ncomplo.business.views.UserBetView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -75,33 +71,6 @@ public class BetService {
     
     public Bet find(final Integer id) {
         return this.betRepository.findOne(id);
-    }
-    
-    public Map<String, Map<Integer, UserBetView>> findUserBetsByLeagueIdAndGames(Integer leagueId, List<Game> games) {
-    	List<Bet> bets = this.betRepository.findByLeagueIdAndGameIn(leagueId, games);
-    	Map<String, List<Bet>> betsByUser = new HashMap<>();
-    	Map<String, Map<Integer, UserBetView>> result = new HashMap<>();
-    	if (!CollectionUtils.isEmpty(bets)) {
-    		for (Bet bet: bets) {
-    			String userLogin = bet.getUser().getLogin();
-    			if (!betsByUser.containsKey(userLogin)) {
-    				betsByUser.put(userLogin, new ArrayList<Bet>());
-    			}
-    			betsByUser.get(userLogin).add(bet);
-    		}
-    		
-    		for (Entry<String, List<Bet>> userBetsEntry: betsByUser.entrySet()) {
-    			List<Bet> userBets = userBetsEntry.getValue(); 
-    			Collections.sort(userBets, new BetByGameOrderComparator());
-    			String userLogin = userBetsEntry.getKey();
-    			result.put(userLogin, new HashMap<Integer, UserBetView>());
-    			for (Bet bet: userBets) {
-    				UserBetView betView = new UserBetView(userLogin, bet.getGame().getId(), bet.getScoreA(), bet.getScoreB(), bet.getScoreMatter());
-    				result.get(userLogin).put(bet.getGame().getId(), betView);
-    			}
-    		}
-    	}
-    	return result;
     }
     
     public List<Bet> findByLeagueIdAndUserLogin(
