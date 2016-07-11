@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+  <head th:substituteby="layout/header :: head"></head>
+  
+  <body>
+    
+    <header th:substituteby="layout/header :: header"></header>
+  
+    <div class="container">
+    
+        <header th:substituteby="layout/admin/header :: header"></header>
+  
+        <h1>Send notification</h1>
+        <div class="row">
+        	<form th:action="@{doNotification}" th:object="${notificationBean}" method="post">
+        		<fieldset>
+	        		<input type="hidden" th:field="*{leagueId}" />
+	        		
+	        		<div id="subject">
+		              <label for="subjectInput">Subject</label>
+		              <input id="subjectInput" type="text" th:field="*{subject}" required="required" />
+		            </div>
+		            
+		            <div id="text">
+		              <label for="textInput">Email text</label>
+		              <textarea rows="4" cols="50" id="textInput" th:field="*{text}" required="required" >Email text </textarea>
+		            </div>
+        		</fieldset>
+        		<input type="submit" />
+        	</form>
+        </div>
+        
+        <a th:href="@{list}">Back to list of Leagues</a>
+        
+    </div> 
+
+  </body>
+  
+</html>

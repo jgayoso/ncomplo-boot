@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import org.jgayoso.ncomplo.business.entities.Bet;
 import org.jgayoso.ncomplo.business.entities.BetType;
@@ -55,6 +56,9 @@ public class LeagueService {
 
 	@Autowired
 	private BetRepository betRepository;
+	
+	@Autowired
+	private EmailService emailService;
 
 	public LeagueService() {
 		super();
@@ -219,6 +223,23 @@ public class LeagueService {
     	TodayRoundGamesAndBetsView betsView = new TodayRoundGamesAndBetsView(round, games, null, sideMatterBets, false);
     	betsView.setMaxSideMattersBets(maxNumber);
     	return betsView;
+	}
+	
+	public void sendNotificationEmailToLeagueMembers(Integer leagueId, String subject, String text) {
+		League league = this.leagueRepository.findOne(leagueId);
+		
+		Set<User> participants = league.getParticipants();
+		if (CollectionUtils.isEmpty(participants)) {
+			return;
+		}
+		
+		String[] destinations = new String[participants.size()];
+		int i = 0;
+		for (User participant: participants) {
+			destinations[i] = participant.getEmail();
+			i++;
+		}
+		this.emailService.sendNotification(subject, destinations, text);
 	}
 
 }
