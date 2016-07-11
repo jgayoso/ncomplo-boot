@@ -25,6 +25,7 @@ import org.jgayoso.ncomplo.business.services.LeagueService;
 import org.jgayoso.ncomplo.web.admin.beans.InvitationBean;
 import org.jgayoso.ncomplo.web.admin.beans.LangBean;
 import org.jgayoso.ncomplo.web.admin.beans.LeagueBean;
+import org.jgayoso.ncomplo.web.admin.beans.NotificationBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -33,7 +34,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.support.RequestContextUtils;
 
 @Controller
@@ -191,6 +194,50 @@ public class LeagueController {
 		this.invitationService.sendInvitations(bean.getLeagueId(), adminLogin, bean.getName(), bean.getEmail());
 		return "redirect:list";
 
+	}
+	
+	@RequestMapping("/notification")
+	public String notification(@RequestParam(value = "id", required = true) final Integer leagueId, final ModelMap model, final RedirectAttributes redirectAttributes) {
+		final Authentication auth = SecurityContextHolder.getContext()
+				.getAuthentication();
+        if (auth instanceof AnonymousAuthenticationToken) {
+			/* The user is not logged in */
+			return "login";
+		}
+        
+        League league = this.leagueService.find(leagueId);
+        if (league == null) {
+        	redirectAttributes.addFlashAttribute("error", "League doesn't exist");
+        	return VIEW_BASE + "notification";
+        }
+        
+		model.addAttribute("notificationBean", new NotificationBean(leagueId));
+		return VIEW_BASE + "notification";
+	}
+	
+	@RequestMapping(method = RequestMethod.POST, value = "/doNotification")
+	public String sendNotification(
+			final NotificationBean notificationBean,
+			final RedirectAttributes redirectAttributes) {
+		
+		final Authentication auth = SecurityContextHolder.getContext()
+				.getAuthentication();
+        if (auth instanceof AnonymousAuthenticationToken) {
+			/* The user is not logged in */
+			return "login";
+		}
+        
+        League league = this.leagueService.find(notificationBean.getLeagueId());
+        if (league == null) {
+        	redirectAttributes.addFlashAttribute("error", "League doesn't exist");
+        	return VIEW_BASE + "notification";
+        }
+		
+		this.leagueService.sendNotificationEmailToLeagueMembers(notificationBean.getLeagueId(), notificationBean.getSubject(),
+				notificationBean.getText());
+		
+		redirectAttributes.addFlashAttribute("message", "Notifications sent");
+		return "redirect:list";
 	}
 	
 }
