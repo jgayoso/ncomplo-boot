@@ -8,7 +8,6 @@ import javax.transaction.Transactional;
 import org.apache.log4j.Logger;
 import org.jgayoso.ncomplo.business.entities.Invitation;
 import org.jgayoso.ncomplo.business.entities.League;
-import org.jgayoso.ncomplo.business.entities.User;
 import org.jgayoso.ncomplo.business.entities.repositories.InvitationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -24,8 +23,6 @@ public class InvitationService {
 	
 	@Autowired
 	private LeagueService leagueService;
-	@Autowired
-	private UserService userService;
 	@Autowired
 	private EmailService emailService;
 	
@@ -56,12 +53,15 @@ public class InvitationService {
 			return;
 		}
 		
-		final User existentUser = this.userService.findByEmail(email);
-		if (existentUser != null) {
-			logger.info("Invitation cannot be sent to existent user " + existentUser.getLogin());
-			return;
-		}
-		
+		Invitation existentInvitation = this.invitationRepository.findByLeagueIdAndEmail(leagueId, email);
+        if (existentInvitation != null) {
+            // send the invitation again
+            final String registrationUrl = generateRegistrationUrl(existentInvitation, league.getId());
+            this.emailService.sendInvitations(league.getName(), existentInvitation, registrationUrl);
+            logger.debug("Created invitation for " + name + ", " + email);
+            return;
+        }
+        
 		final Date now = new Date();
 		final Invitation invitation = new Invitation();
 		invitation.setEmail(email);
@@ -70,19 +70,22 @@ public class InvitationService {
 		invitation.setLeague(league);
 		invitation.setAdminLogin(adminLogin);
 		
-		final int atIndex = invitation.getEmail().indexOf("@");
-		if (atIndex < 0) {
-			logger.info("Invitation not sent, invalid email address");
-			return;
-		}
-		final String fakeLogin = invitation.getEmail().substring(0, atIndex);
 		final Invitation inv = this.invitationRepository.save(invitation);
 		
-        final String registrationUrl =
-                this.baseUrl + "/invitation/" + inv.getId() + "/" + league.getId() + "/" + fakeLogin;
+        final String registrationUrl = generateRegistrationUrl(inv, league.getId());
 			
 		this.emailService.sendInvitations(league.getName(), invitation, registrationUrl);
 		logger.debug("Created invitation for " + name + ", " + email);
+	}
+	
+	private String generateRegistrationUrl(Invitation invitation, Integer leagueId) {
+	    final int atIndex = invitation.getEmail().indexOf("@");
+        if (atIndex < 0) {
+            logger.info("Invitation not sent, invalid email address");
+            return "";
+        }
+        final String fakeLogin = invitation.getEmail().substring(0, atIndex);
+	    return this.baseUrl + "/invitation/" + invitation.getId() + "/" + leagueId + "/" + fakeLogin;
 	}
 
 }

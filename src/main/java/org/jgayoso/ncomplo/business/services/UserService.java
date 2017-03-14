@@ -74,11 +74,11 @@ public class UserService {
 	public User registerFromInvitation(final Integer invitationId, final String login, final String name, final String email,
 			final Integer leagueId, final String password) {
 		
-		final boolean userExists = this.userRepository.exists(login);
+		final User existentUser = this.find(login);
         
-		if (userExists) {
-			//TODO change it
-			throw new InternalErrorException("User already exists");
+		if (existentUser != null) {
+			this.acceptInvitation(invitationId, leagueId, existentUser);
+			return existentUser;
 		}
 		final String hashedNewPassword = 
 				this.passwordEncryptor.encryptPassword(password);
@@ -98,6 +98,16 @@ public class UserService {
         
         this.invitationRepository.delete(invitationId);
         return newUser;
+	}
+	
+	@Transactional
+    public void acceptInvitation(final Integer invitationId, final Integer leagueId, User user) {
+	    
+	    final League league = this.leagueRepository.findOne(leagueId);
+	    user.getLeagues().add(league);
+        league.getParticipants().add(user);
+        
+        this.invitationRepository.delete(invitationId);
 	}
     
     @Transactional

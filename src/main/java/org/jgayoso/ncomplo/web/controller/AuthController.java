@@ -93,6 +93,13 @@ public class AuthController {
             redirectAttributes.addFlashAttribute("error", "Invalid invitation");
             return "redirect:/login?error";
     	}
+        
+        User user = this.userService.findByEmail(invitation.getEmail());
+        if (user != null) {
+            this.userService.acceptInvitation(invitationId, leagueId, user);
+            redirectAttributes.addFlashAttribute("message", "You have joined to the league successfully");
+            return "invitationAccepted";
+        }
     	
     	final UserInvitationBean userBean = new UserInvitationBean();
     	userBean.setEmailId(emailId);
