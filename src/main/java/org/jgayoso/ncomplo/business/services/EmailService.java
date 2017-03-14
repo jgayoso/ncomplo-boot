@@ -77,7 +77,7 @@ public class EmailService {
     					+ "To create your account and sign up at the competition, click <a href='" + registerUrl
     					+ "'>here</a> and complete the registration form." + "<br/>See you soon!";
 			} else {
-			    String resetPasswordUrl = this.baseUrl + "/resetpassword?login'" + user.getLogin() + "&email=" + user.getEmail();
+			    String resetPasswordUrl = this.baseUrl + "/resetpassword?login=" + user.getLogin() + "&email=" + user.getEmail();
 			    logger.info("Reset password link " + resetPasswordUrl);
 			    html = "Hello " + invitation.getName()
                 + "<br />You have been invited to participate at the league " + leagueName + " of ncomplo<br/>"
