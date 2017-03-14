@@ -6,6 +6,7 @@ import org.jgayoso.ncomplo.business.entities.User;
 import org.jgayoso.ncomplo.business.services.InvitationService;
 import org.jgayoso.ncomplo.business.services.UserService;
 import org.jgayoso.ncomplo.web.admin.beans.UserInvitationBean;
+import org.jgayoso.ncomplo.web.beans.ResetPasswordBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -42,6 +43,7 @@ public class AuthController {
 	    User userByLogin = this.userService.find(login);
 	    User userByEmail = this.userService.findByEmail(email);
 	    if (userByLogin != null && userByEmail != null && userByLogin.getLogin().equals(userByEmail.getLogin())) {
+	        model.addAttribute("userInfo", new ResetPasswordBean(login, email));
 	        return "resetpassword";
 	    } else {
 	        redirectAttributes.addFlashAttribute("error", "Invalid reset password url");
@@ -49,6 +51,15 @@ public class AuthController {
 	    }
 	    
 	}
+	
+	@RequestMapping("/resetpassword-confirm")
+    public String resetPasswordConfirm(final ResetPasswordBean bean,
+            final RedirectAttributes redirectAttributes) {
+        
+	    this.userService.resetPassword(bean.getLogin(), true);
+	    return "redirect:/login";
+        
+    }
 
 	@RequestMapping("/password")
 	public String password(final ModelMap model) {

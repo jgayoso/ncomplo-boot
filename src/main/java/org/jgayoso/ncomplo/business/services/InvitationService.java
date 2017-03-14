@@ -79,7 +79,7 @@ public class InvitationService {
 		
         final String registrationUrl = generateRegistrationUrl(inv, league.getId());
 			
-		this.emailService.sendInvitations(league.getName(), invitation, registrationUrl);
+		this.emailService.sendInvitations(league.getName(), invitation, registrationUrl, user);
 		logger.debug("Created invitation for " + name + ", " + email);
 	}
 	
