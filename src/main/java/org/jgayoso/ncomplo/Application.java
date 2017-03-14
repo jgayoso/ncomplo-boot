@@ -85,6 +85,7 @@ public class Application extends WebMvcConfigurerAdapter {
 		protected void configure(final HttpSecurity http) throws Exception {
 			http.authorizeRequests()
 				.antMatchers(HttpMethod.GET, "/invitation*").permitAll()
+				.antMatchers(HttpMethod.GET, "/resetpassword*").permitAll()
 				.antMatchers("/register").permitAll()
 				.antMatchers("/login").permitAll()
 				.antMatchers("/css/ncomplo.css").permitAll()
@@ -92,8 +93,7 @@ public class Application extends WebMvcConfigurerAdapter {
 				.antMatchers("/*").fullyAuthenticated()
 					.and().formLogin().loginPage("/login").failureUrl("/login?error")
 					.and().logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-					.and().exceptionHandling()
-					.accessDeniedPage("/login?error");
+					.and().exceptionHandling().accessDeniedPage("/login?error");
 		}
 
 	}

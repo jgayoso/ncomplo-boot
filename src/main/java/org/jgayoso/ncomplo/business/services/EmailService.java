@@ -60,10 +60,10 @@ public class EmailService {
 	}
 
 	public void sendInvitations(final String leagueName, final Invitation invitation, final String registerUrl) {
-	    this.sendInvitations(leagueName, invitation, registerUrl, false);
+	    this.sendInvitations(leagueName, invitation, registerUrl, null);
 	}
 	
-	public void sendInvitations(final String leagueName, final Invitation invitation, final String registerUrl, boolean existentUser) {
+	public void sendInvitations(final String leagueName, final Invitation invitation, final String registerUrl, User existentUser) {
 		if (this.sendGrid == null) {
 			logger.error("Invitations: No email service found");
 			return;
@@ -75,7 +75,7 @@ public class EmailService {
 					.addTo(invitation.getEmail(), invitation.getName());
 
 			String html = "";
-			if (!existentUser) {
+			if (existentUser == null) {
     			html = "Hello " + invitation.getName()
     					+ "<br />You have been invited to participate at the league " + leagueName + " of ncomplo<br/>"
     					+ "To create your account and sign up at the competition, click <a href='" + registerUrl
@@ -84,7 +84,8 @@ public class EmailService {
 			    html = "Hello " + invitation.getName()
                 + "<br />You have been invited to participate at the league " + leagueName + " of ncomplo<br/>"
                 + "To accept joining to this league, click <a href='" + registerUrl
-                + "'>here</a>." + "<br/>If you do not remember your password, <a href='" + this.baseUrl + "/resetpassword'>reset your password</a>.<br/>See you soon!";
+                        + "'>here</a>." + "<br/>If you do not remember your password, <a href='" + this.baseUrl + "/resetpassword?login'"
+                        + existentUser.getLogin() + "&email=" + existentUser.getEmail() + ">reset your password</a>.<br/>See you soon!";
 			}
 
 			email.setHtml(html);

@@ -32,6 +32,23 @@ public class AuthController {
 	public AuthController() {
 		super();
 	}
+	
+	@RequestMapping("/resetpassword")
+	public String resetPassword(final ModelMap model, 
+	        @RequestParam(value = "login", required = true) final String login, 
+	        @RequestParam(value = "email", required = true) final String email,
+	        final RedirectAttributes redirectAttributes) {
+	    
+	    User userByLogin = this.userService.find(login);
+	    User userByEmail = this.userService.findByEmail(email);
+	    if (userByLogin != null && userByEmail != null && userByLogin.getLogin().equals(userByEmail.getLogin())) {
+	        return "resetpassword";
+	    } else {
+	        redirectAttributes.addFlashAttribute("error", "Invalid reset password url");
+	        return "redirect:/login?error";
+	    }
+	    
+	}
 
 	@RequestMapping("/password")
 	public String password(final ModelMap model) {
@@ -98,7 +115,7 @@ public class AuthController {
         if (user != null) {
             this.userService.acceptInvitation(invitationId, leagueId, user);
             redirectAttributes.addFlashAttribute("message", "You have joined to the league successfully");
-            return "invitationAccepted";
+            return "redirect:/login";
         }
     	
     	final UserInvitationBean userBean = new UserInvitationBean();
