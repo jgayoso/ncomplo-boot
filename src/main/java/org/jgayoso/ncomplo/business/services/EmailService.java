@@ -1,10 +1,9 @@
 package org.jgayoso.ncomplo.business.services;
 
-import java.util.List;
-
 import org.apache.log4j.Logger;
 import org.jgayoso.ncomplo.business.entities.Invitation;
 import org.jgayoso.ncomplo.business.entities.User;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.sendgrid.SendGrid;
@@ -18,6 +17,9 @@ public class EmailService {
 
 	// TODO EmailService must be an interface and this a specific implementation
 
+	@Value("${ncomplo.server.url}")
+    private String baseUrl;
+	
 	private final SendGrid sendGrid;
 
 	public EmailService() {
@@ -58,6 +60,10 @@ public class EmailService {
 	}
 
 	public void sendInvitations(final String leagueName, final Invitation invitation, final String registerUrl) {
+	    this.sendInvitations(leagueName, invitation, registerUrl, false);
+	}
+	
+	public void sendInvitations(final String leagueName, final Invitation invitation, final String registerUrl, boolean existentUser) {
 		if (this.sendGrid == null) {
 			logger.error("Invitations: No email service found");
 			return;
@@ -68,11 +74,18 @@ public class EmailService {
 					.setSubject("Invitation to ncomplo league " + leagueName)
 					.addTo(invitation.getEmail(), invitation.getName());
 
-			// TODO This should be a thymeleaf template
-			final String html = "Hello " + invitation.getName()
-					+ "<br />You have been invited to participate at the league " + leagueName + " of ncomplo<br/>"
-					+ "To create your account and sign up at the competition, click <a href='" + registerUrl
-					+ "'>here</a> and complete the registration form." + "<br/>See you soon!";
+			String html = "";
+			if (!existentUser) {
+    			html = "Hello " + invitation.getName()
+    					+ "<br />You have been invited to participate at the league " + leagueName + " of ncomplo<br/>"
+    					+ "To create your account and sign up at the competition, click <a href='" + registerUrl
+    					+ "'>here</a> and complete the registration form." + "<br/>See you soon!";
+			} else {
+			    html = "Hello " + invitation.getName()
+                + "<br />You have been invited to participate at the league " + leagueName + " of ncomplo<br/>"
+                + "To accept joining to this league, click <a href='" + registerUrl
+                + "'>here</a>." + "<br/>If you do not remember your password, <a href='" + this.baseUrl + "/resetpassword'>reset your password</a>.<br/>See you soon!";
+			}
 
 			email.setHtml(html);
 			logger.debug("Sending invitation email to " + invitation.getEmail());

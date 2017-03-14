@@ -57,7 +57,7 @@ public class InvitationService {
         if (existentInvitation != null) {
             // send the invitation again
             final String registrationUrl = generateRegistrationUrl(existentInvitation, league.getId());
-            this.emailService.sendInvitations(league.getName(), existentInvitation, registrationUrl);
+            this.emailService.sendInvitations(league.getName(), existentInvitation, registrationUrl, true);
             logger.debug("Created invitation for " + name + ", " + email);
             return;
         }
