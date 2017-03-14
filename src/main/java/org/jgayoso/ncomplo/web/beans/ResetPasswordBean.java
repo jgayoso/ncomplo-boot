@@ -5,10 +5,15 @@ import java.io.Serializable;
 public class ResetPasswordBean implements Serializable {
     
     private static final long serialVersionUID = 1984212722109860979L;
-    private final String login;
-    private final String email;
+    private String login;
+    private String email;
+    
+    public ResetPasswordBean() {
+        super();
+    }
     
     public ResetPasswordBean(String login, String email) {
+        super();
         this.login = login;
         this.email = email;
     }
