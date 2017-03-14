@@ -53,10 +53,10 @@ public class AuthController {
 	}
 	
 	@RequestMapping("/resetpassword-confirm")
-    public String resetPasswordConfirm(final ResetPasswordBean bean,
-            final RedirectAttributes redirectAttributes) {
+    public String resetPasswordConfirm(final ResetPasswordBean bean, final RedirectAttributes redirectAttributes) {
         
 	    this.userService.resetPassword(bean.getLogin(), true);
+	    redirectAttributes.addFlashAttribute("message", "A new password has been sent to your email");
 	    return "redirect:/login";
         
     }
