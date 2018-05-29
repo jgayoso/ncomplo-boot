@@ -181,7 +181,7 @@ public class LeagueController {
 	}
 	
 	@RequestMapping("/doInvite")
-	public String doInvite(final InvitationBean bean, BindingResult result) {
+	public String doInvite(final InvitationBean bean) {
 		final Authentication auth = SecurityContextHolder.getContext()
 				.getAuthentication();
         if (auth instanceof AnonymousAuthenticationToken) {

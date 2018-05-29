@@ -17,6 +17,11 @@ import com.sendgrid.SendGridException;
 public class EmailService {
 
 	private static final Logger logger = Logger.getLogger(EmailService.class);
+
+	// TODO EmailService must be an interface and this a specific implementation
+
+	@Value("${ncomplo.server.url}")
+    private String baseUrl;
 	
 	//TODO EmailService must be an interface and this a specific implementation
 	@Value("${SENDGRID_USERNAME)")
@@ -65,7 +70,7 @@ public class EmailService {
 		}
 	}
 
-	public void sendInvitations(final String leagueName, final Invitation invitation, final String registerUrl) {
+	public void sendInvitations(final String leagueName, final Invitation invitation, final String registerUrl, final User user) {
 		if (this.sendGrid == null) {
 			logger.error("Invitations: No email service found");
 			return;
@@ -76,11 +81,18 @@ public class EmailService {
 					.setSubject("Invitation to ncomplo league " + leagueName)
 					.addTo(invitation.getEmail(), invitation.getName());
 
-			// TODO This should be a thymeleaf template
-			final String html = "Hello " + invitation.getName()
-					+ "<br />You have been invited to participate at the league " + leagueName + " of ncomplo<br/>"
-					+ "To create your account and sign up at the competition, click <a href='" + registerUrl
-					+ "'>here</a> and complete the registration form." + "<br/>See you soon!";
+			String html = "";
+			if (user == null) {
+    			html = "Hello " + invitation.getName()
+    					+ "<br />You have been invited to participate at the league " + leagueName + " of ncomplo<br/>"
+    					+ "To create your account and sign up at the competition, click <a href='" + registerUrl
+    					+ "'>here</a> and complete the registration form." + "<br/>See you soon!";
+			} else {
+			    html = "Hello " + invitation.getName()
+                + "<br />You have been invited to participate at the league " + leagueName + " of ncomplo<br/>"
+                + "To join to this league, click <a href='" + registerUrl + "'>here</a>." 
+                + "<br/>If you do not remember your password, contact with " + invitation.getAdminLogin() + "<br/>See you soon!";
+			}
 
 			email.setHtml(html);
 			logger.debug("Sending invitation email to " + invitation.getEmail());

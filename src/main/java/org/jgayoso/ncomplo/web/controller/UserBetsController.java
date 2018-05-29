@@ -203,7 +203,9 @@ public class UserBetsController {
             betsFile.delete();
         } catch (final IOException e) {
             redirectAttributes.addFlashAttribute("error", "Error processing bets file");
-        } 
+        } finally {
+        	// delete file
+        }
         redirectAttributes.addFlashAttribute("message", "Bets processed successfully");
         return "redirect:/bets/"+leagueId+"/";
     }
