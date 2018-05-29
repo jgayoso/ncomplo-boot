@@ -55,7 +55,8 @@ public class GameSideService {
             final Integer id,
             final Integer competitionId,
             final String name,
-            final Map<String,String> namesByLang) {
+            final Map<String,String> namesByLang,
+            final String code) {
 
         final Competition competition = 
                 this.competitionRepository.findOne(competitionId);
@@ -67,6 +68,7 @@ public class GameSideService {
         gameSide.setName(name);
         gameSide.getNamesByLang().clear();
         gameSide.getNamesByLang().putAll(namesByLang);
+        gameSide.setCode(code);
         
         if (id == null) {
             competition.getGameSides().add(gameSide);

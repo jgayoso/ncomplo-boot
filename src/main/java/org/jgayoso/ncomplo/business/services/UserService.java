@@ -4,7 +4,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
-import org.apache.commons.lang3.RandomStringUtils;
 import org.jasypt.util.password.PasswordEncryptor;
 import org.jgayoso.ncomplo.business.entities.League;
 import org.jgayoso.ncomplo.business.entities.User;
@@ -101,7 +100,7 @@ public class UserService {
 	}
 	
 	@Transactional
-    public void acceptInvitation(final Integer invitationId, final Integer leagueId, User user) {
+    public void acceptInvitation(final Integer invitationId, final Integer leagueId, final User user) {
 	    
 	    final League league = this.leagueRepository.findOne(leagueId);
 	    user.getLeagues().add(league);

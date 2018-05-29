@@ -91,7 +91,7 @@ public class GameSideController {
     @RequestMapping("/save")
     public String save(
             final GameSideBean gameSideBean,
-            @SuppressWarnings("unused") final BindingResult bindingResult,
+            final BindingResult bindingResult,
             @PathVariable("competitionId")
             final Integer competitionId) {
 
@@ -99,7 +99,8 @@ public class GameSideController {
                 gameSideBean.getId(),
                 competitionId,
                 gameSideBean.getName(),
-                LangBean.mapFromList(gameSideBean.getNamesByLang()));
+                LangBean.mapFromList(gameSideBean.getNamesByLang()),
+                gameSideBean.getCode());
         
         return "redirect:list";
         

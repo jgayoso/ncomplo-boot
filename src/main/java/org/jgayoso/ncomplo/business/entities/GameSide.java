@@ -40,6 +40,8 @@ public class GameSide implements I18nNamedEntity {
     @Column(name="NAME", nullable=false,length=200)
     private final Map<String,String> namesByLang = new LinkedHashMap<>();
     
+    @Column(name="CODE", nullable=false, length=5, unique=true)
+    private String code;
     
     @ManyToOne
     @JoinColumn(name="COMPETITION_ID",nullable=false)
@@ -94,8 +96,13 @@ public class GameSide implements I18nNamedEntity {
     public String getName(final Locale locale) {
         return I18nUtils.getTextForLocale(locale, this.namesByLang, this.name);
     }
-    
-    
-    
-    
+
+	public String getCode() {
+		return this.code;
+	}
+
+	public void setCode(final String code) {
+		this.code = code;
+	}
+
 }

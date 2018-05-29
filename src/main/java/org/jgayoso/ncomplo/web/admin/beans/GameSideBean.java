@@ -23,7 +23,9 @@ public class GameSideBean implements Serializable {
     @NotNull
     private final List<LangBean> namesByLang = new ArrayList<>();
 
-    
+    @NotNull
+    @Length(min=2, max=5)
+    private String code;
     
     public GameSideBean() {
         super();
@@ -53,6 +55,16 @@ public class GameSideBean implements Serializable {
     public List<LangBean> getNamesByLang() {
         return this.namesByLang;
     }
+
+
+	public String getCode() {
+		return this.code;
+	}
+
+
+	public void setCode(final String code) {
+		this.code = code;
+	}
     
     
     
