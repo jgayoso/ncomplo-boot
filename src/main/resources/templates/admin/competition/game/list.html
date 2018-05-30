@@ -17,6 +17,8 @@
         <table class="table table-striped table-bordered">
           <tr th:each="g : ${allGames}">
             <td th:text="${g.date} ? ${#dates.format(g.date,#messages.msg('dates.format'))} : '-'">date of game</td>
+            <td th:text="${g.order}">game order</td>
+            <td th:text="${g.defaultBetType.getName(#locale)}">game order</td>
             <td th:text="${g.getName(#locale)}">name of game</td>
             <td th:text="${g.gameSideA} ? ${g.gameSideA.getName(#locale)} : '-'">name of team/player A</td>
             <td th:text="${g.gameSideB} ? ${g.gameSideB.getName(#locale)} : '-'">name of team/player B</td>

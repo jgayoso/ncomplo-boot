@@ -4,11 +4,11 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>n.com.plo</groupId>
-	<artifactId>euro16</artifactId>
+	<artifactId>worldcup18</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 
 	<name>Ncomplo</name>
-	<description>Ncomplo Euro 2016</description>
+	<description>Ncomplo Mundial Rusia 2018</description>
 
 	<parent>
 		<groupId>org.springframework.boot</groupId>
