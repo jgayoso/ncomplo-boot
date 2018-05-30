@@ -141,7 +141,7 @@ public class LeagueService {
 		
 		final List<TodayRoundGamesAndBetsView> roundsInfo = new ArrayList<>();
 		
-		final List<Game> todayGames = this.gameService.findTodayGames(leagueId);
+		final List<Game> todayGames = this.gameService.findNextGames(leagueId);
 		
 		Map<Round, List<Game>> gamesByRound = new HashMap<Round, List<Game>>();
 		for (Game game: todayGames){

@@ -23,13 +23,6 @@ public class EmailService {
 	@Value("${ncomplo.server.url}")
     private String baseUrl;
 	
-	//TODO EmailService must be an interface and this a specific implementation
-	@Value("${SENDGRID_USERNAME)")
-	private String sendgridUsername;
-	
-	@Value("${SENDGRID_PASSWORD)")
-	private String sendgridPassword;
-	
 	private final SendGrid sendGrid; 
     public EmailService() {
         super();

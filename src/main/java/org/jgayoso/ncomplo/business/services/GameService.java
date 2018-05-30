@@ -1,5 +1,6 @@
 package org.jgayoso.ncomplo.business.services;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
@@ -23,6 +24,7 @@ import org.jgayoso.ncomplo.business.util.IterableUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 
 
@@ -48,7 +50,8 @@ public class GameService {
     @Autowired
     private LeagueService leagueService;
     
-    
+    SimpleDateFormat hourFormatter = new SimpleDateFormat("HH:mm");
+
     
     
     public GameService() {
@@ -135,15 +138,19 @@ public class GameService {
         
     }
     
-    public List<Game> findTodayGames(Integer leagueId) {
-    	League league = this.leagueService.find(leagueId);
-    	Date today = new Date();
-    	Date todayMorning = DateUtils.truncate(today, Calendar.DATE);
-    	Date todayEvening = DateUtils.addSeconds(DateUtils.addMinutes(DateUtils.addHours(todayMorning, 23), 59), 59);
-    	List<Game> games = this.gameRepository.findByCompetitionAndDateBetween(league.getCompetition(), todayMorning, todayEvening);
-    	Collections.sort(games, new GameOrderComparator());
-    	return games;
+    public List<Game> findNextGames(final Integer leagueId) {
+    	final League league = this.leagueService.find(leagueId);
+    	final Date today = new Date();
+    	final Date todayMorning = DateUtils.truncate(today, Calendar.DATE);
+    	final Date todayEvening = DateUtils.addSeconds(DateUtils.addMinutes(DateUtils.addHours(todayMorning, 23), 59), 59);
+    	final List<Game> todayGames = this.gameRepository.findByCompetitionAndDateBetween(league.getCompetition(), todayMorning, todayEvening);
+    	if (!CollectionUtils.isEmpty(todayGames)) {
+    		Collections.sort(todayGames, new GameOrderComparator());
+    		return todayGames;
+    	}
+    	
+    	final Date nextDays = DateUtils.addDays(todayMorning, 3);
+    	return this.gameRepository.findByCompetitionAndDateBetween(league.getCompetition(), todayMorning, nextDays);
     }
-    
     
 }

@@ -40,6 +40,8 @@ public class GameBean implements Serializable {
     
     private Date date;
     
+    private String time;
+    
     
     private Integer gameSideAId;
     
@@ -116,13 +118,19 @@ public class GameBean implements Serializable {
         return this.date;
     }
 
-
     public void setDate(final Date date) {
         this.date = date;
     }
 
+    public String getTime() {
+		return this.time;
+	}
 
-    public Integer getGameSideAId() {
+	public void setTime(final String time) {
+		this.time = time;
+	}
+
+	public Integer getGameSideAId() {
         return this.gameSideAId;
     }
 
