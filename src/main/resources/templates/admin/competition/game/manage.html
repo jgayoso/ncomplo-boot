@@ -59,7 +59,7 @@
             </div>
             
             <div>
-              <label for="defaultBetTypeSelect">Round</label>
+              <label for="defaultBetTypeSelect">Bet Type</label>
               <select id="defaultBetTypeSelect" th:field="*{defaultBetTypeId}">
                 <option th:each="b : ${allBetTypes}" th:value="${b.id}" th:text="${b.getName(#locale)}">One bet type</option>
               </select>
