@@ -59,10 +59,10 @@ public class BetService {
     private UserRepository userRepository;
     
     private final String groupsFirstColumnName = "E";
-    private final String secondRoundColumnName = "EW";
-    private final String quarterFinalsColumnName = "FD";
-    private final String semisColumnName = "FK";
-    private final String finalColumnName = "FR";
+    private final String secondRoundColumnName = "AZ";
+    private final String quarterFinalsColumnName = "BF";
+    private final String semisColumnName = "BL";
+    private final String finalColumnName = "BR";
     
     public BetService() {
         super();
@@ -132,11 +132,11 @@ public class BetService {
             
             fis = new FileInputStream(betsFile);
             book = new XSSFWorkbook(fis);
-            final XSSFSheet sheet = book.getSheetAt(3);
+            final XSSFSheet sheet = book.getSheetAt(2);
 
             // Groups games
             int matchNumber = 1;
-            for (int rowIndex=10; rowIndex < 46; rowIndex++) {
+            for (int rowIndex=7; rowIndex < 55; rowIndex++) {
                 final BetView betView = this.processGroupsGameBet(sheet, rowIndex, matchNumber, gamesByOrder, betViewssByGameId);
                 // If betId is not null, update the current bet instance
                 final Integer betId = betIdsByGameId.get(betView.getGameId());
