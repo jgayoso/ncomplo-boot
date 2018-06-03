@@ -9,6 +9,7 @@ import org.jgayoso.ncomplo.business.entities.Invitation;
 import org.jgayoso.ncomplo.business.entities.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
 
 import com.sendgrid.SendGrid;
@@ -29,6 +30,8 @@ public class EmailService {
 
 	@Autowired
 	private TemplateEngine templateEngine;
+	@Autowired
+	protected MessageSource resource;
 
 	private final SendGrid sendGrid; 
     public EmailService() {
@@ -78,9 +81,11 @@ public class EmailService {
 			return;
 		}
 		try {
+			String[] subjectParams = {leagueName};
 
-			final Email email = new Email().setFrom("no-reply@ncomplo.com")
-					.setSubject("Invitation to ncomplo league " + leagueName)
+			final String emailSubject = resource.getMessage("emails.invitation.subject", subjectParams, locale);
+			final Email email = new Email().setFrom("ncomplo<no-reply@ncomplo.com>")
+					.setSubject(emailSubject)
 					.addTo(invitation.getEmail(), invitation.getName());
 
 
