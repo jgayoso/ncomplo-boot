@@ -231,7 +231,7 @@ public class LeagueController {
 		final Integer leagueId = bean.getLeagueId();
 			
 		this.invitationService.generateInvitationGroup(leagueId, adminLogin);
-		return "redirect:inviteGroup?leagueId="+leagueId;
+		return "redirect:inviteGroup?id="+leagueId;
 	}
 	
 	
