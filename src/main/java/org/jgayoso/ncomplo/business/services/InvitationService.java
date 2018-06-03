@@ -2,6 +2,7 @@ package org.jgayoso.ncomplo.business.services;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import javax.transaction.Transactional;
 
@@ -49,7 +50,7 @@ public class InvitationService {
 	}
 	
 	@Transactional
-	public void sendInvitations(final Integer leagueId, final String adminLogin, final String name, final String email) {
+	public void sendInvitations(final Integer leagueId, final String adminLogin, final String name, final String email, final Locale locale) {
 		final League league = this.leagueService.find(leagueId);
 		if (league == null) {
 			logger.info("Trying to send an invitation for a non existent league " + leagueId);
@@ -62,7 +63,7 @@ public class InvitationService {
         if (existentInvitation != null) {
             // send the invitation again
             final String registrationUrl = generateRegistrationUrl(existentInvitation, league.getId());
-            this.emailService.sendInvitations(league.getName(), existentInvitation, registrationUrl, user);
+            this.emailService.sendInvitations(league.getName(), existentInvitation, registrationUrl, user, locale);
             logger.debug("Created invitation for " + name + ", " + email);
             return;
         }
@@ -79,7 +80,7 @@ public class InvitationService {
 		
         final String registrationUrl = generateRegistrationUrl(inv, league.getId());
 			
-		this.emailService.sendInvitations(league.getName(), invitation, registrationUrl, user);
+		this.emailService.sendInvitations(league.getName(), invitation, registrationUrl, user, locale);
 		logger.debug("Created invitation for " + name + ", " + email);
 	}
 	
@@ -92,5 +93,6 @@ public class InvitationService {
         final String fakeLogin = invitation.getEmail().substring(0, atIndex);
 	    return this.baseUrl + "/invitation/" + invitation.getId() + "/" + leagueId + "/" + fakeLogin;
 	}
+
 
 }

@@ -1,17 +1,21 @@
 package org.jgayoso.ncomplo.business.services;
 
+import java.util.Locale;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.jgayoso.ncomplo.business.entities.Invitation;
 import org.jgayoso.ncomplo.business.entities.User;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.sendgrid.SendGrid;
 import com.sendgrid.SendGrid.Email;
 import com.sendgrid.SendGridException;
+import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.context.Context;
 
 @Service
 public class EmailService {
@@ -22,7 +26,10 @@ public class EmailService {
 
 	@Value("${ncomplo.server.url}")
     private String baseUrl;
-	
+
+	@Autowired
+	private TemplateEngine templateEngine;
+
 	private final SendGrid sendGrid; 
     public EmailService() {
         super();
@@ -45,6 +52,7 @@ public class EmailService {
 			final Email email = new Email().setFrom("no-reply@ncomplo.com").setSubject("Your new ncomplo password");
 			email.addTo(user.getEmail(), user.getName());
 
+
 			// TODO This should be a thymeleaf template
 			final String html = "Hello " + user.getName()
 					+ "<br />To access to your ncomplo account, use your new credentials:<br><ul><li>Login: "
@@ -63,7 +71,8 @@ public class EmailService {
 		}
 	}
 
-	public void sendInvitations(final String leagueName, final Invitation invitation, final String registerUrl, final User user) {
+	public void sendInvitations(final String leagueName, final Invitation invitation, final String registerUrl,
+								final User user, final Locale locale) {
 		if (this.sendGrid == null) {
 			logger.error("Invitations: No email service found");
 			return;
@@ -74,19 +83,14 @@ public class EmailService {
 					.setSubject("Invitation to ncomplo league " + leagueName)
 					.addTo(invitation.getEmail(), invitation.getName());
 
-			String html = "";
-			if (user == null) {
-    			html = "Hello " + invitation.getName()
-    					+ "<br />You have been invited to participate at the league " + leagueName + " of ncomplo<br/>"
-    					+ "To create your account and sign up at the competition, click <a href='" + registerUrl
-    					+ "'>here</a> and complete the registration form." + "<br/>See you soon!";
-			} else {
-			    html = "Hello " + invitation.getName()
-                + "<br />You have been invited to participate at the league " + leagueName + " of ncomplo<br/>"
-                + "To join to this league, click <a href='" + registerUrl + "'>here</a>." 
-                + "<br/>If you do not remember your password, contact with " + invitation.getAdminLogin() + "<br/>See you soon!";
-			}
 
+			final Context ctx = new Context(locale);
+			ctx.setVariable("invitationName", invitation.getName());
+			ctx.setVariable("leagueName", leagueName);
+			ctx.setVariable("url", registerUrl);
+			ctx.setVariable("isNewUser", user != null);
+
+			final String html = this.templateEngine.process("emails/invitation", ctx);
 			email.setHtml(html);
 			logger.debug("Sending invitation email to " + invitation.getEmail());
 			this.sendGrid.send(email);

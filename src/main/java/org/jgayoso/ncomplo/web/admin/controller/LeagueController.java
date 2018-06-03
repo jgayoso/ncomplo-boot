@@ -181,7 +181,7 @@ public class LeagueController {
 	}
 	
 	@RequestMapping("/doInvite")
-	public String doInvite(final InvitationBean bean) {
+	public String doInvite(final InvitationBean bean, final HttpServletRequest request) {
 		final Authentication auth = SecurityContextHolder.getContext()
 				.getAuthentication();
         if (auth instanceof AnonymousAuthenticationToken) {
@@ -191,7 +191,7 @@ public class LeagueController {
 		/* The user is logged in */
 		final String adminLogin = auth.getName();
 		
-		this.invitationService.sendInvitations(bean.getLeagueId(), adminLogin, bean.getName(), bean.getEmail());
+		this.invitationService.sendInvitations(bean.getLeagueId(), adminLogin, bean.getName(), bean.getEmail(), request.getLocale());
 		return "redirect:list";
 
 	}
