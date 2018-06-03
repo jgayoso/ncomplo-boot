@@ -10,6 +10,7 @@ import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateUtils;
 import org.jgayoso.ncomplo.business.entities.BetType;
 import org.jgayoso.ncomplo.business.entities.Competition;
@@ -114,13 +115,13 @@ public class LeagueController {
 			leagueBean.getNamesByLang().addAll(LangBean.listFromMap(league.getNamesByLang()));
 			leagueBean.setAdminEmail(league.getAdminEmail());
 			leagueBean.setActive(league.isActive());
-			leagueBean.setDate(dateFormat.format(league.getBetsDeadLine()));
+			leagueBean.setDate(this.dateFormat.format(league.getBetsDeadLine()));
 
 			for (final LeagueGame leagueGame : league.getLeagueGames().values()) {
 				leagueBean.getBetTypesByGame().put(leagueGame.getGame().getId(), leagueGame.getBetType().getId());
 			}
 		} else if (firstGameDate != null) {
-			leagueBean.setDate(dateFormat.format(DateUtils.addHours(firstGameDate, -1)));
+			leagueBean.setDate(this.dateFormat.format(DateUtils.addHours(firstGameDate, -1)));
 		}
 
 		model.addAttribute("league", leagueBean);
@@ -133,13 +134,13 @@ public class LeagueController {
 	}
 
 	@RequestMapping("/save")
-	public String save(final LeagueBean leagueBean, BindingResult result) {
+	public String save(final LeagueBean leagueBean, final BindingResult result) {
 		
 		try {
 			this.leagueService.save(leagueBean.getId(), leagueBean.getCompetitionId(), leagueBean.getName(),
 					LangBean.mapFromList(leagueBean.getNamesByLang()), leagueBean.getAdminEmail(), leagueBean.isActive(),
-					dateFormat.parse(leagueBean.getDate()), leagueBean.getBetTypesByGame());
-		} catch (ParseException e) {
+					this.dateFormat.parse(leagueBean.getDate()), leagueBean.getBetTypesByGame());
+		} catch (final ParseException e) {
 			result.rejectValue("date", "bets.date.format.error", "Invalid bets deadline date");
 			return VIEW_BASE + "manage";
 		}
@@ -169,9 +170,9 @@ public class LeagueController {
 	public String invite(@RequestParam(value = "id", required = true) final Integer leagueId,
 			final HttpServletRequest request, final ModelMap model) {
 		
-		List<Invitation> invitationsSent = this.invitationService.findByLeagueId(leagueId);
+		final List<Invitation> invitationsSent = this.invitationService.findByLeagueId(leagueId);
 		
-		InvitationBean bean = new InvitationBean();
+		final InvitationBean bean = new InvitationBean();
 		bean.setLeagueId(leagueId);
 		
 		model.addAttribute("invitation", bean);
@@ -181,7 +182,8 @@ public class LeagueController {
 	}
 	
 	@RequestMapping("/doInvite")
-	public String doInvite(final InvitationBean bean, final HttpServletRequest request) {
+	public String doInvite(final InvitationBean bean, final HttpServletRequest request,
+			final RedirectAttributes redirectAttributes) {
 		final Authentication auth = SecurityContextHolder.getContext()
 				.getAuthentication();
         if (auth instanceof AnonymousAuthenticationToken) {
@@ -191,10 +193,47 @@ public class LeagueController {
 		/* The user is logged in */
 		final String adminLogin = auth.getName();
 		
+		if (StringUtils.isBlank(bean.getName()) || StringUtils.isBlank(bean.getEmail())) {
+			redirectAttributes.addFlashAttribute("error", "Mandatory name and email fields");
+        	return VIEW_BASE + "invite";
+		}
+		
 		this.invitationService.sendInvitations(bean.getLeagueId(), adminLogin, bean.getName(), bean.getEmail(), request.getLocale());
 		return "redirect:list";
 
 	}
+	
+	@RequestMapping("/inviteGroup")
+	public String inviteGroup(@RequestParam(value = "id", required = true) final Integer leagueId,
+			final ModelMap model) {
+		
+		final Invitation existingInvitation = this.invitationService.findGroupByLeagueId(leagueId);
+		model.addAttribute("leagueId", leagueId);
+		model.addAttribute("invitation", existingInvitation);
+		
+		final InvitationBean bean = new InvitationBean();
+		bean.setLeagueId(leagueId);
+		model.addAttribute("invitationBean", bean);
+		
+		return VIEW_BASE + "inviteGroup";
+	}
+	
+	@RequestMapping("/doInviteGroup")
+	public String doInvite(final InvitationBean bean, final HttpServletRequest request, final ModelMap model) {
+		final Authentication auth = SecurityContextHolder.getContext()
+				.getAuthentication();
+        if (auth instanceof AnonymousAuthenticationToken) {
+			/* The user is not logged in */
+			return "login";
+		}
+		/* The user is logged in */
+		final String adminLogin = auth.getName();
+		final Integer leagueId = bean.getLeagueId();
+			
+		this.invitationService.generateInvitationGroup(leagueId, adminLogin);
+		return "redirect:inviteGroup?leagueId="+leagueId;
+	}
+	
 	
 	@RequestMapping("/notification")
 	public String notification(@RequestParam(value = "id", required = true) final Integer leagueId, final ModelMap model, final RedirectAttributes redirectAttributes) {
@@ -205,7 +244,7 @@ public class LeagueController {
 			return "login";
 		}
         
-        League league = this.leagueService.find(leagueId);
+        final League league = this.leagueService.find(leagueId);
         if (league == null) {
         	redirectAttributes.addFlashAttribute("error", "League doesn't exist");
         	return VIEW_BASE + "notification";
@@ -227,7 +266,7 @@ public class LeagueController {
 			return "login";
 		}
         
-        League league = this.leagueService.find(notificationBean.getLeagueId());
+        final League league = this.leagueService.find(notificationBean.getLeagueId());
         if (league == null) {
         	redirectAttributes.addFlashAttribute("error", "League doesn't exist");
         	return VIEW_BASE + "notification";

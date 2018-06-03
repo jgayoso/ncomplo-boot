@@ -23,11 +23,14 @@ public class Invitation {
 	@JoinColumn(name = "LEAGUE_ID", nullable = false)
 	private League league;
 
-	@Column(name = "EMAIL", nullable = false)
+	@Column(name = "EMAIL")
 	private String email;
 	
-	@Column(name = "NAME", nullable = false)
+	@Column(name = "NAME")
 	private String name;
+	
+	@Column(name = "TOKEN")
+	private String token;
 	
 	@Column(name = "ADMIN_LOGIN", nullable = false)
 	private String adminLogin;
@@ -40,51 +43,60 @@ public class Invitation {
 	}
 
 	public Integer getId() {
-		return id;
+		return this.id;
 	}
 
-	public void setId(Integer id) {
+	public void setId(final Integer id) {
 		this.id = id;
 	}
 
 	public League getLeague() {
-		return league;
+		return this.league;
 	}
 
-	public void setLeague(League league) {
+	public void setLeague(final League league) {
 		this.league = league;
 	}
 
 	public String getEmail() {
-		return email;
+		return this.email;
 	}
 
-	public void setEmail(String email) {
+	public void setEmail(final String email) {
 		this.email = email;
 	}
 
 	public String getName() {
-		return name;
+		return this.name;
 	}
 
-	public void setName(String name) {
+	public void setName(final String name) {
 		this.name = name;
 	}
 	
 	public String getAdminLogin() {
-		return adminLogin;
+		return this.adminLogin;
 	}
 
-	public void setAdminLogin(String adminLogin) {
+	public void setAdminLogin(final String adminLogin) {
 		this.adminLogin = adminLogin;
 	}
 
 	public Date getDate() {
-		return date;
+		return this.date;
 	}
 
-	public void setDate(Date date) {
+	public void setDate(final Date date) {
 		this.date = date;
 	}
+
+	public String getToken() {
+		return this.token;
+	}
+
+	public void setToken(final String token) {
+		this.token = token;
+	}
+	
 	
 }

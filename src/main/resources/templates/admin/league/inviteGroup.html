@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+  <head th:substituteby="layout/header :: head"></head>
+  
+  <body>
+    
+    <header th:substituteby="layout/header :: header"></header>
+  
+    <div class="container">
+    
+        <header th:substituteby="layout/admin/header :: header"></header>
+  
+        <h1>Group invitation</h1>
+        
+       	<form th:action="@{doInviteGroup}" th:object="${invitationBean}" method="post" th:if="${invitation == null}">
+       		<fieldset>
+        		<input type="hidden" th:field="*{leagueId}" />
+       		</fieldset>
+       		<input type="submit" value="Create"/>
+       	</form>
+       
+        
+        <div class="row" th:if="${invitation != null}">
+        	<h2>Existing invitation</h2>
+	        <table id="invitations" class="table table-striped table-bordered">
+	        <thead>
+	        	<tr><th>Token</th><th>Admin</th></tr>
+        	</thead>
+        	<tbody>
+	      		<tr>
+		          	<td><span th:text="${invitation.token}" >Token</span></td>
+		          	<td><span th:text="${invitation.adminLogin}">admin</span></td>
+		        </tr>
+	        </tbody>
+	        </table>
+		</div>	        
+        <a th:href="@{list}">Back to list of Leagues</a>
+        
+    </div> 
+
+  </body>
+  
+</html>

@@ -84,8 +84,9 @@ public class Application extends WebMvcConfigurerAdapter {
 		@Override
 		protected void configure(final HttpSecurity http) throws Exception {
 			http.authorizeRequests()
-				.antMatchers(HttpMethod.GET, "/invitation*").permitAll()
 				.antMatchers(HttpMethod.GET, "/resetpassword*").permitAll()
+				.antMatchers("/joinLeague*").permitAll()
+				.antMatchers("/invitation*").permitAll()
 				.antMatchers("/register").permitAll()
 				.antMatchers("/login").permitAll()
 				.antMatchers("/css/ncomplo.css").permitAll()

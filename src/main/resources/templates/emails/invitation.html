@@ -296,7 +296,7 @@
                                         <p> <span th:text="#{emails.welcome(${invitationName})}">Hi Ivan,</span></p>
                                         <p> <span th:text="#{emails.invitation.p1(${leagueName})}">You have been invited to participate at the league World Cup of ncomplo</span></p>
                                         <p> <span th:if="${isNewUser}" th:text="#{emails.invitation.create.account}">To create your account and sign up at the competition, click in the link below.</span></p>
-                                        <p> <span th:unless="${isNewUser}"th:text="#{emails.invitation.join.league}">To join to this league, click in the link below and sing in with your account.</span></p>
+                                        <p> <span th:unless="${isNewUser}" th:text="#{emails.invitation.join.league}">To join to this league, click in the link below and sing in with your account.</span></p>
                                         <table border="0" cellpadding="0" cellspacing="0" class="btn btn-primary">
                                             <tbody>
                                             <tr>
@@ -329,7 +329,7 @@
                         <tr>
                             <td class="content-block">
                                 <span class="apple-link"></span>
-                                <br/> <span th:text="#{emails.dont.like}"></span>Don't like these emails? Sorry :(.
+                                <br/> <span th:text="#{emails.dont.like}">Don't like these emails? Sorry :(.</span>
                             </td>
                         </tr>
                         <tr>

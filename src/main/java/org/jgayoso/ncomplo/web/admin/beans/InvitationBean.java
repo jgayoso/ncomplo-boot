@@ -11,10 +11,8 @@ public class InvitationBean implements Serializable {
 	@NotNull
 	private Integer leagueId;
 	
-	@NotNull
 	private String name;
 	
-	@NotNull
 	private String email;
 
 	public InvitationBean() {
@@ -22,26 +20,26 @@ public class InvitationBean implements Serializable {
 	}
 	
 	public Integer getLeagueId() {
-		return leagueId;
+		return this.leagueId;
 	}
 
-	public void setLeagueId(Integer leagueId) {
+	public void setLeagueId(final Integer leagueId) {
 		this.leagueId = leagueId;
 	}
 
 	public String getName() {
-		return name;
+		return this.name;
 	}
 
-	public void setName(String name) {
+	public void setName(final String name) {
 		this.name = name;
 	}
 
 	public String getEmail() {
-		return email;
+		return this.email;
 	}
 
-	public void setEmail(String email) {
+	public void setEmail(final String email) {
 		this.email = email;
 	}
 	

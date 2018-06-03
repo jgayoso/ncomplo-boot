@@ -6,6 +6,7 @@ import java.util.Locale;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.jasypt.util.password.PasswordEncryptor;
+import org.jgayoso.ncomplo.business.entities.Invitation;
 import org.jgayoso.ncomplo.business.entities.League;
 import org.jgayoso.ncomplo.business.entities.User;
 import org.jgayoso.ncomplo.business.entities.User.UserComparator;
@@ -96,7 +97,10 @@ public class UserService {
         newUser.getLeagues().add(league);
         league.getParticipants().add(newUser);
         
-        this.invitationRepository.delete(invitationId);
+        final Invitation invitation = this.invitationRepository.findOne(invitationId);
+        if (invitation.getToken() == null) { 
+        	this.invitationRepository.delete(invitationId);
+        }
         return newUser;
 	}
 	
@@ -107,7 +111,10 @@ public class UserService {
 	    user.getLeagues().add(league);
         league.getParticipants().add(user);
         
-        this.invitationRepository.delete(invitationId);
+        final Invitation invitation = this.invitationRepository.findOne(invitationId);
+        if (invitation.getToken() == null) { 
+        	this.invitationRepository.delete(invitationId);
+        }
 	}
     
     @Transactional

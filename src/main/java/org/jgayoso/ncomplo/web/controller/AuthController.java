@@ -40,8 +40,8 @@ public class AuthController {
 	        @RequestParam(value = "email", required = true) final String email,
 	        final RedirectAttributes redirectAttributes) {
 	    
-	    User userByLogin = this.userService.find(login);
-	    User userByEmail = this.userService.findByEmail(email);
+	    final User userByLogin = this.userService.find(login);
+	    final User userByEmail = this.userService.findByEmail(email);
 	    if (userByLogin != null && userByEmail != null && userByLogin.getLogin().equals(userByEmail.getLogin())) {
 	        model.addAttribute("userInfo", new ResetPasswordBean(login, email));
 	        return "resetpassword";
@@ -106,6 +106,27 @@ public class AuthController {
 
 	}
 
+	@RequestMapping(method=RequestMethod.GET, value = "/joinLeague/{leagueToken}")
+	public String processInvitationGroup(@PathVariable("leagueToken") final String token,
+			final ModelMap model, final RedirectAttributes redirectAttributes) {
+		
+		final Invitation invitation = this.invitationService.findByToken(token);
+		if (invitation == null) {
+            logger.info("Invalid invitation " + token);
+            redirectAttributes.addFlashAttribute("error", "Invalid invitation");
+            return "redirect:/login?error";
+    	}
+		
+		final UserInvitationBean userBean = new UserInvitationBean();
+    	userBean.setEmail(invitation.getEmail());
+    	userBean.setName(invitation.getName());
+    	userBean.setInvitationId(invitation.getId());
+    	model.addAttribute("user", userBean);
+    	
+    	return "invitation";
+		
+	}
+	
 	@RequestMapping(method=RequestMethod.GET, value = "/invitation/{invitationId}/{leagueId}/{emailId}")
     public String processInvitation(
             @PathVariable("invitationId") final Integer invitationId,
@@ -122,11 +143,11 @@ public class AuthController {
             return "redirect:/login?error";
     	}
         
-        User user = this.userService.findByEmail(invitation.getEmail());
+        final User user = this.userService.findByEmail(invitation.getEmail());
         if (user != null) {
             this.userService.acceptInvitation(invitationId, leagueId, user);
             redirectAttributes.addFlashAttribute("message", "You have joined to the league successfully");
-            return "invitationAccepted";
+            return "redirect:/scoreboard";
         }
     	
     	final UserInvitationBean userBean = new UserInvitationBean();
@@ -152,6 +173,29 @@ public class AuthController {
 		
 		this.userService.registerFromInvitation(invitationId, userBean.getLogin(), userBean.getName(),
 				userBean.getEmail(), leagueId, userBean.getPassword());
+		return "redirect:/login";
+	}
+	
+	@RequestMapping(method=RequestMethod.POST, value = "/joinLeague/register")
+	public String acceptInvitationGroup(
+			final UserInvitationBean userBean,
+			final RedirectAttributes redirectAttributes) {
+		
+		final Invitation invitation = this.invitationService.findById(userBean.getInvitationId());
+		if (invitation == null) {
+			logger.info("Invalid invitation");
+            redirectAttributes.addFlashAttribute("error", "Invalid invitation");
+            return "redirect:/login?error";
+		}
+		
+		if (!userBean.getPassword().equals(userBean.getPassword2())) {
+            redirectAttributes.addFlashAttribute("error", "Passwords don't match");
+			return "redirect:/joinLeague/"+invitation.getToken();
+		}
+		
+		this.userService.registerFromInvitation(invitation.getId(), userBean.getLogin(), userBean.getName(),
+				userBean.getEmail(), invitation.getLeague().getId(), userBean.getPassword());
+		
 		return "redirect:/login";
 	}
 

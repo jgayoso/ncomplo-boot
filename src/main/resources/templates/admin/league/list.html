@@ -43,6 +43,7 @@
                 <td><a th:href="@{recompute(id=${l.id})}" onclick="return confirm('Sure?');">recompute scores</a></td>
                 <td><a th:href="@{manage(id=${l.id})}">manage league</a></td>
                 <td><a th:href="@{invite(id=*{l.id})}">invite</a></td>
+                <td><a th:href="@{inviteGroup(id=*{l.id})}">invite group</a></td>
                 <td><a th:href="@{notification(id=*{l.id})}">notification</a></td>
                 <td><a th:href="@{delete(id=${l.id})}" onclick="return confirm('Sure?');">delete league</a></td>
               </tr>
