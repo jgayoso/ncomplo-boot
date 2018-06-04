@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateUtils;
@@ -45,7 +46,9 @@ import org.springframework.web.servlet.support.RequestContextUtils;
 public class LeagueController {
 
 	private static final String VIEW_BASE = "admin/league/";
-
+	private static final String DEFAULT_TIME_ZONE = "+0200";
+	private static final String DATE_FORMAT_PATTERN = "dd-MM-yyyy HH:mm";
+	private static final String DATE_FORMAT_PATTERN_WITH_TIMEZONE = "dd-MM-yyyy HH:mm Z";
 	@Autowired
 	private CompetitionService competitionService;
 
@@ -57,8 +60,11 @@ public class LeagueController {
 
 	@Autowired
 	private BetTypeService betTypeService;
-	
-	private final SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+
+	private final SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT_PATTERN);
+
+	private final SimpleDateFormat dateFormatWithTimeZone = new SimpleDateFormat(DATE_FORMAT_PATTERN_WITH_TIMEZONE);
+
 
 	public LeagueController() {
 		super();
@@ -134,12 +140,18 @@ public class LeagueController {
 	}
 
 	@RequestMapping("/save")
-	public String save(final LeagueBean leagueBean, final BindingResult result) {
-		
+	public String save(@Valid final LeagueBean leagueBean, final BindingResult result) {
+
 		try {
+			Date date;
+			try {
+				date = this.dateFormatWithTimeZone.parse(leagueBean.getDate());
+			} catch (ParseException e) {
+				date = this.dateFormatWithTimeZone.parse(leagueBean.getDate() + " " + DEFAULT_TIME_ZONE);
+			}
 			this.leagueService.save(leagueBean.getId(), leagueBean.getCompetitionId(), leagueBean.getName(),
 					LangBean.mapFromList(leagueBean.getNamesByLang()), leagueBean.getAdminEmail(), leagueBean.isActive(),
-					this.dateFormat.parse(leagueBean.getDate()), leagueBean.getBetTypesByGame());
+					date, leagueBean.getBetTypesByGame());
 		} catch (final ParseException e) {
 			result.rejectValue("date", "bets.date.format.error", "Invalid bets deadline date");
 			return VIEW_BASE + "manage";

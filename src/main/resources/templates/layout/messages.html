@@ -8,6 +8,9 @@
 	<div th:if="${error}" class="error">
 		<p th:text="${error}">Error</p>
 	</div>
+	<div th:if="${param.error}" class="error">
+		<p th:text="#{login.error}">Login failed</p>
+	</div>
 </div>
 
 </html>
