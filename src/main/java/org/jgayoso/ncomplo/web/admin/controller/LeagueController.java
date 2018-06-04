@@ -2,11 +2,7 @@ package org.jgayoso.ncomplo.web.admin.controller;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -121,13 +117,13 @@ public class LeagueController {
 			leagueBean.getNamesByLang().addAll(LangBean.listFromMap(league.getNamesByLang()));
 			leagueBean.setAdminEmail(league.getAdminEmail());
 			leagueBean.setActive(league.isActive());
-			leagueBean.setDate(this.dateFormat.format(league.getBetsDeadLine()));
+			leagueBean.setDate(this.dateFormatWithTimeZone.format(league.getBetsDeadLine()));
 
 			for (final LeagueGame leagueGame : league.getLeagueGames().values()) {
 				leagueBean.getBetTypesByGame().put(leagueGame.getGame().getId(), leagueGame.getBetType().getId());
 			}
 		} else if (firstGameDate != null) {
-			leagueBean.setDate(this.dateFormat.format(DateUtils.addHours(firstGameDate, -1)));
+			leagueBean.setDate(this.dateFormatWithTimeZone.format(DateUtils.addHours(firstGameDate, -1)));
 		}
 
 		model.addAttribute("league", leagueBean);
