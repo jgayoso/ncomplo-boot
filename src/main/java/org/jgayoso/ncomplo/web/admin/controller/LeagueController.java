@@ -43,6 +43,7 @@ public class LeagueController {
 
 	private static final String VIEW_BASE = "admin/league/";
 	private static final String DEFAULT_TIME_ZONE = "+0200";
+	private static final String DEFAULT_TIME_ZONE_ID = "Europe/Madrid";
 	private static final String DATE_FORMAT_PATTERN = "dd-MM-yyyy HH:mm";
 	private static final String DATE_FORMAT_PATTERN_WITH_TIMEZONE = "dd-MM-yyyy HH:mm Z";
 	@Autowired
@@ -117,13 +118,15 @@ public class LeagueController {
 			leagueBean.getNamesByLang().addAll(LangBean.listFromMap(league.getNamesByLang()));
 			leagueBean.setAdminEmail(league.getAdminEmail());
 			leagueBean.setActive(league.isActive());
-			leagueBean.setDate(this.dateFormatWithTimeZone.format(league.getBetsDeadLine()));
+			this.dateFormat.setTimeZone(TimeZone.getTimeZone(DEFAULT_TIME_ZONE_ID));
+			leagueBean.setDate(this.dateFormat.format(league.getBetsDeadLine()));
 
 			for (final LeagueGame leagueGame : league.getLeagueGames().values()) {
 				leagueBean.getBetTypesByGame().put(leagueGame.getGame().getId(), leagueGame.getBetType().getId());
 			}
 		} else if (firstGameDate != null) {
-			leagueBean.setDate(this.dateFormatWithTimeZone.format(DateUtils.addHours(firstGameDate, -1)));
+			this.dateFormat.setTimeZone(TimeZone.getTimeZone(DEFAULT_TIME_ZONE_ID));
+			leagueBean.setDate(this.dateFormat.format(DateUtils.addHours(firstGameDate, -1)));
 		}
 
 		model.addAttribute("league", leagueBean);
