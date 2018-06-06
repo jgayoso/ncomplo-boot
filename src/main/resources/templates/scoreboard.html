@@ -37,14 +37,14 @@
 					th:with="gsA=${g.gameSideA},gsB=${g.gameSideB}, gScA=${g.scoreA},gScB=${g.scoreB}">
 					<td class="match-row--team team-home">
 						<span class="team-name" th:text="${gsA.getName(#locale)}">Belgium</span>
-						<span class="team-flag" th:class="'team-flag euro-flag-'+${#strings.replace(gsA.name,' ','-')}"></span>
+						<span class="team-flag" th:class="'world-team-flag world-flag-'+${gsA.code}"></span>
 					</td>
 					<td class="match-score text-center">
 						<span th:if="${gScA != null}" th:text="${gScA}">1</span> - <span
 							th:if="${gScB != null}" th:text="${gScB}">0</span>
 					</td>
 					<td class="match-row--team team-away">
-						<span class="team-flag" th:class="'team-flag euro-flag-'+${#strings.replace(gsB.name,' ','-')}"></span>
+						<span class="team-flag" th:class="'world-team-flag world-flag-'+${gsB.code}"></span>
 						<span class="team-name" th:text="${gsB.getName(#locale)}">Republic of Ireland</span>
 					</td>
 				</tr>

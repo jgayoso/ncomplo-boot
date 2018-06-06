@@ -389,3 +389,48 @@ form#password {
 .euro-flag-España {background-position: 25% 90%;}
 .euro-flag-Italia {background-position: 25% 50%;}
 .euro-flag-Suecia {background-position: 100% 90%;}
+
+[class*=" world-flag-"], [class^=world-flag-] {
+    display: inline-block;
+    margin: 0;
+    background-repeat: no-repeat;
+    background-image: url(/images/mundial2018-flags-72x44.png);
+}
+.world-team-flag {
+   	background-size: 72px 1408px;
+    width: 72px;
+    height: 44px;
+    vertical-align: middle;
+}
+.world-flag-AR  {background-position: 0%   0.000%;}
+.world-flag-AU  {background-position: 0%   3.226%;}
+.world-flag-BE  {background-position: 0%   6.452%;}
+.world-flag-BR  {background-position: 0%   9.678%;}
+.world-flag-CH  {background-position: 0%  12.904%;}
+.world-flag-CO  {background-position: 0%  16.130%;}
+.world-flag-CR  {background-position: 0%  19.356%;}
+.world-flag-GER {background-position: 0%  22.582%;}
+.world-flag-DK  {background-position: 0%  25.808%;}
+.world-flag-EG  {background-position: 0%  29.034%;}
+.world-flag-ENG {background-position: 0%  32.260%;}
+.world-flag-ES  {background-position: 0%  35.486%;}
+.world-flag-FR  {background-position: 0%  38.712%;}
+.world-flag-HR  {background-position: 0%  41.938%;}
+.world-flag-IR  {background-position: 0%  45.164%;}
+.world-flag-IS  {background-position: 0%  48.390%;}
+.world-flag-JP  {background-position: 0%  51.616%;}
+.world-flag-KR  {background-position: 0%  54.842%;}
+.world-flag-MA  {background-position: 0%  58.068%;}
+.world-flag-MX  {background-position: 0%  61.294%;}
+.world-flag-NG  {background-position: 0%  64.520%;}
+.world-flag-PA  {background-position: 0%  67.746%;}
+.world-flag-PE  {background-position: 0%  70.972%;}
+.world-flag-PL  {background-position: 0%  74.198%;}
+.world-flag-PT  {background-position: 0%  77.424%;}
+.world-flag-RU  {background-position: 0%  80.650%;}
+.world-flag-SA  {background-position: 0%  83.876%;}
+.world-flag-SE  {background-position: 0%  87.102%;}
+.world-flag-RS  {background-position: 0%  90.328%;}
+.world-flag-SN  {background-position: 0%  93.554%;}
+.world-flag-TN  {background-position: 0%  96.780%;}
+.world-flag-UY  {background-position: 0% 100.006%;}
