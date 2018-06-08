@@ -60,10 +60,12 @@
                   
                   
                   <td th:if="${g.gameSideA}">
-                  	<span th:text="${g.gameSideA.getName(#locale)}">Game side a</span>
+                      <span th:class="(${g.gameSideA.code}?'small-world-team-flag world-flag-'+${g.gameSideA.code}:'')"></span>
+                      <span th:text="${g.gameSideA.getName(#locale)}">Game side a</span>
                	  </td>
                	  <td th:if="${g.gameSideB}">
-                  	<span th:text="${g.gameSideB.getName(#locale)}">Game side b</span>
+                      <span th:class="(${g.gameSideB.code}?'small-world-team-flag world-flag-'+${g.gameSideB.code}:'')"></span>
+                      <span th:text="${g.gameSideB.getName(#locale)}">Game side b</span>
                	  </td>
                	  
                   <td th:unless="${g.gameSideA}">
