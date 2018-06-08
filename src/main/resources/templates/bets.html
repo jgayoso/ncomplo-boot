@@ -62,7 +62,7 @@
                     <span th:text="${gsA} ? ${gsA.getName(#locale)} : '?'">game sideA</span>
                   </td>
                     <td class="bet_flag">
-                    <span th:class="'small-world-team-flag world-flag-'+${gsA} ? ${gsA.code}:''"></span>
+                    <span th:class="'small-world-team-flag world-flag-'+(${gsA} ? ${gsA.code}:'')"></span>
                   </td>
                   <td class="bet_game_scoreA">
                     <span th:if="${b.scoreMatter}" th:text="${gScA} ?: '?'">game score sideA</span>
@@ -71,7 +71,7 @@
                     <span th:if="${b.scoreMatter}" th:text="${gScB} ?: '?'">game score sideB</span>
                   </td>
                     <td class="bet_flag">
-                        <span th:class="'small-world-team-flag world-flag-'+${gsB} ? ${gsB.code}:''"></span>
+                        <span th:class="'small-world-team-flag world-flag-'+(${gsB} ? ${gsB.code}:'')"></span>
                     </td>
                     <td class="bet_game_sideB">
                         <span th:text="${gsB} ? ${gsB.getName(#locale)} :  '?'">game sideB</span>
@@ -81,7 +81,7 @@
                   </td>
 
                     <td class="bet_flag">
-                        <span th:class="'small-world-team-flag world-flag-'+${gsA} ? ${gsA.code}:''"></span>
+                        <span th:class="'small-world-team-flag world-flag-'+(${gsA} ? ${gsA.code}:'')"></span>
                     </td>
                   <td class="bet_bet_scoreA">
                     <span th:if="${b.scoreMatter}" th:text="${bScA} ?: '?'">bet score sideA</span>
@@ -90,7 +90,7 @@
                     <span th:if="${b.scoreMatter}" th:text="${bScB} ?: '?'">bet score sideB</span>
                   </td>
                     <td class="bet_flag">
-                        <span th:class="'small-world-team-flag world-flag-'+${gsB} ? ${gsB.code}:''"></span>
+                        <span th:class="'small-world-team-flag world-flag-'+(${gsB} ? ${gsB.code}:'')"></span>
                     </td>
                   <td class="bet_bet_sideB">
                     <span th:text="${bsB} ? ${bsB.getName(#locale)} :  '?'">bet sideB</span>
