@@ -33,21 +33,26 @@
 	        	<tr>
 	        		<td colspan="4" class="roundName"><span th:text="${roundInfo.round.getName(#locale)}">Groups</span></td>
 	        	</tr>
-				<tr class="match-row" th:each="g : ${roundInfo.games}"
-					th:with="gsA=${g.gameSideA},gsB=${g.gameSideB}, gScA=${g.scoreA},gScB=${g.scoreB}">
-					<td class="match-row--team team-home">
-						<span class="team-name" th:text="${gsA.getName(#locale)}">Belgium</span>
-						<span class="team-flag" th:class="'world-team-flag world-flag-'+${gsA.code}"></span>
-					</td>
-					<td class="match-score text-center">
-						<span th:if="${gScA != null}" th:text="${gScA}">1</span> - <span
-							th:if="${gScB != null}" th:text="${gScB}">0</span>
-					</td>
-					<td class="match-row--team team-away">
-						<span class="team-flag" th:class="'world-team-flag world-flag-'+${gsB.code}"></span>
-						<span class="team-name" th:text="${gsB.getName(#locale)}">Republic of Ireland</span>
-					</td>
-				</tr>
+	        	<th:block th:each="g : ${roundInfo.games}">
+	        		<tr class="match-row">
+	        			<td colspan="4" class="matchDate"><span th:text="${#dates.format(g.date, #messages.msg('dates.format'))}">14/06/2018 16:00</span></td>
+	        		</tr>
+					<tr class="match-row" 
+						th:with="gsA=${g.gameSideA},gsB=${g.gameSideB}, gScA=${g.scoreA},gScB=${g.scoreB}">
+						<td class="match-row--team team-home">
+							<span class="team-name" th:text="${gsA.getName(#locale)}">Belgium</span>
+							<span class="team-flag" th:class="'world-team-flag world-flag-'+${gsA.code}"></span>
+						</td>
+						<td class="match-score text-center">
+							<span th:if="${gScA != null}" th:text="${gScA}">1</span> - <span
+								th:if="${gScB != null}" th:text="${gScB}">0</span>
+						</td>
+						<td class="match-row--team team-away">
+							<span class="team-flag" th:class="'world-team-flag world-flag-'+${gsB.code}"></span>
+							<span class="team-name" th:text="${gsB.getName(#locale)}">Republic of Ireland</span>
+						</td>
+					</tr>
+				</th:block>
 			</table>
 		</div>
         
@@ -72,9 +77,9 @@
               <tr>
                 <th class="smallColumn" th:text="#{scoreboard.header.position}">Pos</th>
                 <th th:text="#{scoreboard.header.name}">Name</th>
-                <th class="smallColumn" th:text="#{scoreboard.header.points}">Points</th>
                 <th th:if="${todayEvents} and ${#lists.size(todayEvents.roundsInformation) > 0}" class="todayBetHeader" 
                 	th:each="roundInfo : ${todayEvents.roundsInformation}" th:text="${roundInfo.round.getName(#locale)}">Groups</th>
+               	<th class="smallColumn" th:text="#{scoreboard.header.points}">Points</th>
                 <th th:unless="${betsAllowed}" class="betsColumn"></th>
               </tr>
             </thead>
@@ -86,14 +91,12 @@
                 <td class="scoreboard_name">
                   <span th:text="${sc.user.name}">name</span>
                 </td>
-                <td class="scoreboard_points">
-                  <span th:text="${sc.points}">points</span>
-                </td>
                 
                 <td th:if="${todayEvents} and ${#lists.size(todayEvents.roundsInformation)}>0" th:each="roundInfo : ${todayEvents.roundsInformation}">
                 	<table class="betsTable" th:if="${roundInfo.scoreMatters}">
 	                	<tr>
-	                		<td th:each="g : ${roundInfo.games}" th:with="userBets=${roundInfo.scoreMatterBets[__${sc.user.login}__]}" class="todayBetColumn">
+	                		<td class="todayBetColumn" th:if="${roundInfo.scoreMatterBets != null}"
+	                			th:each="g : ${roundInfo.games}" th:with="userBets=${roundInfo.scoreMatterBets[__${sc.user.login}__]}" >
 	                			<span th:if="${userBets} != null and ${userBets.containsKey(g.id)} and ${userBets[__${g.id}__].scoreA} != null and ${userBets[__${g.id}__].scoreB} != null" 
 	                				th:text="${userBets[__${g.id}__].scoreA} + ' - ' + ${userBets[__${g.id}__].scoreB}">1 - 0</span>
 	               			</td>
@@ -109,6 +112,10 @@
                				</td>
                 		</tr>
                 	</table>
+                </td>
+                
+                <td class="scoreboard_points">
+                  <span th:text="${sc.points}">points</span>
                 </td>
                 
                 <td class="scoreboard_actions betsColumn" th:unless="${betsAllowed}" >

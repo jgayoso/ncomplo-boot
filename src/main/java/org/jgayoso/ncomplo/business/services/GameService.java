@@ -12,7 +12,6 @@ import org.apache.commons.lang3.time.DateUtils;
 import org.jgayoso.ncomplo.business.entities.Competition;
 import org.jgayoso.ncomplo.business.entities.Game;
 import org.jgayoso.ncomplo.business.entities.Game.GameComparator;
-import org.jgayoso.ncomplo.business.entities.Game.GameOrderComparator;
 import org.jgayoso.ncomplo.business.entities.GameSide;
 import org.jgayoso.ncomplo.business.entities.League;
 import org.jgayoso.ncomplo.business.entities.repositories.BetTypeRepository;
@@ -143,14 +142,18 @@ public class GameService {
     	final Date today = new Date();
     	final Date todayMorning = DateUtils.truncate(today, Calendar.DATE);
     	final Date todayEvening = DateUtils.addSeconds(DateUtils.addMinutes(DateUtils.addHours(todayMorning, 23), 59), 59);
-    	final List<Game> todayGames = this.gameRepository.findByCompetitionAndDateBetween(league.getCompetition(), todayMorning, todayEvening);
+    	final List<Game> todayGames = this.gameRepository.findByCompetitionAndDateBetweenOrderByDate(league.getCompetition(), todayMorning, todayEvening);
     	if (!CollectionUtils.isEmpty(todayGames)) {
-    		Collections.sort(todayGames, new GameOrderComparator());
+    		//Collections.sort(todayGames, new GameOrderComparator());
     		return todayGames;
     	}
     	
-    	final Date nextDays = DateUtils.addDays(todayMorning, 3);
-    	return this.gameRepository.findByCompetitionAndDateBetween(league.getCompetition(), todayMorning, nextDays);
+    	final Date nextWeek = DateUtils.addDays(todayMorning, 7);
+    	final Game game = this.gameRepository.findFirstByCompetitionAndDateBetweenOrderByDate(league.getCompetition(), todayMorning, nextWeek);
+    	if (game != null) {
+    		return Collections.singletonList(game);
+    	}
+    	return null;
     }
     
 }

@@ -340,6 +340,11 @@ form#password {
 	font-size: 18px;
 }
 
+.matchDate {
+	text-align: center;	
+	font-size: 10px;
+}
+
 .match-row {
 	width: 100%;
 }

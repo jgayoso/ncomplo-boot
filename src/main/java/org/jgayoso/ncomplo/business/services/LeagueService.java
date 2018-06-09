@@ -177,7 +177,7 @@ public class LeagueService {
 		
 		Map<String, Map<Integer, ScoreMatterBetView>> bets = new HashMap<>();
     	if (CollectionUtils.isEmpty(betsForGames)) {
-    		return null;
+    		return new TodayRoundGamesAndBetsView(round, games, null, null, true);
     	}
 		for (Bet bet: betsForGames) {
 			String userLogin = bet.getUser().getLogin();
