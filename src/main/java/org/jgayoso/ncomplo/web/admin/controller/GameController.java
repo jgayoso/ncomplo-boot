@@ -37,6 +37,7 @@ import org.springframework.web.servlet.support.RequestContextUtils;
 public class GameController {
 
     private static final String VIEW_BASE = "admin/competition/game/";
+    private static final SimpleDateFormat timeDateFormat = new SimpleDateFormat("HH:mm");
     
     
     @Autowired
@@ -108,6 +109,8 @@ public class GameController {
             gameBean.getNamesByLang().clear();
             gameBean.getNamesByLang().addAll(LangBean.listFromMap(game.getNamesByLang()));
             gameBean.setDate(game.getDate());
+            final String time = timeDateFormat.format(game.getDate());
+            gameBean.setTime(time);
             gameBean.setDefaultBetTypeId(game.getDefaultBetType().getId());
             gameBean.setRoundId(game.getRound().getId());
             gameBean.setOrder(game.getOrder());
