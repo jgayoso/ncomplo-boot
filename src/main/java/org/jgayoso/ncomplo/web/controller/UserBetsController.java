@@ -80,7 +80,7 @@ public class UserBetsController {
         final League league = this.leagueService.find(leagueId);
         if (league.getBetsDeadLine().before(new Date())) {
         	logger.info("User " + login + " trying to edit the bets in league " + league.getId() + " - " + league.getName());
-        	return "managebets";
+            return "redirect:/scoreboard";
         }
         
         final Competition competition = league.getCompetition();
@@ -160,13 +160,21 @@ public class UserBetsController {
 			/* The user is not logged in */
 			return "login";
 		}
+
+		final String login = participationBean.getLogin();
+        final Integer leagueId = participationBean.getLeagueId();
+        final League league = this.leagueService.find(participationBean.getLeagueId());
+        if (league.getBetsDeadLine().before(new Date())) {
+            logger.info("User " + login + " trying to edit the bets in league " + league.getId() + " - " + league.getName());
+            return "redirect:/scoreboard";
+        }
         
     	for (final BetBean betBean : participationBean.getBetsByGame().values()) {
             final Game game = this.gameService.find(betBean.getGameId());
             this.betService.save(
                     betBean.getId(),
-                    participationBean.getLeagueId(),
-                    participationBean.getLogin(),
+                    leagueId,
+                    login,
                     betBean.getGameId(),
                     game.getGameSideA() != null ? game.getGameSideA().getId() : betBean.getGameSideAId(),
             		game.getGameSideB() != null ? game.getGameSideB().getId() : betBean.getGameSideBId(),
@@ -192,7 +200,13 @@ public class UserBetsController {
         
         final String login = auth.getName();
         final Locale locale = RequestContextUtils.getLocale(request);
-        
+
+        final League league = this.leagueService.find(leagueId);
+        if (league.getBetsDeadLine().before(new Date())) {
+            logger.info("User " + login + " trying to edit the bets in league " + league.getId() + " - " + league.getName());
+            return "redirect:/scoreboard";
+        }
+
         try {
             final File betsFile = this.convert(file, login);
             if (!betsFile.exists() || betsFile.length() == 0) {
