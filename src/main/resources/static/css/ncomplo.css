@@ -10,6 +10,11 @@ body {
     padding-left: 20px;
 }
 
+.page-header a {
+	text-decoration: none;
+	color: inherit;
+}
+
 
 form#login {
     margin: 0 auto;
