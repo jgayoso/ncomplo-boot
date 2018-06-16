@@ -1,6 +1,7 @@
 package org.jgayoso.ncomplo.business.services;
 
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -15,6 +16,7 @@ import org.jgayoso.ncomplo.business.entities.repositories.LeagueRepository;
 import org.jgayoso.ncomplo.business.entities.repositories.UserRepository;
 import org.jgayoso.ncomplo.business.util.IterableUtils;
 import org.jgayoso.ncomplo.exceptions.InternalErrorException;
+import org.jgayoso.ncomplo.exceptions.LeagueClosedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -73,9 +75,14 @@ public class UserService {
 
 	@Transactional
 	public User registerFromInvitation(final Integer invitationId, final String login, final String name, final String email,
-			final Integer leagueId, final String password) {
+			final Integer leagueId, final String password) throws LeagueClosedException {
 		
 		final User existentUser = this.find(login);
+		
+		final League league = this.leagueRepository.findOne(leagueId);
+		if (league.getBetsDeadLine().before(new Date())) {
+			throw new LeagueClosedException(leagueId);
+		}
         
 		if (existentUser != null) {
 			this.acceptInvitation(invitationId, leagueId, existentUser);
@@ -93,7 +100,7 @@ public class UserService {
         user.setPassword(hashedNewPassword);
         final User newUser = this.userRepository.save(user);
 
-        final League league = this.leagueRepository.findOne(leagueId);
+        
         newUser.getLeagues().add(league);
         league.getParticipants().add(newUser);
         
