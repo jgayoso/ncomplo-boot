@@ -143,22 +143,24 @@ public class LeagueService {
 		
 		final List<Game> todayGames = this.gameService.findNextGames(leagueId);
 		
-		Map<Round, List<Game>> gamesByRound = new HashMap<Round, List<Game>>();
-		for (Game game: todayGames){
-			if (!gamesByRound.containsKey(game.getRound())) {
-				gamesByRound.put(game.getRound(), new ArrayList<Game>());
+		final Map<Round, List<Game>> gamesByRound = new HashMap<Round, List<Game>>();
+		if (todayGames != null) {
+			for (final Game game: todayGames){
+				if (!gamesByRound.containsKey(game.getRound())) {
+					gamesByRound.put(game.getRound(), new ArrayList<Game>());
+				}
+				gamesByRound.get(game.getRound()).add(game);
 			}
-			gamesByRound.get(game.getRound()).add(game);
 		}
 		
-		for (Entry<Round, List<Game>> roundGamesEntry: gamesByRound.entrySet()) {
-			List<Game> games = roundGamesEntry.getValue();
-			BetType betType = games.get(0).getDefaultBetType();
+		for (final Entry<Round, List<Game>> roundGamesEntry: gamesByRound.entrySet()) {
+			final List<Game> games = roundGamesEntry.getValue();
+			final BetType betType = games.get(0).getDefaultBetType();
 			TodayRoundGamesAndBetsView betView = null;
 			if (betType.isScoreMatter()) {
 				betView = this.processScoreMattersGames(leagueId, roundGamesEntry.getKey(), games);
 			} else if (betType.isSidesMatter()) {
-				betView = processSideMattersGames(leagueId, roundGamesEntry.getKey(), games);
+				betView = this.processSideMattersGames(leagueId, roundGamesEntry.getKey(), games);
 			}
 			if (betView != null) {
 				roundsInfo.add(betView);
