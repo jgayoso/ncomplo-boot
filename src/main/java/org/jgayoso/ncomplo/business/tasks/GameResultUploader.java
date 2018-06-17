@@ -1,20 +1,21 @@
 package org.jgayoso.ncomplo.business.tasks;
 
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Locale;
 import java.util.Set;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.time.DateUtils;
 import org.apache.log4j.Logger;
 import org.jgayoso.ncomplo.business.entities.Competition;
 import org.jgayoso.ncomplo.business.entities.Game;
 import org.jgayoso.ncomplo.business.entities.League;
 import org.jgayoso.ncomplo.business.entities.repositories.CompetitionRepository;
+import org.jgayoso.ncomplo.business.entities.repositories.GameRepository;
 import org.jgayoso.ncomplo.business.entities.repositories.LeagueRepository;
-import org.jgayoso.ncomplo.business.services.GameService;
 import org.jgayoso.ncomplo.business.services.LeagueService;
 import org.jgayoso.ncomplo.business.tasks.vo.MatchVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,8 +32,7 @@ public class GameResultUploader {
 	private static final RestTemplate restTemplate = new RestTemplate(); 
 	
 	@Autowired
-	private GameService gameService;
-	
+	private GameRepository gameRepository;
 	@Autowired
 	private LeagueRepository leagueRepository;
 	@Autowired
@@ -65,7 +65,12 @@ public class GameResultUploader {
 				continue;
 			}
 
-			final List<Game> todayGames = this.gameService.findAll(competitionId, Locale.ENGLISH);
+			final Date now = new Date();
+			final Date todayMorning = DateUtils.addHours(now, -2);
+			final Date todayEvening = DateUtils.addHours(now, 2);
+
+			final List<Game> todayGames = this.gameRepository.findByCompetitionAndDateBetweenOrderByDate(competition,
+					todayMorning, todayEvening);
 			if (CollectionUtils.isEmpty(todayGames)) {
 				return;
 			}
@@ -83,7 +88,7 @@ public class GameResultUploader {
 					for (final MatchVO match : matches) {
 						for (final Game game : todayGames) {
 							if (!game.isTeamsDefined()) {
-								logger.info("Discarding game " + game);
+								logger.info("Discarding game " + game.getId());
 								continue;
 							}
 							if (StringUtils.equalsIgnoreCase(match.getHome_team().getCode(),
