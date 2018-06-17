@@ -375,8 +375,6 @@ form#password {
 }
 
 .match-score {
-	min-width: 120px;
-	width: 10%;
 	font-size: 25px;
 }
 

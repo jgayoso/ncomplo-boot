@@ -10,14 +10,18 @@
     <div class="container">
     
         <div class="row">
-            <h2 th:text="#{scoreboard.title}">SCOREBOARD</h2>
-            <h4 th:text="#{scoreboard.title.league(${league.getName(#locale)})}">League: one league</h4>
+            <div class="col-12">
+                <h2 th:text="#{scoreboard.title}">SCOREBOARD</h2>
+                <h4 th:text="#{scoreboard.title.league(${league.getName(#locale)})}">League: one league</h4>
+            </div>
         </div>
         
         <div th:substituteby="layout/messages :: messages"></div>
         
         <div class="row">
-          <form class="navbar-form" role="form" th:if="${showLeagueSelector}" th:action="@{/selectScoreboard}" method="post" th:object="${leagueSelector}">
+             <div class="col-12 col-sm-6">
+          <form class="form-inline" role="form" th:if="${showLeagueSelector}" th:action="@{/selectScoreboard}" method="post" th:object="${leagueSelector}">
+
             <div class="form-group">
                 <select class="form-control" th:field="*{leagueId}">
                   <option th:each="l : ${allLeagues}" th:value="${l.id}" th:text="${l.getName(#locale)}">a league</option>
@@ -27,51 +31,52 @@
                 <button type="submit" class="btn btn-primary" th:text="#{scoreboard.league.form.submit}">View</button>
             </div>
           </form>
+            </div>
         </div>
         <div class="row">
-	        <table th:if="${todayEvents} and ${#lists.size(todayEvents)>0}" id="matchesTable" class="table" th:each="roundInfo : ${todayEvents.roundsInformation}">
-	        	<tr>
-	        		<td colspan="4" class="roundName"><span th:text="${roundInfo.round.getName(#locale)}">Groups</span></td>
-	        	</tr>
-	        	<th:block th:each="g : ${roundInfo.games}">
-	        		<tr class="match-row">
-	        			<td colspan="4" class="matchDate"><span th:text="${#dates.format(g.date, #messages.msg('dates.format'))}">14/06/2018 16:00</span></td>
-	        		</tr>
-					<tr class="match-row" 
-						th:with="gsA=${g.gameSideA},gsB=${g.gameSideB}, gScA=${g.scoreA},gScB=${g.scoreB}">
-						<td class="match-row--team team-home">
-							<span class="team-name" th:text="${gsA.getName(#locale)}">Belgium</span>
-							<span class="team-flag" th:class="'world-team-flag world-flag-'+${gsA.code}"></span>
-						</td>
-						<td class="match-score text-center">
-							<span th:if="${gScA != null}" th:text="${gScA}">1</span> - <span
-								th:if="${gScB != null}" th:text="${gScB}">0</span>
-						</td>
-						<td class="match-row--team team-away">
-							<span class="team-flag" th:class="'world-team-flag world-flag-'+${gsB.code}"></span>
-							<span class="team-name" th:text="${gsB.getName(#locale)}">Republic of Ireland</span>
-						</td>
-					</tr>
-				</th:block>
-			</table>
+	        <div class="col-12" th:if="${todayEvents} and ${#lists.size(todayEvents)>0}" id="matchesTable" th:each="roundInfo : ${todayEvents.roundsInformation}">
+	        	<div class="row">
+	        		<div class="col-12 roundName"><span th:text="${roundInfo.round.getName(#locale)}">Groups</span></div>
+	        	</div>
+	        	<div class="row justify-content-center" th:each="g : ${roundInfo.games}" th:with="gsA=${g.gameSideA},gsB=${g.gameSideB}, gScA=${g.scoreA},gScB=${g.scoreB}">
+                    <div class="d-none d-md-block col-2 team-name" th:text="${gsA.getName(#locale)}">Belgium</div>
+                    <div class="col-auto"><span class="team-flag" th:class="'world-team-flag world-flag-'+${gsA.code}"></span></div>
+                    <div class="col-auto">
+                        <div class="row">
+                            <div class="col-12 matchDate">
+                                <span th:text="${#dates.format(g.date, #messages.msg('dates.format'))}">14/06/2018 16:00</span>
+                            </div>
+                            <div class="col-12 match-score text-center">
+                                <span>
+                                    <span th:if="${gScA != null}" th:text="${gScA}">1</span> - <span
+                                        th:if="${gScB != null}" th:text="${gScB}">0</span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-auto"><span class="team-flag" th:class="'world-team-flag world-flag-'+${gsB.code}"></span></div>
+                    <div class="d-none d-md-block col-2 team-name" th:text="${gsB.getName(#locale)}">Republic of Ireland</div>
+
+				</div>
+			</div>
 		</div>
         
         <div class="row">
-          <form class="navbar-form" role="form" th:action="@{/selectScoreboard}" method="post" th:object="${leagueSelector}">
-            <input class="form-control" type="hidden" th:field="*{leagueId}" />
-            <div class="form-group">
-                <select class="form-control" th:field="*{roundId}">
-                  <option value="" th:text="#{scoreboard.form.round.allrounds}">All rounds</option>
-                  <option th:each="r : ${allRounds}" th:value="${r.id}" th:text="${r.getName(#locale)}">a league</option>
-                </select>
+            <div class="col-12 col-sm-6">
+                <form class="form-inline" role="form" th:action="@{/selectScoreboard}" method="post" th:object="${leagueSelector}">
+                    <input class="form-control" type="hidden" th:field="*{leagueId}" />
+
+                    <select class="form-control" th:field="*{roundId}">
+                        <option value="" th:text="#{scoreboard.form.round.allrounds}">All rounds</option>
+                        <option th:each="r : ${allRounds}" th:value="${r.id}" th:text="${r.getName(#locale)}">a league</option>
+                    </select>
+                    <button type="submit" class="btn btn-primary" th:text="#{scoreboard.form.round.submit}">View</button>
+                </form>
             </div>
-            <div class="form-group">
-                <button type="submit" class="btn btn-primary" th:text="#{scoreboard.form.round.submit}">View</button>
-            </div>
-          </form>
         </div>
 
 		<div class="row">
+            <div class="col-12">
           <table id="scoreboard" class="table table-striped table-bordered" >
             <thead>
               <tr>
@@ -93,25 +98,23 @@
                 </td>
                 
                 <td th:if="${todayEvents} and ${#lists.size(todayEvents.roundsInformation)}>0" th:each="roundInfo : ${todayEvents.roundsInformation}">
-                	<table class="betsTable" th:if="${roundInfo.scoreMatters}">
-	                	<tr>
-	                		<td class="todayBetColumn" th:if="${roundInfo.scoreMatterBets != null}"
+                	<div class="row no-gutters" th:if="${roundInfo.scoreMatters}">
+
+	                		<div class="col-3" th:if="${roundInfo.scoreMatterBets != null}"
 	                			th:each="g : ${roundInfo.games}" th:with="userBets=${roundInfo.scoreMatterBets[__${sc.user.login}__]}" >
 	                			<span th:if="${userBets} != null and ${userBets.containsKey(g.id)} and ${userBets[__${g.id}__].scoreA} != null and ${userBets[__${g.id}__].scoreB} != null" 
 	                				th:text="${userBets[__${g.id}__].scoreA} + ' - ' + ${userBets[__${g.id}__].scoreB}">1 - 0</span>
-	               			</td>
-	                	</tr>
-                	</table>
-                	<table class="betsTable" th:unless="${roundInfo.scoreMatters}" >
-                		<tr>
-                			<td th:each="i : ${#numbers.sequence(0, roundInfo.maxSideMattersBets - 1, 1)}"
-                				th:with="userBets=${roundInfo.sideMatterBetsWinners[__${sc.user.login}__]}" class="todayBetColumn">
+	               			</div>
+
+                	</div>
+                	<div class="row no-gutters" th:unless="${roundInfo.scoreMatters}" >
+                			<div class="col-3" th:each="i : ${#numbers.sequence(0, roundInfo.maxSideMattersBets - 1, 1)}"
+                				th:with="userBets=${roundInfo.sideMatterBetsWinners[__${sc.user.login}__]}">
                 				
                 				<span  th:if="${userBets} != null and ${#lists.size(userBets) > i}" th:text="${userBets[__${i}__].getName(#locale)}">Belgium</span>
                 				
-               				</td>
-                		</tr>
-                	</table>
+               				</div>
+                	</div>
                 </td>
                 
                 <td class="scoreboard_points">
@@ -124,6 +127,7 @@
               </tr>
             </tbody>
           </table>
+            </div>
         </div>
 		<div class="row" th:if="${betsAllowed}">  
           <a th:href="@{'/bets/' + ${league.id} + '/'}" th:text="#{scoreboard.sendbets}">Send bets</a>

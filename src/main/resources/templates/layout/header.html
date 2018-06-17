@@ -4,24 +4,42 @@
 <head th:fragment="head">
 
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css"
+          integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/ncomplo.css}" />
+
     <title>NCompl&oacute;</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.js" type="text/javascript"></script>
-    
-    <link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.min.css}" />
-    <link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap-theme.min.css}" />
-    <link rel="stylesheet" type="text/css" th:href="@{/css/ncomplo.css}" />
-    
     <script th:src="@{/js/ncomplo.js}" type="text/javascript"></script>
-    <script th:src="@{/js/bootstrap.min.js}" type="text/javascript"></script>
-    
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+            integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
+            integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"
+            integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
 </head>
 
 <body>
-  
-    <div class="page-header" th:fragment="header">
-        <h1><a th:href="@{/}" href="/">NCompl&oacute;</a></h1>
-    </div>
+
+
+    <nav class="navbar navbar-dark bg-dark" th:fragment="header">
+        <a class="navbar-brand" th:href="@{/}" href="/">NCompl&oacute;</a>
+        <div class="collapse navbar-collapse" >
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active" th:if="${betsAllowed}">
+                    <a th:href="@{'/bets/' + ${league.id} + '/'}" th:text="#{scoreboard.sendbets}">Send bets</a>
+                </li>
+                <li class="nav-item active">
+                    <a th:href="@{/password}" th:text="#{nav.changepassword}">Change password</a>
+                </li>
+                <li class="nav-item active">
+                    <a th:href="@{/logout}" th:text="#{logout}">Logout</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
 
 </body>
 
