@@ -77,6 +77,7 @@ public class GameSideController {
             gameSideBean.setName(gameSide.getName());
             gameSideBean.getNamesByLang().clear();
             gameSideBean.getNamesByLang().addAll(LangBean.listFromMap(gameSide.getNamesByLang()));
+			gameSideBean.setCode(gameSide.getCode());
         }
         
         model.addAttribute("gameSide", gameSideBean);
