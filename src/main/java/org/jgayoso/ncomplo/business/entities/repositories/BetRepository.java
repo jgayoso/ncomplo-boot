@@ -17,6 +17,9 @@ public interface BetRepository
     
     public List<Bet> findByLeagueIdAndUserLogin(final Integer leagueId, final String login);
     
+	public List<Bet> findByLeagueIdAndUserLoginAndGameIn(final Integer leagueId, final String login,
+			final Collection<Game> games);
+
     public List<Bet> findByScoreMatterTrueAndLeagueIdAndGameIn(final Integer leagueId, final Collection<Game> games);
     
     public List<Bet> findBySidesMatterTrueAndLeagueIdAndAndGameRound(final Integer leagueId, final Round round);

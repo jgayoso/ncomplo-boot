@@ -26,6 +26,8 @@ public class CompetitionBean implements Serializable {
     @NotNull
     private boolean active = true;
 
+	private String updaterUri;
+
     
     
     public CompetitionBean() {
@@ -70,6 +72,18 @@ public class CompetitionBean implements Serializable {
     public List<LangBean> getNamesByLang() {
         return this.namesByLang;
     }
+
+
+
+	public String getUpdaterUri() {
+		return this.updaterUri;
+	}
+
+
+
+	public void setUpdaterUri(String updaterUri) {
+		this.updaterUri = updaterUri;
+	}
 
     
     

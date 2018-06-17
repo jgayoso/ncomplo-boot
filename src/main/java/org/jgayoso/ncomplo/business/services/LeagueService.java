@@ -137,6 +137,20 @@ public class LeagueService {
 		}
 	}
 	
+	@Transactional
+	public void recomputeScoresForGames(final Integer leagueId, final Collection<Game> games) {
+
+		final League league = this.leagueRepository.findOne(leagueId);
+
+		for (final User participant : league.getParticipants()) {
+			final List<Bet> bets = this.betRepository.findByLeagueIdAndUserLoginAndGameIn(league.getId(),
+					participant.getLogin(), games);
+			for (final Bet bet : bets) {
+				bet.evaluate();
+			}
+		}
+	}
+
 	public TodayEventsView getTodayInformation(final Integer leagueId) {
 		
 		final List<TodayRoundGamesAndBetsView> roundsInfo = new ArrayList<>();
@@ -174,15 +188,15 @@ public class LeagueService {
 		return new TodayEventsView(roundsInfo);
 	}
 	
-	private TodayRoundGamesAndBetsView processScoreMattersGames(Integer leagueId, Round round, List<Game> games) {
-		List<Bet> betsForGames = this.betRepository.findByScoreMatterTrueAndLeagueIdAndGameIn(leagueId, games);
+	private TodayRoundGamesAndBetsView processScoreMattersGames(final Integer leagueId, final Round round, final List<Game> games) {
+		final List<Bet> betsForGames = this.betRepository.findByScoreMatterTrueAndLeagueIdAndGameIn(leagueId, games);
 		
-		Map<String, Map<Integer, ScoreMatterBetView>> bets = new HashMap<>();
+		final Map<String, Map<Integer, ScoreMatterBetView>> bets = new HashMap<>();
     	if (CollectionUtils.isEmpty(betsForGames)) {
     		return new TodayRoundGamesAndBetsView(round, games, null, null, true);
     	}
-		for (Bet bet: betsForGames) {
-			String userLogin = bet.getUser().getLogin();
+		for (final Bet bet: betsForGames) {
+			final String userLogin = bet.getUser().getLogin();
 			if (!bets.containsKey(userLogin)) {
 				bets.put(userLogin, new HashMap<Integer, ScoreMatterBetView>());
 			}
@@ -192,22 +206,22 @@ public class LeagueService {
     	return new TodayRoundGamesAndBetsView(round, games, bets, null, true);
 	}
 	
-	private TodayRoundGamesAndBetsView processSideMattersGames(Integer leagueId, Round round, List<Game> games) {
+	private TodayRoundGamesAndBetsView processSideMattersGames(final Integer leagueId, final Round round, final List<Game> games) {
 		
-		Collection<GameSide> gameSides = new HashSet<>();
-    	for (Game game: games) {
+		final Collection<GameSide> gameSides = new HashSet<>();
+    	for (final Game game: games) {
     		gameSides.add(game.getGameSideA());
     		gameSides.add(game.getGameSideB());
     	}
 		
-		List<Bet> betsForRound = this.betRepository.findBySidesMatterTrueAndLeagueIdAndAndGameRound(leagueId, round);
-		Map<String, List<GameSide>> sideMatterBets = new HashMap<>();
+		final List<Bet> betsForRound = this.betRepository.findBySidesMatterTrueAndLeagueIdAndAndGameRound(leagueId, round);
+		final Map<String, List<GameSide>> sideMatterBets = new HashMap<>();
 		int maxNumber = 0;
     	if (CollectionUtils.isEmpty(betsForRound)) {
     		return null;
     	}
-		for (Bet bet: betsForRound) {
-			String userLogin = bet.getUser().getLogin();
+		for (final Bet bet: betsForRound) {
+			final String userLogin = bet.getUser().getLogin();
 			if (!sideMatterBets.containsKey(userLogin)) {
 				sideMatterBets.put(userLogin, new ArrayList<GameSide>());
 			}
@@ -217,27 +231,27 @@ public class LeagueService {
 				sideMatterBets.get(userLogin).add(bet.getGameSideB());
 			}
 		}
-		for (Entry<String, List<GameSide>> userBets : sideMatterBets.entrySet()) {
+		for (final Entry<String, List<GameSide>> userBets : sideMatterBets.entrySet()) {
 			if (userBets.getValue().size() > maxNumber) {
 				maxNumber = userBets.getValue().size();
 			}
     	}
-    	TodayRoundGamesAndBetsView betsView = new TodayRoundGamesAndBetsView(round, games, null, sideMatterBets, false);
+    	final TodayRoundGamesAndBetsView betsView = new TodayRoundGamesAndBetsView(round, games, null, sideMatterBets, false);
     	betsView.setMaxSideMattersBets(maxNumber);
     	return betsView;
 	}
 	
-	public void sendNotificationEmailToLeagueMembers(Integer leagueId, String subject, String text) {
-		League league = this.leagueRepository.findOne(leagueId);
+	public void sendNotificationEmailToLeagueMembers(final Integer leagueId, final String subject, final String text) {
+		final League league = this.leagueRepository.findOne(leagueId);
 		
-		Set<User> participants = league.getParticipants();
+		final Set<User> participants = league.getParticipants();
 		if (CollectionUtils.isEmpty(participants)) {
 			return;
 		}
 		
-		String[] destinations = new String[participants.size()];
+		final String[] destinations = new String[participants.size()];
 		int i = 0;
-		for (User participant: participants) {
+		for (final User participant: participants) {
 			destinations[i] = participant.getEmail();
 			i++;
 		}

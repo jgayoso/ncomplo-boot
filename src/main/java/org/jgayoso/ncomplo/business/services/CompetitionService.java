@@ -48,7 +48,7 @@ public class CompetitionService {
             final Integer id,
             final String name, 
             final Map<String,String> namesByLang, 
-            final boolean active) {
+			final boolean active, final String updaterUri) {
         
         final Competition competition =
                 (id == null? new Competition() : this.competitionRepository.findOne(id));
@@ -57,6 +57,7 @@ public class CompetitionService {
         competition.getNamesByLang().clear();
         competition.getNamesByLang().putAll(namesByLang);
         competition.setActive(active);
+		competition.setUpdaterUri(updaterUri);
         
         if (id == null) {
             return this.competitionRepository.save(competition);

@@ -46,6 +46,9 @@ public class Competition implements I18nNamedEntity {
     @Column(name="ACTIVE",nullable=false)
     private boolean active = true;
 
+	@Column(name = "UPDATER_URI", nullable = false)
+	private String updaterUri;
+
     
     @OneToMany(cascade=CascadeType.ALL,orphanRemoval=true,mappedBy="competition")
     private final Set<BetType> betTypes = new LinkedHashSet<>();
@@ -126,7 +129,13 @@ public class Competition implements I18nNamedEntity {
     public void setName(final String name) {
         this.name = name;
     }
-    
-    
+
+	public String getUpdaterUri() {
+		return this.updaterUri;
+	}
+
+	public void setUpdaterUri(final String updaterUri) {
+		this.updaterUri = updaterUri;
+	}
     
 }

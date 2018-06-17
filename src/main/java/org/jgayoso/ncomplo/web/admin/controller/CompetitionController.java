@@ -60,7 +60,7 @@ public class CompetitionController {
             competitionBean.setId(competition.getId());
             competitionBean.setName(competition.getName());
             competitionBean.setActive(competition.isActive());
-            
+			competitionBean.setUpdaterUri(competition.getUpdaterUri());
             competitionBean.getNamesByLang().clear();
             competitionBean.getNamesByLang().addAll(LangBean.listFromMap(competition.getNamesByLang()));
             
@@ -75,15 +75,11 @@ public class CompetitionController {
     
     
     @RequestMapping("/save")
-    public String save(
-            final CompetitionBean competitionBean,
-            @SuppressWarnings("unused") final BindingResult bindingResult) {
+	public String save(final CompetitionBean competitionBean, final BindingResult bindingResult) {
 
-        this.competitionService.save(
-                competitionBean.getId(),
-                competitionBean.getName(),
-                LangBean.mapFromList(competitionBean.getNamesByLang()),
-                competitionBean.isActive());
+		this.competitionService.save(competitionBean.getId(), competitionBean.getName(),
+				LangBean.mapFromList(competitionBean.getNamesByLang()), competitionBean.isActive(),
+				competitionBean.getUpdaterUri());
         
         return "redirect:list";
         
