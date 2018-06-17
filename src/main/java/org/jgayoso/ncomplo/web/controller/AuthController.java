@@ -5,6 +5,7 @@ import org.jgayoso.ncomplo.business.entities.Invitation;
 import org.jgayoso.ncomplo.business.entities.User;
 import org.jgayoso.ncomplo.business.services.InvitationService;
 import org.jgayoso.ncomplo.business.services.UserService;
+import org.jgayoso.ncomplo.exceptions.LeagueClosedException;
 import org.jgayoso.ncomplo.web.admin.beans.UserInvitationBean;
 import org.jgayoso.ncomplo.web.beans.ResetPasswordBean;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -171,8 +172,13 @@ public class AuthController {
 			return "redirect:/invitation/"+invitationId+"/"+leagueId+"/"+userBean.getEmailId();
 		}
 		
-		this.userService.registerFromInvitation(invitationId, userBean.getLogin(), userBean.getName(),
-				userBean.getEmail(), leagueId, userBean.getPassword());
+		try {
+			this.userService.registerFromInvitation(invitationId, userBean.getLogin(), userBean.getName(),
+					userBean.getEmail(), leagueId, userBean.getPassword());
+		} catch (final LeagueClosedException e) {
+			redirectAttributes.addFlashAttribute("error", "League is closed");
+			return "redirect:/login";
+		}
 		return "redirect:/login";
 	}
 	
@@ -192,9 +198,13 @@ public class AuthController {
             redirectAttributes.addFlashAttribute("error", "Passwords don't match");
 			return "redirect:/joinLeague/"+invitation.getToken();
 		}
-		
-		this.userService.registerFromInvitation(invitation.getId(), userBean.getLogin(), userBean.getName(),
-				userBean.getEmail(), invitation.getLeague().getId(), userBean.getPassword());
+		try {
+			this.userService.registerFromInvitation(invitation.getId(), userBean.getLogin(), userBean.getName(),
+					userBean.getEmail(), invitation.getLeague().getId(), userBean.getPassword());
+		} catch (final LeagueClosedException e) {
+			redirectAttributes.addFlashAttribute("error", "League is closed");
+			return "redirect:/login";
+		}
 		
 		return "redirect:/login";
 	}
