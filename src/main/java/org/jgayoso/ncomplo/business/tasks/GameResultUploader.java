@@ -6,6 +6,7 @@ import java.util.Locale;
 import java.util.Set;
 
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.jgayoso.ncomplo.business.entities.Competition;
@@ -76,13 +77,20 @@ public class GameResultUploader {
 
 				if (responseEntity.hasBody()) {
 					final MatchVO[] matches = responseEntity.getBody();
-					logger.debug("Response: " + matches);
+					logger.info("Response: " + matches);
 
 					final Set<Game> updatedGames = new HashSet<Game>();
 					for (final MatchVO match : matches) {
 						for (final Game game : todayGames) {
-							if (StringUtils.startsWithIgnoreCase(match.getHome_team().getCode(),
-									game.getGameSideA().getCode())) {
+							if (!game.isTeamsDefined()) {
+								logger.info("Discarding game " + game);
+								continue;
+							}
+							if (StringUtils.equalsIgnoreCase(match.getHome_team().getCode(),
+									game.getGameSideA().getCode())
+									&& StringUtils.equalsIgnoreCase(match.getAway_team().getCode(),
+											game.getGameSideB().getCode())) {
+
 								if (match.getHome_team().getGoals() != null
 										&& !match.getHome_team().getGoals().equals(game.getScoreA())) {
 									game.setScoreA(match.getHome_team().getGoals());
@@ -107,7 +115,8 @@ public class GameResultUploader {
 					logger.debug("Empty response");
 				}
 			} catch (final Exception e) {
-				logger.info("Error consuming service", e);
+				logger.info("Error consuming service " + e.getMessage() + " "
+						+ (ArrayUtils.isEmpty(e.getStackTrace()) ? "" : e.getStackTrace()[0]));
 			}
 		}
 		
