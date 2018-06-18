@@ -7,18 +7,20 @@
   
     <header th:substituteby="layout/header :: header"></header>
     
-    <div class="container">
+    <div class="container mt-3">
     	
     	<div th:substituteby="layout/messages :: messages"></div>
-    
-        <form id="login" th:action="@{/login}" method="post" class="form-signin" role="form">
-            <h3 class="form-signin-heading" th:text="#{login.title}">Authenticate</h3>
-            <input id="loginInput" type="text" name="username" required="required" class="form-control" th:placeholder="#{login.form.login}" autofocus="autofocus" />
-            
-            <input id="passwordInput" type="password" name="password" required="required" class="form-control" th:placeholder="#{login.form.password}" />
-            <button class="btn btn-lg btn-primary btn-block" type="submit" th:text="#{login.form.submit}">Sign in</button>
-        </form>
-        
+        <div class="row">
+            <div class="col-12">
+                <form id="login" th:action="@{/login}" method="post" class="form-signin" role="form">
+                    <h3 class="form-signin-heading" th:text="#{login.title}">Authenticate</h3>
+                    <input id="loginInput" type="text" name="username" required="required" class="form-control" th:placeholder="#{login.form.login}" autofocus="autofocus" />
+
+                    <input id="passwordInput" type="password" name="password" required="required" class="form-control" th:placeholder="#{login.form.password}" />
+                    <button class="btn btn-lg btn-primary btn-block" type="submit" th:text="#{login.form.submit}">Sign in</button>
+                </form>
+            </div>
+        </div>
     </div>
   </body>
   

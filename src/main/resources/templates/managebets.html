@@ -7,7 +7,7 @@
   
     <header th:substituteby="layout/header :: header"></header>
   
-    <div class="container">
+    <div class="container mt-3">
     
         <h1><span th:text="#{bets.title}">Manage bets for league</span> "<span th:text="${league.getName(#locale)}">league</span>"</h1>
         
@@ -18,7 +18,7 @@
                 <input type="hidden" th:value="${league.id}" name="leagueId" />
                 <span th:text="#{bets.upload.bets}">Upload</span>
                 <span><input type="file" name="file" /></span>
-                <p><input type="submit" th:value="#{bets.upload.submit}" /></p>
+                <p><input type="submit" class="btn btn-primary" th:value="#{bets.upload.submit}" /></p>
             </form>
         </div>
 
@@ -93,7 +93,7 @@
           
           </fieldset>
           
-          <input type="submit" th:value="#{submit.save}" value="Save" />
+          <input type="submit" class="btn btn-primary" th:value="#{submit.save}" value="Save" />
           
         </form>
 		<br />        
