@@ -139,7 +139,8 @@ public class UserBetsController {
             }
             
         }
-        
+        final User user = this.userService.find(login);
+        model.addAttribute("user", user);
         model.addAttribute("participation", participationBean);
         model.addAttribute("league", league);
         model.addAttribute("competition", competition);
