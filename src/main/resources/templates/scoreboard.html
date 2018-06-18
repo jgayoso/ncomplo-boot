@@ -40,16 +40,14 @@
 	        	<div class="row justify-content-center" th:each="g : ${roundInfo.games}" th:with="gsA=${g.gameSideA},gsB=${g.gameSideB}, gScA=${g.scoreA},gScB=${g.scoreB}">
                     <div class="d-none d-md-block col-2 team-name" th:text="${gsA.getName(#locale)}">Belgium</div>
                     <div class="col-auto"><span class="team-flag" th:class="'world-team-flag world-flag-'+${gsA.code}"></span></div>
-                    <div class="col-auto">
+                    <div class="col-4">
                         <div class="row">
                             <div class="col-12 matchDate">
                                 <span th:text="${#dates.format(g.date, #messages.msg('dates.format'))}">14/06/2018 16:00</span>
                             </div>
                             <div class="col-12 match-score text-center">
-                                <span>
-                                    <span th:if="${gScA != null}" th:text="${gScA}">1</span> - <span
-                                        th:if="${gScB != null}" th:text="${gScB}">0</span>
-                                </span>
+                                <span th:text="${gScA != null}? ${gScA}:' '">1</span> - <span
+                                    th:text="${gScB != null} ? ${gScB} : ' '">0</span>
                             </div>
                         </div>
                     </div>
@@ -87,7 +85,7 @@
                 <th th:if="${todayEvents} and ${#lists.size(todayEvents.roundsInformation) > 0}" class="todayBetHeader" 
                 	th:each="roundInfo : ${todayEvents.roundsInformation}" th:text="${roundInfo.round.getName(#locale)}">Groups</th>
                	<th class="smallColumn" th:text="#{scoreboard.header.points}">Points</th>
-                <th th:unless="${betsAllowed}" class="betsColumn"></th>
+                <th th:unless="${betsAllowed}" class="betsColumn" th:text="#{scoreboard.bets}"></th>
               </tr>
             </thead>
             <tbody>
@@ -124,7 +122,11 @@
                 </td>
                 
                 <td class="scoreboard_actions" th:unless="${betsAllowed}" >
-                  <a th:href="@{'/bets/' + ${league.id} + '/' + ${sc.user.login}}" th:text="#{scoreboard.viewbets}" class="btn btn-secondary btn-sm">view bets</a>
+                    <a th:href="@{'/bets/' + ${league.id} + '/' + ${sc.user.login}}" th:text="#{scoreboard.viewbets}"
+                       class="btn btn-secondary btn-sm d-none d-md-block">view bets</a>
+                    <a th:href="@{'/bets/' + ${league.id} + '/' + ${sc.user.login}}"
+                       class="btn btn-secondary btn-sm d-block d-md-none"><i class="fas fa-search" ></i></a>
+
                 </td>
               </tr>
             </tbody>
