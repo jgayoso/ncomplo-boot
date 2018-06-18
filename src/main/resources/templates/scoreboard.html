@@ -38,7 +38,7 @@
 	        		<div class="col-12 roundName"><span th:text="${roundInfo.round.getName(#locale)}">Groups</span></div>
 	        	</div>
 	        	<div class="row justify-content-center" th:each="g : ${roundInfo.games}" th:with="gsA=${g.gameSideA},gsB=${g.gameSideB}, gScA=${g.scoreA},gScB=${g.scoreB}">
-                    <div class="d-none d-md-block col-2 team-name" th:text="${gsA.getName(#locale)}">Belgium</div>
+                    <div class="d-none d-md-block col-2 team-name text-right" th:text="${gsA.getName(#locale)}">Belgium</div>
                     <div class="col-auto"><span class="team-flag" th:class="'world-team-flag world-flag-'+${gsA.code}"></span></div>
                     <div class="col-4 col-md-2">
                         <div class="row">
@@ -52,7 +52,7 @@
                         </div>
                     </div>
                     <div class="col-auto"><span class="team-flag" th:class="'world-team-flag world-flag-'+${gsB.code}"></span></div>
-                    <div class="d-none d-md-block col-2 team-name" th:text="${gsB.getName(#locale)}">Republic of Ireland</div>
+                    <div class="d-none d-md-block col-2 team-name text-left" th:text="${gsB.getName(#locale)}">Republic of Ireland</div>
 
 				</div>
 			</div>
