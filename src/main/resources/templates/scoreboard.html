@@ -40,7 +40,7 @@
 	        	<div class="row justify-content-center" th:each="g : ${roundInfo.games}" th:with="gsA=${g.gameSideA},gsB=${g.gameSideB}, gScA=${g.scoreA},gScB=${g.scoreB}">
                     <div class="d-none d-md-block col-2 team-name" th:text="${gsA.getName(#locale)}">Belgium</div>
                     <div class="col-auto"><span class="team-flag" th:class="'world-team-flag world-flag-'+${gsA.code}"></span></div>
-                    <div class="col-4">
+                    <div class="col-4 col-md-2">
                         <div class="row">
                             <div class="col-12 matchDate">
                                 <span th:text="${#dates.format(g.date, #messages.msg('dates.format'))}">14/06/2018 16:00</span>
