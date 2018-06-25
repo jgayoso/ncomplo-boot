@@ -82,32 +82,47 @@ public class GameResultUploader {
 
 				if (responseEntity.hasBody()) {
 					final MatchVO[] matches = responseEntity.getBody();
-					logger.info("Response: " + matches);
 
 					final Set<Game> updatedGames = new HashSet<Game>();
 					for (final MatchVO match : matches) {
+						logger.info("Processing response: " + match);
+
+						final String homeTeamCode = match.getHome_team().getCode();
+						final String awayTeamCode = match.getAway_team().getCode();
+
 						for (final Game game : todayGames) {
 							if (!game.isTeamsDefined()) {
-								logger.info("Discarding game " + game.getId());
+								logger.info("Discarding not team defined game " + game.getId());
 								continue;
 							}
-							if (StringUtils.equalsIgnoreCase(match.getHome_team().getCode(),
-									game.getGameSideA().getCode())
-									&& StringUtils.equalsIgnoreCase(match.getAway_team().getCode(),
-											game.getGameSideB().getCode())) {
 
-								if (match.getHome_team().getGoals() != null
-										&& !match.getHome_team().getGoals().equals(game.getScoreA())) {
-									game.setScoreA(match.getHome_team().getGoals());
+							final String sideACode = game.getGameSideA().getCode();
+							final String sideBCode = game.getGameSideB().getCode();
+
+							if ((homeTeamCode.equalsIgnoreCase(sideACode) || awayTeamCode.equalsIgnoreCase(sideACode)) &&
+									(homeTeamCode.equalsIgnoreCase(sideBCode) || awayTeamCode.equalsIgnoreCase(sideBCode))) {
+								
+								Integer sideAGoals = null;
+								Integer sideBGoals = null;
+								if (homeTeamCode.equalsIgnoreCase(sideACode)) {
+									sideAGoals = match.getHome_team().getGoals();
+									sideBGoals = match.getAway_team().getGoals();
+								} else {
+									sideAGoals = match.getAway_team().getGoals();
+									sideBGoals = match.getHome_team().getGoals();
+								}
+
+								if (sideAGoals != null && !sideAGoals.equals(game.getScoreA())) {
+									game.setScoreA(sideAGoals);
 									updatedGames.add(game);
 									logger.debug("Game updated score A: " + game.getScoreA());
 								}
-								if (match.getAway_team().getGoals() != null
-										&& !match.getAway_team().getGoals().equals(game.getScoreB())) {
-									game.setScoreB(match.getAway_team().getGoals());
+								if (sideBGoals != null && !sideBGoals.equals(game.getScoreB())) {
+									game.setScoreB(sideBGoals);
 									updatedGames.add(game);
 									logger.debug("Game updated score B: " + game.getScoreB());
 								}
+
 							}
 						}
 					}
