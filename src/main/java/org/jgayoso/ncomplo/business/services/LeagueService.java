@@ -225,6 +225,9 @@ public class LeagueService {
 			if (!sideMatterBets.containsKey(userLogin)) {
 				sideMatterBets.put(userLogin, new ArrayList<GameSide>());
 			}
+			if (bet.getScoreA() == null || bet.getScoreB() == null) {
+				continue;
+			}
 			if (bet.getScoreA().intValue() > bet.getScoreB().intValue() && gameSides.contains(bet.getGameSideA())) {
 				sideMatterBets.get(userLogin).add(bet.getGameSideA());
 			} else if (bet.getScoreA().intValue() < bet.getScoreB().intValue() && gameSides.contains(bet.getGameSideB())) {
