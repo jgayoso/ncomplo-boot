@@ -81,7 +81,7 @@
                     <span th:text="${bsA} ? ${bsA.getName(#locale)} : '?'">bet sideA</span>
                   </td>
 
-                    <td class="bet_flag">
+                    <td class="bet_bsa">
                         <span th:class="(${bsA} ? (${bsA.code}?'small-world-team-flag world-flag-'+${bsA.code}:''):'')"></span>
                     </td>
                   <td class="bet_bet_scoreA">
@@ -90,7 +90,7 @@
                   <td class="bet_bet_scoreB">
                     <span th:if="${b.scoreMatter}" th:text="${bScB} ?: '?'">bet score sideB</span>
                   </td>
-                    <td class="bet_flag">
+                    <td class="bet_bsb">
                         <span th:class="(${bsB} ? (${bsB.code}?'small-world-team-flag world-flag-'+${bsB.code}:''):'')"></span>
                     </td>
                   <td class="bet_bet_sideB">
