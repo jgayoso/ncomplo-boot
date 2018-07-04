@@ -125,7 +125,9 @@ form#password {
 /* -----------------  */
 /* BET GENERAL        */
 /* -----------------  */
-#bets td.bet_flag {
+#bets td.bet_flag,
+#bets td.bet_bsa,
+#bets td.bet_bsb {
     padding-right: 2px;
     padding-left: 2px;
     border-left: none;
@@ -189,8 +191,12 @@ form#password {
 
 #bets tr.bet_computed.bet_winlevel0 td.bet_bet_sideA,
 #bets tr.bet_computed.bet_winlevel0 td.bet_bet_sideB,
+#bets tr.bet_computed.bet_winlevel0 td.bet_bsa,
+#bets tr.bet_computed.bet_winlevel0 td.bet_bsb,
 #bets tr.bet_computed.bet_sideAwinlevel0 td.bet_bet_sideA,
-#bets tr.bet_computed.bet_sideBwinlevel0 td.bet_bet_sideB {
+#bets tr.bet_computed.bet_sideBwinlevel0 td.bet_bet_sideB,
+#bets tr.bet_computed.bet_sideAwinlevel0 td.bet_bsa,
+#bets tr.bet_computed.bet_sideBwinlevel0 td.bet_bsb {
     background-color: #f4b190;
 }
 
@@ -203,8 +209,12 @@ form#password {
 
 #bets tr.bet_computed.bet_winlevel1 td.bet_bet_sideA,
 #bets tr.bet_computed.bet_winlevel1 td.bet_bet_sideB,
+#bets tr.bet_computed.bet_winlevel1 td.bet_bsa,
+#bets tr.bet_computed.bet_winlevel1 td.bet_bsb,
 #bets tr.bet_computed.bet_sideAwinlevel1 td.bet_bet_sideA,
-#bets tr.bet_computed.bet_sideBwinlevel1 td.bet_bet_sideB {
+#bets tr.bet_computed.bet_sideBwinlevel1 td.bet_bet_sideB,
+#bets tr.bet_computed.bet_sideAwinlevel1 td.bet_bsa,
+#bets tr.bet_computed.bet_sideBwinlevel1 td.bet_bsb {
     background-color: #a7f37e;
 }
 
@@ -217,8 +227,12 @@ form#password {
 
 #bets tr.bet_computed.bet_winlevel2 td.bet_bet_sideA,
 #bets tr.bet_computed.bet_winlevel2 td.bet_bet_sideB,
+#bets tr.bet_computed.bet_winlevel2 td.bet_bsa,
+#bets tr.bet_computed.bet_winlevel2 td.bet_bsb,
 #bets tr.bet_computed.bet_sideAwinlevel2 td.bet_bet_sideA,
-#bets tr.bet_computed.bet_sideBwinlevel2 td.bet_bet_sideB {
+#bets tr.bet_computed.bet_sideBwinlevel2 td.bet_bet_sideB,
+#bets tr.bet_computed.bet_sideAwinlevel2 td.bet_bsa,
+#bets tr.bet_computed.bet_sideBwinlevel2 td.bet_bsb {
     background-color: #77d245;
 }
 

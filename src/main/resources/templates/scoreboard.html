@@ -100,7 +100,7 @@
                 <td th:if="${todayEvents} and ${#lists.size(todayEvents.roundsInformation)}>0" th:each="roundInfo : ${todayEvents.roundsInformation}">
                 	<div class="row no-gutters" th:if="${roundInfo.scoreMatters}">
 
-	                		<div class="col-12 col-sm-3" th:if="${roundInfo.scoreMatterBets != null}"
+	                		<div class="col-sm-12 col-md-6 col-lg-3" th:if="${roundInfo.scoreMatterBets != null}"
 	                			th:each="g : ${roundInfo.games}" th:with="userBets=${roundInfo.scoreMatterBets[__${sc.user.login}__]}" >
 	                			<span th:if="${userBets} != null and ${userBets.containsKey(g.id)} and ${userBets[__${g.id}__].scoreA} != null and ${userBets[__${g.id}__].scoreB} != null" 
 	                				th:text="${userBets[__${g.id}__].scoreA} + ' - ' + ${userBets[__${g.id}__].scoreB}">1 - 0</span>
@@ -108,7 +108,7 @@
 
                 	</div>
                 	<div class="row no-gutters" th:unless="${roundInfo.scoreMatters or roundInfo.maxSideMattersBets == 0}" >
-                			<div class="col-3" th:each="i : ${#numbers.sequence(0, roundInfo.maxSideMattersBets - 1, 1)}"
+                			<div class="col-sm-12 col-md-6 col-lg-3" th:each="i : ${#numbers.sequence(0, roundInfo.maxSideMattersBets - 1, 1)}"
                 				th:with="userBets=${roundInfo.sideMatterBetsWinners[__${sc.user.login}__]}">
                 				
                 				<span  th:if="${userBets} != null and ${#lists.size(userBets) > i}" th:text="${userBets[__${i}__].getName(#locale)}">Belgium</span>
