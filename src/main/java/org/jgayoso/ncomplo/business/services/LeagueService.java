@@ -218,7 +218,9 @@ public class LeagueService {
 		final Map<String, List<GameSide>> sideMatterBets = new HashMap<>();
 		int maxNumber = 0;
     	if (CollectionUtils.isEmpty(betsForRound)) {
-    		return null;
+			final TodayRoundGamesAndBetsView betsView = new TodayRoundGamesAndBetsView(round, games, null, null, false);
+			betsView.setMaxSideMattersBets(maxNumber);
+			return betsView;
     	}
 		for (final Bet bet: betsForRound) {
 			final String userLogin = bet.getUser().getLogin();

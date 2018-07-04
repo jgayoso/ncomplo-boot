@@ -1,6 +1,7 @@
 package org.jgayoso.ncomplo.business.services;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
@@ -149,11 +150,22 @@ public class GameService {
     	}
     	
     	final Date nextWeek = DateUtils.addDays(todayMorning, 7);
-    	final Game game = this.gameRepository.findFirstByCompetitionAndDateBetweenOrderByDate(league.getCompetition(), todayMorning, nextWeek);
-    	if (game != null) {
-    		return Collections.singletonList(game);
+		final List<Game> games = this.gameRepository.findByCompetitionAndDateBetweenOrderByDate(league.getCompetition(),
+				todayMorning, nextWeek);
+		if (CollectionUtils.isEmpty(games)) {
+			return null;
     	}
-    	return null;
+		final Date date = games.get(0).getDate();
+		final List<Game> gamesToReturn = new ArrayList<>();
+		for (final Game game : games) {
+			if (DateUtils.isSameDay(date, game.getDate())) {
+				gamesToReturn.add(game);
+			} else {
+				break;
+			}
+		}
+
+		return gamesToReturn;
     }
     
 }

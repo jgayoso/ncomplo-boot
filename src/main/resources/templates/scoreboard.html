@@ -107,7 +107,7 @@
 	               			</div>
 
                 	</div>
-                	<div class="row no-gutters" th:unless="${roundInfo.scoreMatters}" >
+                	<div class="row no-gutters" th:unless="${roundInfo.scoreMatters or roundInfo.maxSideMattersBets == 0}" >
                 			<div class="col-3" th:each="i : ${#numbers.sequence(0, roundInfo.maxSideMattersBets - 1, 1)}"
                 				th:with="userBets=${roundInfo.sideMatterBetsWinners[__${sc.user.login}__]}">
                 				
