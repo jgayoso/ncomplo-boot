@@ -122,7 +122,7 @@ public class AuthController {
     	userBean.setEmail(invitation.getEmail());
     	userBean.setName(invitation.getName());
     	userBean.setInvitationId(invitation.getId());
-    	model.addAttribute("user", userBean);
+    	model.addAttribute("invitation", userBean);
     	
     	return "invitation";
 		
@@ -156,7 +156,7 @@ public class AuthController {
     	userBean.setEmail(invitation.getEmail());
     	userBean.setName(invitation.getName());
     	userBean.setInvitationId(invitation.getId());
-    	model.addAttribute("user", userBean);
+    	model.addAttribute("invitation", userBean);
     	
     	return "invitation";
     }
