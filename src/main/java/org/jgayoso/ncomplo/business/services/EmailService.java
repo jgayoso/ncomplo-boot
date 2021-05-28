@@ -39,7 +39,6 @@ public class EmailService {
 	private final SendGrid sendGrid; 
     public EmailService() {
         super();
-        final Map<String, String> env = System.getenv();
     	final String apiKey = System.getenv("SENDGRID_API_KEY");
     	if (StringUtils.isNotBlank(apiKey)){
     		this.sendGrid = new SendGrid(apiKey);
@@ -64,18 +63,21 @@ public class EmailService {
 					+ "<br />To access to your ncomplo account, use your new credentials:<br><ul><li>Login: "
 					+ user.getLogin() + "</li><li>Password: " + newPassword + "</li></ul>Please, change your password!"
 					+ "<br /> See you soon at <a href='" + baseUrl + "'>ncomplo</a>";
-//			final String text = "Hello " + user.getName()
-//					+ "\nTo access to your ncomplo account, use your new credentials: \n-Login: " + user.getLogin()
-//					+ "\n-Password: " + newPassword + "\nPlease, change your password!" + "\nSee you at " + baseUrl;
+			final String text = "Hello " + user.getName()
+					+ "\nTo access to your ncomplo account, use your new credentials: \n-Login: " + user.getLogin()
+					+ "\n-Password: " + newPassword + "\nPlease, change your password!" + "\nSee you at " + baseUrl;
 //			email.setHtml(html).setText(text);
 
 
 			Content content = new Content("text/html", html);
-			Mail mail = new Mail(email, subject, to, content);
+			Content textContent = new Content("text/plain", text);
 
-			logger.debug("Sending email to " + user.getEmail());
+			Mail mail = new Mail(email, subject, to, content);
+			mail.addContent(textContent);
+
+			logger.info("Sending new password email to " + user.getEmail());
 			sendMailRequest(mail);
-			logger.debug("Reset password email sent to " + user.getEmail());
+			logger.info("Reset password email sent to " + user.getEmail());
 
 		} catch (final IOException e) {
 			logger.error("Error sending new password email", e);
@@ -131,9 +133,10 @@ public class EmailService {
 			for (String destination: destinations) {
 				Email toEmail = new Email(destination);
 				Personalization pers = new Personalization();
-				pers.addBcc(toEmail);
+				pers.addTo(toEmail);
 				mail.addPersonalization(pers);
 			}
+			
 			sendMailRequest(mail);
 			logger.info("Notification sent");
 		} catch (final IOException e) {
