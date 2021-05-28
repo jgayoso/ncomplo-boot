@@ -2,7 +2,6 @@ package org.jgayoso.ncomplo.business.services;
 
 import java.io.IOException;
 import java.util.Locale;
-import java.util.Map;
 
 import com.sendgrid.helpers.mail.Mail;
 import com.sendgrid.helpers.mail.objects.Content;
@@ -36,7 +35,9 @@ public class EmailService {
 	@Autowired
 	protected MessageSource resource;
 
-	private final SendGrid sendGrid; 
+	private final SendGrid sendGrid;
+	private final String fromEmail;
+
     public EmailService() {
         super();
     	final String apiKey = System.getenv("SENDGRID_API_KEY");
@@ -45,6 +46,8 @@ public class EmailService {
     	} else {
     		this.sendGrid = null;
     	}
+
+		fromEmail = System.getenv("EMAIL_FROM");
     }
 
 	public void sendNewPassword(final User user, final String newPassword, final String baseUrl) {
@@ -53,7 +56,7 @@ public class EmailService {
 			return;
 		}
 		try {
-			Email email = new Email("no-reply@ncomplo.com");
+			Email email = new Email(fromEmail);
 			String subject = "Your new ncomplo password";
 
 			Email to = new Email(user.getEmail(), user.getName());
@@ -66,8 +69,6 @@ public class EmailService {
 			final String text = "Hello " + user.getName()
 					+ "\nTo access to your ncomplo account, use your new credentials: \n-Login: " + user.getLogin()
 					+ "\n-Password: " + newPassword + "\nPlease, change your password!" + "\nSee you at " + baseUrl;
-//			email.setHtml(html).setText(text);
-
 
 			Content content = new Content("text/html", html);
 			Content textContent = new Content("text/plain", text);
@@ -94,7 +95,7 @@ public class EmailService {
 			String[] subjectParams = {leagueName};
 
 			final String emailSubject = resource.getMessage("emails.invitation.subject", subjectParams, locale);
-			final Email email = new Email("ncomplo<no-reply@ncomplo.com>");
+			final Email email = new Email(fromEmail);
 			Email to = new Email(invitation.getEmail(), invitation.getName());
 
 			final Context ctx = new Context(locale);
@@ -122,7 +123,7 @@ public class EmailService {
 		}
 		try {
 
-			final Email from = new Email("no-reply@ncomplo.com");
+			final Email from = new Email(fromEmail);
 			Content content = new Content("text/html", text);
 			logger.info("Sending notification email");
 			Mail mail = new Mail();
@@ -136,7 +137,7 @@ public class EmailService {
 				pers.addTo(toEmail);
 				mail.addPersonalization(pers);
 			}
-			
+
 			sendMailRequest(mail);
 			logger.info("Notification sent");
 		} catch (final IOException e) {
