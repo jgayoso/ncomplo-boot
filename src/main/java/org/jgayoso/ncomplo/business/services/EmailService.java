@@ -1,8 +1,13 @@
 package org.jgayoso.ncomplo.business.services;
 
+import java.io.IOException;
 import java.util.Locale;
 import java.util.Map;
 
+import com.sendgrid.helpers.mail.Mail;
+import com.sendgrid.helpers.mail.objects.Content;
+import com.sendgrid.helpers.mail.objects.Email;
+import com.sendgrid.helpers.mail.objects.Personalization;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.jgayoso.ncomplo.business.entities.Invitation;
@@ -12,9 +17,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
 
-import com.sendgrid.SendGrid;
-import com.sendgrid.SendGrid.Email;
-import com.sendgrid.SendGridException;
+import com.sendgrid.*;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
@@ -37,10 +40,9 @@ public class EmailService {
     public EmailService() {
         super();
         final Map<String, String> env = System.getenv();
-    	final String username = env.get("SENDGRID_USERNAME");
-    	final String password = env.get("SENDGRID_PASSWORD");
-    	if (StringUtils.isNotBlank(username) && StringUtils.isNotBlank(password)){
-    		this.sendGrid = new SendGrid(username, password);
+    	final String apiKey = System.getenv("SENDGRID_API_KEY");
+    	if (StringUtils.isNotBlank(apiKey)){
+    		this.sendGrid = new SendGrid(apiKey);
     	} else {
     		this.sendGrid = null;
     	}
@@ -52,24 +54,30 @@ public class EmailService {
 			return;
 		}
 		try {
-			final Email email = new Email().setFrom("no-reply@ncomplo.com").setSubject("Your new ncomplo password");
-			email.addTo(user.getEmail(), user.getName());
+			Email email = new Email("no-reply@ncomplo.com");
+			String subject = "Your new ncomplo password";
 
+			Email to = new Email(user.getEmail(), user.getName());
 
-			// TODO This should be a thymeleaf template
+//			// TODO This should be a thymeleaf template
 			final String html = "Hello " + user.getName()
 					+ "<br />To access to your ncomplo account, use your new credentials:<br><ul><li>Login: "
 					+ user.getLogin() + "</li><li>Password: " + newPassword + "</li></ul>Please, change your password!"
 					+ "<br /> See you soon at <a href='" + baseUrl + "'>ncomplo</a>";
-			final String text = "Hello " + user.getName()
-					+ "\nTo access to your ncomplo account, use your new credentials: \n-Login: " + user.getLogin()
-					+ "\n-Password: " + newPassword + "\nPlease, change your password!" + "\nSee you at " + baseUrl;
-			email.setHtml(html).setText(text);
+//			final String text = "Hello " + user.getName()
+//					+ "\nTo access to your ncomplo account, use your new credentials: \n-Login: " + user.getLogin()
+//					+ "\n-Password: " + newPassword + "\nPlease, change your password!" + "\nSee you at " + baseUrl;
+//			email.setHtml(html).setText(text);
+
+
+			Content content = new Content("text/html", html);
+			Mail mail = new Mail(email, subject, to, content);
+
 			logger.debug("Sending email to " + user.getEmail());
-			this.sendGrid.send(email);
+			sendMailRequest(mail);
 			logger.debug("Reset password email sent to " + user.getEmail());
 
-		} catch (final SendGridException e) {
+		} catch (final IOException e) {
 			logger.error("Error sending new password email", e);
 		}
 	}
@@ -84,10 +92,8 @@ public class EmailService {
 			String[] subjectParams = {leagueName};
 
 			final String emailSubject = resource.getMessage("emails.invitation.subject", subjectParams, locale);
-			final Email email = new Email().setFrom("ncomplo<no-reply@ncomplo.com>")
-					.setSubject(emailSubject)
-					.addTo(invitation.getEmail(), invitation.getName());
-
+			final Email email = new Email("ncomplo<no-reply@ncomplo.com>");
+			Email to = new Email(invitation.getEmail(), invitation.getName());
 
 			final Context ctx = new Context(locale);
 			ctx.setVariable("invitationName", invitation.getName());
@@ -96,11 +102,13 @@ public class EmailService {
 			ctx.setVariable("isNewUser", user != null);
 
 			final String html = this.templateEngine.process("emails/invitation", ctx);
-			email.setHtml(html);
+			Content content = new Content("text/html", html);
 			logger.debug("Sending invitation email to " + invitation.getEmail());
-			this.sendGrid.send(email);
+
+			Mail mail = new Mail(email, emailSubject, to, content);
+			sendMailRequest(mail);
 			logger.debug("Invitation sent to " + invitation.getEmail());
-		} catch (final SendGridException e) {
+		} catch (final IOException e) {
 			logger.error("Error sending invitations", e);
 		}
 	}
@@ -112,15 +120,38 @@ public class EmailService {
 		}
 		try {
 
-			final Email email = new Email().setFrom("no-reply@ncomplo.com")
-					.setSubject(subject)
-					.setBcc(destinations);
-			email.setHtml(text);
+			final Email from = new Email("no-reply@ncomplo.com");
+
+			Email to = new Email(destinations[0]);
+
+			Content content = new Content("text/html", text);
 			logger.debug("Sending notification email");
-			this.sendGrid.send(email);
+			Mail mail = new Mail();
+			mail.setFrom(from);
+			mail.setSubject(subject);
+			mail.addContent(content);
+
+			for (String destination: destinations) {
+				Email toEmail = new Email(destination);
+				Personalization pers = new Personalization();
+				pers.addBcc(toEmail);
+				mail.addPersonalization(pers);
+			}
+			sendMailRequest(mail);
 			logger.debug("Notification sent");
-		} catch (final SendGridException e) {
+		} catch (final IOException e) {
 			logger.error("Error sending invitations", e);
 		}
+	}
+
+	private void sendMailRequest(Mail mail) throws IOException{
+		Request request = new Request();
+		request.setMethod(Method.POST);
+		request.setEndpoint("mail/send");
+		request.setBody(mail.build());
+		Response response = this.sendGrid.api(request);
+		logger.debug(response.getStatusCode());
+		logger.debug(response.getBody());
+		logger.debug(response.getHeaders());
 	}
 }

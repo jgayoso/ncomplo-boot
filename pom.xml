@@ -92,13 +92,14 @@
             <artifactId>hibernate-validator</artifactId>
             <scope>compile</scope>
         </dependency>
-        <dependency>
-	        <groupId>com.sendgrid</groupId>
-		    <artifactId>sendgrid-java</artifactId>
-		    <version>2.1.1</version>
-	    </dependency>
+		<dependency>
+			<groupId>com.sendgrid</groupId>
+			<artifactId>sendgrid-java</artifactId>
+			<version>4.7.2</version>
+		</dependency>
 
-        <dependency>
+
+		<dependency>
             <groupId>org.apache.poi</groupId>
             <artifactId>poi</artifactId>
             <version>3.14</version>

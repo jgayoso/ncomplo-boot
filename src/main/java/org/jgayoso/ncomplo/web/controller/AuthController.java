@@ -179,6 +179,7 @@ public class AuthController {
 			redirectAttributes.addFlashAttribute("error", "League is closed");
 			return "redirect:/login";
 		}
+		redirectAttributes.addFlashAttribute("message", "You have joined to the league successfully");
 		return "redirect:/login";
 	}
 	
