@@ -121,11 +121,8 @@ public class EmailService {
 		try {
 
 			final Email from = new Email("no-reply@ncomplo.com");
-
-			Email to = new Email(destinations[0]);
-
 			Content content = new Content("text/html", text);
-			logger.debug("Sending notification email");
+			logger.info("Sending notification email");
 			Mail mail = new Mail();
 			mail.setFrom(from);
 			mail.setSubject(subject);
@@ -138,7 +135,7 @@ public class EmailService {
 				mail.addPersonalization(pers);
 			}
 			sendMailRequest(mail);
-			logger.debug("Notification sent");
+			logger.info("Notification sent");
 		} catch (final IOException e) {
 			logger.error("Error sending invitations", e);
 		}
@@ -150,8 +147,8 @@ public class EmailService {
 		request.setEndpoint("mail/send");
 		request.setBody(mail.build());
 		Response response = this.sendGrid.api(request);
-		logger.debug(response.getStatusCode());
-		logger.debug(response.getBody());
-		logger.debug(response.getHeaders());
+		logger.info("Response code " + response.getStatusCode());
+		logger.info(response.getBody());
+		logger.info(response.getHeaders());
 	}
 }
