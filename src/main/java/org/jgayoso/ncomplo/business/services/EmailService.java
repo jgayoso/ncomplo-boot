@@ -56,7 +56,7 @@ public class EmailService {
 			return;
 		}
 		try {
-			Email email = new Email(fromEmail);
+			Email email = new Email(fromEmail, "NComplo");
 			String subject = "Your new ncomplo password";
 
 			Email to = new Email(user.getEmail(), user.getName());
@@ -95,7 +95,7 @@ public class EmailService {
 			String[] subjectParams = {leagueName};
 
 			final String emailSubject = resource.getMessage("emails.invitation.subject", subjectParams, locale);
-			final Email email = new Email(fromEmail);
+			final Email email = new Email(fromEmail, "NComplo");
 			Email to = new Email(invitation.getEmail(), invitation.getName());
 
 			final Context ctx = new Context(locale);
@@ -123,7 +123,7 @@ public class EmailService {
 		}
 		try {
 
-			final Email from = new Email(fromEmail);
+			final Email from = new Email(fromEmail, "NComplo");
 			Content content = new Content("text/html", text);
 			logger.info("Sending notification email");
 			Mail mail = new Mail();
