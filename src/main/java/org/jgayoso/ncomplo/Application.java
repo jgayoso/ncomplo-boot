@@ -87,6 +87,8 @@ public class Application extends WebMvcConfigurerAdapter {
 		protected void configure(final HttpSecurity http) throws Exception {
 			http.authorizeRequests()
 				.antMatchers(HttpMethod.GET, "/resetpassword*").permitAll()
+				.antMatchers(HttpMethod.GET, "/forgot-password*").permitAll()
+				.antMatchers(HttpMethod.POST, "/forgot-password*").permitAll()
 				.antMatchers("/joinLeague*").permitAll()
 				.antMatchers("/invitation*").permitAll()
 				.antMatchers("/register").permitAll()

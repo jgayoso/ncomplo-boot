@@ -9,6 +9,7 @@ import com.sendgrid.helpers.mail.objects.Email;
 import com.sendgrid.helpers.mail.objects.Personalization;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
+import org.jgayoso.ncomplo.business.entities.ForgotPasswordToken;
 import org.jgayoso.ncomplo.business.entities.Invitation;
 import org.jgayoso.ncomplo.business.entities.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -82,6 +83,43 @@ public class EmailService {
 
 		} catch (final IOException e) {
 			logger.error("Error sending new password email", e);
+		}
+	}
+
+	public void sendForgotPassword(final User user, final ForgotPasswordToken fpt, final String url) {
+		if (this.sendGrid == null) {
+			logger.error("No email service found");
+			return;
+		}
+
+		try {
+			Email email = new Email(fromEmail, "NComplo");
+			String subject = "Restore you NComplo password";
+
+			Email to = new Email(user.getEmail(), user.getName());
+
+			final String html = "Hello " + user.getName()
+					+ "<br />You have requested to restore the NComplo password for the login <b>" + user.getLogin() + "</b>."
+					+ "<br />If you have not requested that, ignore this email."
+					+ "<br />To create a new password, follow this <a href='" + url + "'>link</a>.";
+
+			final String text = "Hello " + user.getName()
+					+ "\nYou have requested to restore the NComplo password for the login" + user.getLogin()+ "\n"
+					+ "If you have not requested that, ignore this email.\n"
+					+ "\nTo create a new password go to " + url;
+
+			Content content = new Content("text/html", html);
+			Content textContent = new Content("text/plain", text);
+
+			Mail mail = new Mail(email, subject, to, content);
+			mail.addContent(textContent);
+
+			logger.info("Sending forgot password email to " + user.getEmail());
+			sendMailRequest(mail);
+			logger.info("Forgot password email sent to " + user.getEmail());
+
+		} catch (final IOException e) {
+			logger.error("Error sending forgot password email", e);
 		}
 	}
 

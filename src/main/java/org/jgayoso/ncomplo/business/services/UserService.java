@@ -7,10 +7,12 @@ import java.util.Locale;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.jasypt.util.password.PasswordEncryptor;
+import org.jgayoso.ncomplo.business.entities.ForgotPasswordToken;
 import org.jgayoso.ncomplo.business.entities.Invitation;
 import org.jgayoso.ncomplo.business.entities.League;
 import org.jgayoso.ncomplo.business.entities.User;
 import org.jgayoso.ncomplo.business.entities.User.UserComparator;
+import org.jgayoso.ncomplo.business.entities.repositories.ForgotPasswordTokenRepository;
 import org.jgayoso.ncomplo.business.entities.repositories.InvitationRepository;
 import org.jgayoso.ncomplo.business.entities.repositories.LeagueRepository;
 import org.jgayoso.ncomplo.business.entities.repositories.UserRepository;
@@ -34,6 +36,9 @@ public class UserService {
     
     @Autowired
     private InvitationRepository invitationRepository;
+
+    @Autowired
+    private ForgotPasswordTokenRepository forgotPasswordTokenRepository;
     
     @Autowired
     private PasswordEncryptor passwordEncryptor;
@@ -100,12 +105,12 @@ public class UserService {
         user.setPassword(hashedNewPassword);
         final User newUser = this.userRepository.save(user);
 
-        
+
         newUser.getLeagues().add(league);
         league.getParticipants().add(newUser);
-        
+
         final Invitation invitation = this.invitationRepository.findOne(invitationId);
-        if (invitation.getToken() == null) { 
+        if (invitation.getToken() == null) {
         	this.invitationRepository.delete(invitationId);
         }
         return newUser;
@@ -162,7 +167,35 @@ public class UserService {
         
     }
 
-    
+
+    @Transactional
+    public void forgotPassword(final String email) {
+
+        User user = this.userRepository.findByEmail(email);
+        if (user == null) {
+            return;
+        }
+
+        ForgotPasswordToken forgotPwdToken = this.forgotPasswordTokenRepository.findByEmail(email);
+        if (forgotPwdToken == null) {
+            forgotPwdToken = new ForgotPasswordToken();
+            forgotPwdToken.setEmail(email);
+            forgotPwdToken.setLogin(user.getLogin());
+
+            final String token = RandomStringUtils.randomAlphanumeric(7);
+
+            forgotPwdToken.setToken(token);
+            forgotPasswordTokenRepository.save(forgotPwdToken);
+        }
+
+        String fptUrl = this.baseUrl + "/forgot-password-reset/" + forgotPwdToken.getLogin() + "/" + forgotPwdToken.getToken();
+        this.emailService.sendForgotPassword(user, forgotPwdToken, fptUrl);
+
+    }
+
+    public ForgotPasswordToken findForgotPasswordToken(User user) {
+        return this.forgotPasswordTokenRepository.findByLogin(user.getLogin());
+    }
     
     @Transactional
     public String resetPassword(final String login, final boolean sendEmail) {
@@ -183,24 +216,38 @@ public class UserService {
         
     }
 
-    
+
+    @Transactional
+    public User changePassword(final String login,
+                               final String oldPassword, final String newPassword) {
+        return this.changePassword(login, oldPassword, newPassword, null);
+    }
     
     @Transactional
-    public User changePassword(final String login, 
-            final String oldPassword, final String newPassword) {
+    public User changePassword(final String login, final String newPassword, ForgotPasswordToken forgotPasswordToken) {
+        return this.changePassword(login, null, newPassword, forgotPasswordToken);
+    }
+
+    private User changePassword(final String login, final String oldPassword, final String newPassword, ForgotPasswordToken forgotPasswordToken) {
         
         final User user =
                 this.userRepository.findOne(login);
-        
-        final String oldHashedPassword = user.getPassword();
-        
-        if (!this.passwordEncryptor.checkPassword(oldPassword, oldHashedPassword)) {
-            throw new InternalErrorException("Old password does not match!");
+
+        if (oldPassword != null) {
+            final String oldHashedPassword = user.getPassword();
+
+            if (!this.passwordEncryptor.checkPassword(oldPassword, oldHashedPassword)) {
+                throw new InternalErrorException("Old password does not match!");
+            }
         }
         
         final String hashedNewPassword = 
                 this.passwordEncryptor.encryptPassword(newPassword);
         user.setPassword(hashedNewPassword);
+
+        if (forgotPasswordToken != null) {
+            this.forgotPasswordTokenRepository.delete(forgotPasswordToken.getId());
+        }
         
         return user;
         

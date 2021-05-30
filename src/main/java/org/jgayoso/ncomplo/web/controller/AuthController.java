@@ -1,6 +1,9 @@
 package org.jgayoso.ncomplo.web.controller;
 
+import org.apache.commons.lang3.RandomStringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
+import org.jgayoso.ncomplo.business.entities.ForgotPasswordToken;
 import org.jgayoso.ncomplo.business.entities.Invitation;
 import org.jgayoso.ncomplo.business.entities.User;
 import org.jgayoso.ncomplo.business.services.InvitationService;
@@ -34,7 +37,7 @@ public class AuthController {
 	public AuthController() {
 		super();
 	}
-	
+
 	@RequestMapping("/resetpassword")
 	public String resetPassword(final ModelMap model, 
 	        @RequestParam(value = "login", required = true) final String login, 
@@ -208,6 +211,76 @@ public class AuthController {
 		}
 		
 		return "redirect:/login";
+	}
+
+	@RequestMapping("/forgot-password")
+	public String forgotPassword(final ModelMap model) {
+		model.addAttribute("userInfo", new ResetPasswordBean());
+		return "forgotpassword";
+	}
+
+	@RequestMapping("/forgot-password-confirm")
+	public String forgotPasswordConfirm(final ResetPasswordBean bean, final RedirectAttributes redirectAttributes) {
+
+		if (StringUtils.isBlank(bean.getEmail())) {
+			redirectAttributes.addFlashAttribute("error", "Empty email address");
+			return "redirect:/login?error";
+		}
+
+		this.userService.forgotPassword(bean.getEmail());
+		return "redirect:/login";
+	}
+
+	@RequestMapping(method=RequestMethod.GET, value = "/forgot-password-reset/{login}/{token}")
+	public String forgotPasswordRequest(
+			@PathVariable("login") final String login,
+			@PathVariable("token") final String token,
+			final ModelMap model, final RedirectAttributes redirectAttributes) {
+
+		User user = this.userService.find(login);
+		if (user != null) {
+			ForgotPasswordToken fpt = this.userService.findForgotPasswordToken(user);
+			if (fpt != null && StringUtils.equalsIgnoreCase(token, fpt.getToken())) {
+				model.addAttribute("user", user);
+				return "forgotpasswordreset";
+
+			}
+		}
+		redirectAttributes.addFlashAttribute("error", "Invalid url");
+		return "redirect:/login?error";
+
+
+
+
+	}
+
+	@RequestMapping("/forgot-password-change")
+	public String changeForgotPassword(
+			@RequestParam(value = "login", required = true) final String login,
+			@RequestParam(value = "newPassword1", required = true) final String newPassword1,
+			@RequestParam(value = "newPassword2", required = true) final String newPassword2,
+			final RedirectAttributes redirectAttributes) {
+
+		if (!newPassword1.equals(newPassword2)) {
+			redirectAttributes.addFlashAttribute("error", "Passwords don't match");
+			return "redirect:/password";
+		}
+
+		User user = this.userService.find(login);
+		if (user == null) {
+			redirectAttributes.addFlashAttribute("error", "Invalid request");
+			return "redirect:/login?error";
+		}
+
+		ForgotPasswordToken fpt = this.userService.findForgotPasswordToken(user);
+		if (fpt == null) {
+			return "redirect:/login?error";
+		}
+
+		this.userService.changePassword(login, newPassword1, fpt);
+
+		return "redirect:/login";
+
 	}
 
 }
