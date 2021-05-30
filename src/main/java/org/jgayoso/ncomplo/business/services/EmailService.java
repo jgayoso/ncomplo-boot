@@ -71,11 +71,11 @@ public class EmailService {
 					+ "\nTo access to your ncomplo account, use your new credentials: \n-Login: " + user.getLogin()
 					+ "\n-Password: " + newPassword + "\nPlease, change your password!" + "\nSee you at " + baseUrl;
 
-			Content content = new Content("text/html", html);
+			Content htmlContent = new Content("text/html", html);
 			Content textContent = new Content("text/plain", text);
 
-			Mail mail = new Mail(email, subject, to, content);
-			mail.addContent(textContent);
+			Mail mail = new Mail(email, subject, to, textContent);
+			mail.addContent(htmlContent);
 
 			logger.info("Sending new password email to " + user.getEmail());
 			sendMailRequest(mail);
@@ -108,11 +108,11 @@ public class EmailService {
 					+ "If you have not requested that, ignore this email.\n"
 					+ "\nTo create a new password go to " + url;
 
-			Content content = new Content("text/html", html);
+			Content htmlContent = new Content("text/html", html);
 			Content textContent = new Content("text/plain", text);
 
-			Mail mail = new Mail(email, subject, to, content);
-			mail.addContent(textContent);
+			Mail mail = new Mail(email, subject, to, textContent);
+			mail.addContent(htmlContent);
 
 			logger.info("Sending forgot password email to " + user.getEmail());
 			sendMailRequest(mail);
