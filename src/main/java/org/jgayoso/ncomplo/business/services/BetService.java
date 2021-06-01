@@ -136,7 +136,7 @@ public class BetService {
 
             // Groups games
             int matchNumber = 1;
-            for (int rowIndex=10; rowIndex < 45; rowIndex++) {
+            for (int rowIndex=10; rowIndex < 46; rowIndex++) {
                 final BetView betView = this.processGroupsGameBet(sheet, rowIndex, matchNumber, gamesByOrder, betViewssByGameId);
                 // If betId is not null, update the current bet instance
                 final Integer betId = betIdsByGameId.get(betView.getGameId());
