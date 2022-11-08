@@ -11,6 +11,7 @@ import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.log4j.Logger;
 import org.jgayoso.ncomplo.business.entities.Bet;
 import org.jgayoso.ncomplo.business.entities.Competition;
@@ -20,10 +21,7 @@ import org.jgayoso.ncomplo.business.entities.GameSide;
 import org.jgayoso.ncomplo.business.entities.League;
 import org.jgayoso.ncomplo.business.entities.LeagueGame;
 import org.jgayoso.ncomplo.business.entities.User;
-import org.jgayoso.ncomplo.business.services.BetService;
-import org.jgayoso.ncomplo.business.services.GameService;
-import org.jgayoso.ncomplo.business.services.LeagueService;
-import org.jgayoso.ncomplo.business.services.UserService;
+import org.jgayoso.ncomplo.business.services.*;
 import org.jgayoso.ncomplo.business.util.I18nNamedEntityComparator;
 import org.jgayoso.ncomplo.web.admin.beans.BetBean;
 import org.jgayoso.ncomplo.web.admin.beans.ParticipationBean;
@@ -55,6 +53,9 @@ public class UserBetsController {
 
     @Autowired
     private BetService betService;
+
+    @Autowired
+    private CompetitionService competitionService;
     
     public UserBetsController() {
     	super();
@@ -85,6 +86,8 @@ public class UserBetsController {
         
         final Competition competition = league.getCompetition();
         final User participant = this.userService.find(login);
+
+        List<League> userLeagues = this.leagueService.findByCompetitionIdAndUser(competition.getId(), participant, locale);
         
         final List<GameSide> competitionGameSides =
                 new ArrayList<>(competition.getGameSides());
@@ -148,6 +151,7 @@ public class UserBetsController {
         model.addAttribute("allGames", allGames);
         model.addAttribute("allGameSides", competitionGameSides);
         model.addAttribute("allBets", bets);
+        model.addAttribute("multipleLeagues", CollectionUtils.size(userLeagues) > 1);
         
         return "managebets";
         
@@ -189,6 +193,7 @@ public class UserBetsController {
     @RequestMapping(method = RequestMethod.POST, value = "/upload")
     public String uploadBets(@RequestParam("file") final MultipartFile file,
     		@RequestParam("leagueId") final Integer leagueId,
+            @RequestParam(value = "allLeagues") final Boolean allLeagues,
     		final HttpServletRequest request,
             final RedirectAttributes redirectAttributes){
         final Authentication auth = SecurityContextHolder.getContext()
@@ -214,7 +219,7 @@ public class UserBetsController {
                 redirectAttributes.addFlashAttribute("error", "Empty file");
                 return "redirect:/bets/"+leagueId+"/";
             }
-            this.betService.processBetsFile(betsFile, login, leagueId, locale);
+            this.betService.processBetsFile(betsFile, login, leagueId, Boolean.TRUE.equals(allLeagues), locale);
             betsFile.delete();
         } catch (final IOException e) {
             redirectAttributes.addFlashAttribute("error", "Error processing bets file");

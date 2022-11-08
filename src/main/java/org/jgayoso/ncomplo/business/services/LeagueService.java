@@ -1,16 +1,7 @@
 package org.jgayoso.ncomplo.business.services;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
-import java.util.Set;
 
 import org.jgayoso.ncomplo.business.entities.Bet;
 import org.jgayoso.ncomplo.business.entities.BetType;
@@ -74,6 +65,23 @@ public class LeagueService {
 		final List<League> leagues = IterableUtils.toList(this.leagueRepository.findAll());
 		Collections.sort(leagues, new I18nNamedEntityComparator(locale));
 		return leagues;
+	}
+
+	@Transactional
+	public List<League> findByCompetitionIdAndUser(final Integer competitionId, User user, final Locale locale) {
+
+		final Date now = new Date();
+		List<League> leagues = this.leagueRepository.findByCompetitionId(competitionId);
+		List<League> userLeaguesForCompetition = new ArrayList<>();
+		for (League league: leagues) {
+			if (league.getParticipants().contains(user) && league.getBetsDeadLine().after(now)) {
+				userLeaguesForCompetition.add(league);
+			}
+		}
+
+		Collections.sort(userLeaguesForCompetition, new I18nNamedEntityComparator(locale));
+		return userLeaguesForCompetition;
+
 	}
 
 	@Transactional
