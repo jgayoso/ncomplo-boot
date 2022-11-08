@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Locale;
 
 import org.apache.commons.lang3.RandomStringUtils;
+import org.apache.log4j.Logger;
 import org.jasypt.util.password.PasswordEncryptor;
 import org.jgayoso.ncomplo.business.entities.ForgotPasswordToken;
 import org.jgayoso.ncomplo.business.entities.Invitation;
@@ -27,6 +28,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class UserService {
+
+    private static final Logger logger = Logger.getLogger(UserService.class);
 
     @Autowired
     private UserRepository userRepository;
@@ -76,6 +79,24 @@ public class UserService {
     
     public long countUsers() {
     	return this.userRepository.count();
+    }
+
+    @Transactional
+    public User registerLoggedUserFromInvitation(final Integer invitationId, final String login, final Integer leagueId) throws LeagueClosedException {
+        final User existentUser = this.find(login);
+        final League league = this.leagueRepository.findOne(leagueId);
+        if (league.getBetsDeadLine().before(new Date())) {
+            throw new LeagueClosedException(leagueId);
+        }
+
+        if (existentUser == null) {
+            logger.info("User not found " + login + " for league " + leagueId);
+            return null;
+        }
+
+        this.acceptInvitation(invitationId, leagueId, existentUser);
+        return existentUser;
+
     }
 
 	@Transactional

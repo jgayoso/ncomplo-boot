@@ -1,6 +1,5 @@
 package org.jgayoso.ncomplo.web.controller;
 
-import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.jgayoso.ncomplo.business.entities.ForgotPasswordToken;
@@ -120,7 +119,23 @@ public class AuthController {
             redirectAttributes.addFlashAttribute("error", "Invalid invitation");
             return "redirect:/login?error";
     	}
-		
+
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		if (!(authentication instanceof AnonymousAuthenticationToken)) {
+			String currentPrincipalName = authentication.getName();
+
+			try {
+				User user = this.userService.registerLoggedUserFromInvitation(
+						invitation.getId(), currentPrincipalName, invitation.getLeague().getId());
+				if (user != null) {
+					return "redirect:/scoreboard";
+				}
+			} catch (final LeagueClosedException e) {
+				redirectAttributes.addFlashAttribute("error", "League is closed");
+				return "redirect:/login";
+			}
+		}
+
 		final UserInvitationBean userBean = new UserInvitationBean();
     	userBean.setEmail(invitation.getEmail());
     	userBean.setName(invitation.getName());
