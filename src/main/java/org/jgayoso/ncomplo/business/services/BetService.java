@@ -59,10 +59,10 @@ public class BetService {
     private UserRepository userRepository;
     
     private final String groupsFirstColumnName = "E";
-    private final String secondRoundColumnName = "EW";
-    private final String quarterFinalsColumnName = "FD";
-    private final String semisColumnName = "FK";
-    private final String finalColumnName = "FR";
+    private final String secondRoundColumnName = "AZ";
+    private final String quarterFinalsColumnName = "BG";
+    private final String semisColumnName = "BN";
+    private final String finalColumnName = "BU";
     
     public BetService() {
         super();
@@ -132,11 +132,11 @@ public class BetService {
             
             fis = new FileInputStream(betsFile);
             book = new XSSFWorkbook(fis);
-            final XSSFSheet sheet = book.getSheetAt(3);
+            final XSSFSheet sheet = book.getSheetAt(2);
 
             // Groups games
             int matchNumber = 1;
-            for (int rowIndex=10; rowIndex < 46; rowIndex++) {
+            for (int rowIndex=7; rowIndex < 55; rowIndex++) {
                 final BetView betView = this.processGroupsGameBet(sheet, rowIndex, matchNumber, gamesByOrder, betViewssByGameId);
                 // If betId is not null, update the current bet instance
                 final Integer betId = betIdsByGameId.get(betView.getGameId());
@@ -229,15 +229,23 @@ public class BetService {
     	final Row homeRow = sheet.getRow(homeCellReference.getRow());
     	final Cell homeTeamCell = homeRow.getCell(homeCellReference.getCol());
     	final Cell homeResultCell = homeRow.getCell(homeCellReference.getCol() + 1);
+        final Cell extraTimeHomeResultCell = homeRow.getCell(homeCellReference.getCol() + 2);
+        final Cell penaltiesHomeResultCell = homeRow.getCell(homeCellReference.getCol() + 3);
     	final String homeTeamName = homeTeamCell.getStringCellValue();
-    	final int homeResult = Double.valueOf(homeResultCell.getNumericCellValue()).intValue();
+    	int homeResult = Double.valueOf(homeResultCell.getNumericCellValue()).intValue();
+    	final int extraTimeHomeResult = Double.valueOf(extraTimeHomeResultCell.getNumericCellValue()).intValue();
+        final int penaltiesHomeResult = Double.valueOf(penaltiesHomeResultCell.getNumericCellValue()).intValue();
     	
     	final CellReference awayCellReference = new CellReference(columnName + (rowIndex + 1));
     	final Row awayRow = sheet.getRow(awayCellReference.getRow());
     	final Cell awayTeamCell = awayRow.getCell(awayCellReference.getCol());
     	final Cell awayResultCell = awayRow.getCell(awayCellReference.getCol() + 1);
+        final Cell extraTimeAwayResultCell = awayRow.getCell(homeCellReference.getCol() + 2);
+        final Cell penaltiesAwayResultCell = awayRow.getCell(homeCellReference.getCol() + 3);
     	final String awayTeamName = awayTeamCell.getStringCellValue();
-    	final int awayResult = Double.valueOf(awayResultCell.getNumericCellValue()).intValue();
+    	int awayResult = Double.valueOf(awayResultCell.getNumericCellValue()).intValue();
+        final int extraTimeAwayResult = Double.valueOf(extraTimeAwayResultCell.getNumericCellValue()).intValue();
+        final int penaltiesAwayResult = Double.valueOf(penaltiesAwayResultCell.getNumericCellValue()).intValue();
     	
         final Integer gameSideAId =
                 gameSidesByName.get(homeTeamName) == null ? null : gameSidesByName.get(homeTeamName).getId();
@@ -248,6 +256,16 @@ public class BetService {
     	final BetView betView = betsByGameId.get(game.getId());
     	betView.setGameSideAId(gameSideAId);
     	betView.setGameSideBId(gameSideBId);
+
+    	if (homeResult == awayResult) {
+    	    // We need to parse the extra time and maybe penalties results
+            if (extraTimeHomeResult == extraTimeAwayResult) {
+                // Penalties
+                homeResult = penaltiesHomeResult > penaltiesAwayResult ? 1 : 0;
+                awayResult = homeResult == 1 ? 0 : 1;
+            }
+        }
+
     	betView.setScoreA(Integer.valueOf(homeResult));
     	betView.setScoreB(Integer.valueOf(awayResult));
     	return betView;
