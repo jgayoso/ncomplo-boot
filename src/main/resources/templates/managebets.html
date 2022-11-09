@@ -30,7 +30,7 @@
             </form>
         </div>
 
-		<p><a th:href="@{/scoreboard}"><span th:text="#{bets.go.back}">Back to scoreboard</span></a></p>
+		<p><a th:href="@{'/scoreboard/' + ${league.id}}"><span th:text="#{bets.go.back}">Back to scoreboard</span></a></p>
         
         <form th:action="@{save}" th:object="${participation}" method="post">
           
@@ -104,8 +104,8 @@
           <input type="submit" class="btn btn-primary" th:value="#{submit.save}" value="Save" />
           
         </form>
-		<br />        
-       	<p><a th:href="@{/scoreboard}"><span th:text="#{bets.go.back}">Back to scoreboard</span></a></p>
+		<br />
+        <p><a th:href="@{'/scoreboard/' + ${league.id}}"><span th:text="#{bets.go.back}">Back to scoreboard</span></a></p>
         
     </div>
     
