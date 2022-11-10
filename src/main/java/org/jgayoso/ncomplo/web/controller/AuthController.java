@@ -145,6 +145,35 @@ public class AuthController {
     	return "invitation";
 		
 	}
+
+	@RequestMapping(method=RequestMethod.GET, value = "/authJoinLeague")
+	public String processInvitationGroupAuth(
+			@RequestParam("invitationId") final Integer invitationId,
+			final ModelMap model, final RedirectAttributes redirectAttributes) {
+
+		final Invitation invitation = this.invitationService.findById(invitationId);
+		if (invitation == null) {
+			logger.info("Invalid invitation " + invitationId);
+			redirectAttributes.addFlashAttribute("error", "Invalid invitation");
+			return "redirect:/login?error";
+		}
+
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		if (authentication instanceof AnonymousAuthenticationToken) {
+			redirectAttributes.addFlashAttribute("error", "Authentication required");
+			return "redirect:/login";
+		}
+
+		try {
+			this.userService.registerLoggedUserFromInvitation(
+					invitation.getId(), authentication.getName(), invitation.getLeague().getId());
+		} catch (LeagueClosedException e) {
+			redirectAttributes.addFlashAttribute("error", "League is closed");
+			return "redirect:/login";
+		}
+
+		return "redirect:/scoreboard/"+invitation.getLeague().getId();
+	}
 	
 	@RequestMapping(method=RequestMethod.GET, value = "/invitation/{invitationId}/{leagueId}/{emailId}")
     public String processInvitation(

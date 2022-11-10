@@ -47,9 +47,21 @@
             	<button type="submit" class="btn btn-primary" th:text="#{register.form.submit}">Change</button>
             </div>
           </fieldset>
-          
+
+
+
         </form>
-        
+
+        <h1 th:text="#{register.form.already.registered}">Already registered?</h1>
+        <form th:action="@{/authJoinLeague}" th:object="${invitation}" method="get" class="form-horizontal">
+
+            <input type="hidden" th:field="*{invitationId}" />
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary" th:text="#{register.form.goToLogin}">Go to Login</button>
+            </div>
+        </form>
+
+
     </div>
     
   </body>
