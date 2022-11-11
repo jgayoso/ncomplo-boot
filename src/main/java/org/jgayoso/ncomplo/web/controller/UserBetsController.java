@@ -193,7 +193,7 @@ public class UserBetsController {
     @RequestMapping(method = RequestMethod.POST, value = "/upload")
     public String uploadBets(@RequestParam("file") final MultipartFile file,
     		@RequestParam("leagueId") final Integer leagueId,
-            @RequestParam(value = "allLeagues") final Boolean allLeagues,
+            @RequestParam(value = "allLeagues", required = false) final Boolean allLeagues,
     		final HttpServletRequest request,
             final RedirectAttributes redirectAttributes){
         final Authentication auth = SecurityContextHolder.getContext()

@@ -19,9 +19,8 @@
                 <span th:text="#{bets.upload.bets}">Upload</span>
                 <span><input type="file" name="file" /></span>
                 <div th:if="${multipleLeagues}">
-                    <span th:text="#{bets.upload.allbets}">
-                        Update all leagues for competition: </span> <span><input type="checkbox" name="allLeagues" />
-                    </span>
+                    <span th:text="#{bets.upload.allbets}">Update all leagues for competition: </span>
+                    <span><input type="checkbox" name="allLeagues" /></span>
                 </div>
                 <div th:unless="${multipleLeagues}">
                     <input type="hidden" name="allLeagues" value="false" />
