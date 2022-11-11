@@ -27,7 +27,12 @@ public class NCUserDetailsService implements UserDetailsService {
      * First search user by the login and if does not exists tries to find it by the email. 
      */
     public UserDetails loadUserByUsername(final String login) throws UsernameNotFoundException {
-        User user = this.userService.find(login);        
+        User user = this.userService.find(login);
+
+        if (user == null) {
+            user = this.userService.findByEmail(login);
+
+        }
         if (user == null) {
             throw new UsernameNotFoundException("User with username " + login + " not found");
         }
@@ -39,7 +44,7 @@ public class NCUserDetailsService implements UserDetailsService {
         grantedAuthorities.add(new SimpleGrantedAuthority("USER"));
 
 		UserDetails userDetails = new org.springframework.security.core.userdetails.User(
-				login, user.getPassword(), grantedAuthorities);
+				user.getLogin(), user.getPassword(), grantedAuthorities);
 
         return userDetails;
     }
