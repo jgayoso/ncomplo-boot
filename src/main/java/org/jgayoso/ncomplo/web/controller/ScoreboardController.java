@@ -79,11 +79,17 @@ public class ScoreboardController {
 			if (user.isAdmin()) {
 				return "redirect:/admin";
 			}
-			throw new InternalErrorException("No active leagues for user \"" + login + "\"");
+			return "redirect:/userWithNoLeagues";
 		}
 
 		return "redirect:/scoreboard/" + activeUserLeagues.get(0).getId();
 
+	}
+
+	@RequestMapping("/userWithNoLeagues")
+	public String userWithNoLeagues(final HttpServletRequest request,
+			final ModelMap model) {
+		return "userWithNoLeagues";
 	}
 
 	@RequestMapping("/scoreboard/{leagueId}")

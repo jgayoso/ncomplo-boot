@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:substituteby="layout/header :: head">
+    <link rel="stylesheet" type="text/css" href="../../css/ncomplo.css" />
+</head>
+
+<body>
+
+<header th:substituteby="layout/header :: header"></header>
+
+
+    <div class="container mt-3">
+
+        <div class="row">
+            <div class="col-12">
+                <h2 th:text="#{user.no.leagues.title}">You are not in any league.</h2>
+                <h4 th:text="#{user.no.leagues.message}">Follow an invitation league to join one.</h4>
+            </div>
+        </div>
+
+    </div>
+
+</body>
+
+</html>
