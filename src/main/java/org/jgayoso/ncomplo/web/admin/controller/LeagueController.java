@@ -169,10 +169,14 @@ public class LeagueController {
 	}
 
 	@RequestMapping("/recompute")
-	public String manage(@RequestParam(value = "id", required = true) final Integer leagueId) {
+	public String manage(@RequestParam(value = "id", required = true) final Integer leagueId,
+						 @RequestParam(value = "scoreboard", required = false) final Boolean toScoreboard) {
 
 		this.leagueService.recomputeScores(leagueId);
 
+		if (toScoreboard) {
+			return "redirect:/scoreboard/"+leagueId;
+		}
 		return "redirect:list";
 
 	}

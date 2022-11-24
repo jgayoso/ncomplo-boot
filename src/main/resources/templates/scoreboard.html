@@ -14,6 +14,9 @@
                 <h2 th:text="#{scoreboard.title}">SCOREBOARD</h2>
                 <h4 th:text="#{scoreboard.title.league(${league.getName(#locale)})}">League: one league</h4>
             </div>
+            <div class="col-12" th:if="${user != null and user.admin}">
+                <td><a th:href="@{/admin/league/recompute(id=${league.id},scoreboard=true)}" onclick="return confirm('Sure?');">Recompute scores for league</a></td>
+            </div>
         </div>
         
         <div th:substituteby="layout/messages :: messages"></div>
