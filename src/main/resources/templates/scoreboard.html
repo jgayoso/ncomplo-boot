@@ -40,25 +40,32 @@
 	        	<div class="row">
 	        		<div class="col-12 roundName"><span th:text="${roundInfo.round.getName(#locale)}">Groups</span></div>
 	        	</div>
-	        	<div class="row justify-content-center" th:each="g : ${roundInfo.games}" th:with="gsA=${g.gameSideA},gsB=${g.gameSideB}, gScA=${g.scoreA},gScB=${g.scoreB}">
-                    <div class="d-none d-md-block col-2 team-name text-right" th:text="${gsA.getName(#locale)}">Belgium</div>
-                    <div class="col-auto"><span class="team-flag" th:class="'world-team-flag world-flag-'+${gsA.code}"></span></div>
-                    <div class="col-4 col-md-2">
-                        <div class="row">
-                            <div class="col-12 matchDate">
-                                <span th:text="${#dates.format(g.date, #messages.msg('dates.format'))}">14/06/2018 16:00</span>
-                            </div>
-                            <div class="col-12 match-score text-center">
-                                <span th:text="${gScA != null}? ${gScA}:' '">1</span> - <span
-                                    th:text="${gScB != null} ? ${gScB} : ' '">0</span>
+	        	<div th:each="g : ${roundInfo.games}" th:with="gsA=${g.gameSideA},gsB=${g.gameSideB}, gScA=${g.scoreA},gScB=${g.scoreB}">
+                    <div class="row justify-content-center">
+                        <div class="d-none d-md-block col-2 team-name text-right" th:text="${gsA.getName(#locale)}">Belgium</div>
+                        <div class="col-auto"><span class="team-flag" th:class="'world-team-flag world-flag-'+${gsA.code}"></span></div>
+                        <div class="col-4 col-md-2">
+                            <div class="row">
+                                <div class="col-12 matchDate">
+                                    <span th:text="${#dates.format(g.date, #messages.msg('dates.format'))}">14/06/2018 16:00</span>
+                                </div>
+                                <div class="col-12 match-score text-center">
+                                    <span th:text="${gScA != null}? ${gScA}:' '">1</span> - <span
+                                        th:text="${gScB != null} ? ${gScB} : ' '">0</span>
+                                </div>
                             </div>
                         </div>
+                        <div class="col-auto"><span class="team-flag" th:class="'world-team-flag world-flag-'+${gsB.code}"></span></div>
+                        <div class="d-none d-md-block col-2 team-name text-left" th:text="${gsB.getName(#locale)}">Republic of Ireland</div>
                     </div>
-                    <div class="col-auto"><span class="team-flag" th:class="'world-team-flag world-flag-'+${gsB.code}"></span></div>
-                    <div class="d-none d-md-block col-2 team-name text-left" th:text="${gsB.getName(#locale)}">Republic of Ireland</div>
+                    <div class="row justify-content-center" th:if="${user != null and user.admin}">
+                        <a th:href="@{'/admin/competition/' + ${g.competition.id} + '/game/manage?id=' + ${g.id}}">manage game</a>
+                        <hr />
+                    </div>
 
-				</div>
-			</div>
+                </div>
+
+            </div>
 		</div>
         
         <div class="row">
